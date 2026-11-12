@@ -1,0 +1,13 @@
+package com.aiguardian.domain.model;
+
+public enum AuditEventType {
+    REQUEST_RECEIVED,
+    RETRIEVAL_DONE,
+    GENERATION_DONE,
+    GENERATION_FAILED,
+    VERIFICATION_DONE,
+    CITATION_CHECKED,
+    GUARD_APPLIED,
+    REQUEST_COMPLETED,
+    REQUEST_FAILED
+}

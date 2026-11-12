@@ -1,0 +1,38 @@
+{
+  "requestId" : "req_192f9f6ca518",
+  "sessionId" : "ses_f9e0621c412c",
+  "mode" : "REAL",
+  "scenarioId" : null,
+  "question" : "公司食堂周末几点开门？",
+  "evidence" : [ ],
+  "verification" : {
+    "requestId" : "req_192f9f6ca518",
+    "verificationState" : "NO_EVIDENCE",
+    "failureReason" : null,
+    "answer" : null,
+    "totalClaims" : 0,
+    "supportedClaims" : 0,
+    "insufficientClaims" : 0,
+    "unsupportedRatio" : null,
+    "truncated" : false,
+    "claims" : [ ],
+    "verifierName" : "none",
+    "llmCalls" : 0
+  },
+  "guard" : {
+    "strategy" : "annotate",
+    "blockThreshold" : 0.5,
+    "action" : "NO_EVIDENCE",
+    "answerVisible" : true,
+    "displayAnswer" : "知识库中没有找到与该问题相关的资料，系统未生成回答。",
+    "message" : null,
+    "unsupportedRatio" : null
+  },
+  "timing" : {
+    "retrievalMs" : 0,
+    "generationMs" : null,
+    "verificationMs" : null,
+    "totalMs" : 0
+  },
+  "createdAt" : "2026-11-12T21:17:29.324+08:00"
+}

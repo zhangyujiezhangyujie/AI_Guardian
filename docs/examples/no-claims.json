@@ -1,0 +1,54 @@
+{
+  "requestId" : "req_2b6dcf3085ef",
+  "sessionId" : "ses_35dd8ef73218",
+  "mode" : "REAL",
+  "scenarioId" : null,
+  "question" : "公司员工有哪些福利？",
+  "evidence" : [ {
+    "evidenceId" : "doc001_chunk03",
+    "documentId" : "doc001",
+    "documentTitle" : "员工手册",
+    "section" : "年假制度",
+    "content" : "正式员工每年享有15天带薪年假，试用期员工不享有年假。",
+    "score" : 4.52,
+    "rank" : 1
+  }, {
+    "evidenceId" : "doc005_chunk02",
+    "documentId" : "doc005",
+    "documentTitle" : "福利规定",
+    "section" : "餐费补贴",
+    "content" : "正式员工可按规定申请工作日餐费补贴。",
+    "score" : 2.35,
+    "rank" : 2
+  } ],
+  "verification" : {
+    "requestId" : "req_2b6dcf3085ef",
+    "verificationState" : "NO_CLAIMS",
+    "failureReason" : null,
+    "answer" : "员工每年享有15天年假，每月还有2,000元交通补贴。",
+    "totalClaims" : 0,
+    "supportedClaims" : 0,
+    "insufficientClaims" : 0,
+    "unsupportedRatio" : null,
+    "truncated" : false,
+    "claims" : [ ],
+    "verifierName" : "batch",
+    "llmCalls" : 1
+  },
+  "guard" : {
+    "strategy" : "annotate",
+    "blockThreshold" : 0.5,
+    "action" : "NO_CLAIMS",
+    "answerVisible" : true,
+    "displayAnswer" : "员工每年享有15天年假，每月还有2,000元交通补贴。",
+    "message" : "回答中没有需要核验的事实性结论。",
+    "unsupportedRatio" : null
+  },
+  "timing" : {
+    "retrievalMs" : 0,
+    "generationMs" : 0,
+    "verificationMs" : 0,
+    "totalMs" : 1
+  },
+  "createdAt" : "2026-11-12T21:17:29.315+08:00"
+}

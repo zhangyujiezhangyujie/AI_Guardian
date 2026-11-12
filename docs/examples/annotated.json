@@ -1,0 +1,78 @@
+{
+  "requestId" : "req_ae26ec5d0da2",
+  "sessionId" : "ses_66b975f6a35a",
+  "mode" : "REAL",
+  "scenarioId" : null,
+  "question" : "公司员工有哪些福利？",
+  "evidence" : [ {
+    "evidenceId" : "doc001_chunk03",
+    "documentId" : "doc001",
+    "documentTitle" : "员工手册",
+    "section" : "年假制度",
+    "content" : "正式员工每年享有15天带薪年假，试用期员工不享有年假。",
+    "score" : 4.52,
+    "rank" : 1
+  }, {
+    "evidenceId" : "doc005_chunk02",
+    "documentId" : "doc005",
+    "documentTitle" : "福利规定",
+    "section" : "餐费补贴",
+    "content" : "正式员工可按规定申请工作日餐费补贴。",
+    "score" : 2.35,
+    "rank" : 2
+  } ],
+  "verification" : {
+    "requestId" : "req_ae26ec5d0da2",
+    "verificationState" : "COMPLETED",
+    "failureReason" : null,
+    "answer" : "员工每年享有15天年假，每月还有2,000元交通补贴。",
+    "totalClaims" : 2,
+    "supportedClaims" : 1,
+    "insufficientClaims" : 1,
+    "unsupportedRatio" : 0.5,
+    "truncated" : false,
+    "claims" : [ {
+      "claimId" : "c1",
+      "claim" : "员工每年享有15天年假",
+      "originalText" : "员工每年享有15天年假",
+      "startIndex" : 0,
+      "endIndex" : 11,
+      "modelSupported" : true,
+      "status" : "SUPPORTED",
+      "evidenceId" : "doc001_chunk03",
+      "quote" : "正式员工每年享有15天带薪年假",
+      "quoteExists" : true,
+      "insufficientReason" : null
+    }, {
+      "claimId" : "c2",
+      "claim" : "员工每月有2000元交通补贴",
+      "originalText" : "每月还有2,000元交通补贴",
+      "startIndex" : 12,
+      "endIndex" : 26,
+      "modelSupported" : false,
+      "status" : "INSUFFICIENT",
+      "evidenceId" : null,
+      "quote" : null,
+      "quoteExists" : null,
+      "insufficientReason" : "MODEL_UNSUPPORTED"
+    } ],
+    "verifierName" : "batch",
+    "llmCalls" : 0
+  },
+  "guard" : {
+    "strategy" : "annotate",
+    "blockThreshold" : 0.5,
+    "action" : "ANNOTATED",
+    "answerVisible" : true,
+    "displayAnswer" : "员工每年享有15天年假，每月还有2,000元交通补贴。",
+    "message" : "部分结论未在知识库中找到充分证据，已用黄色标出。",
+    "unsupportedRatio" : 0.5
+  },
+  "timing" : {
+    "retrievalMs" : 0,
+    "generationMs" : 2,
+    "verificationMs" : 1,
+    "totalMs" : 5
+  },
+  "createdAt" : "2026-11-12T21:17:29.188+08:00"
+}

@@ -1,0 +1,24 @@
+package com.aiguardian.common;
+
+import java.security.SecureRandom;
+import java.util.HexFormat;
+
+public final class IdGenerator {
+    private static final SecureRandom RANDOM = new SecureRandom();
+
+    private IdGenerator() {}
+
+    public static String requestId() {
+        return "req_" + randomHex();
+    }
+
+    public static String sessionId() {
+        return "ses_" + randomHex();
+    }
+
+    private static String randomHex() {
+        byte[] bytes = new byte[6];
+        RANDOM.nextBytes(bytes);
+        return HexFormat.of().formatHex(bytes);
+    }
+}

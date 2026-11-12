@@ -1,0 +1,78 @@
+{
+  "requestId" : "req_4d2ab363b596",
+  "sessionId" : "ses_0e2bb7ea87c4",
+  "mode" : "REAL",
+  "scenarioId" : null,
+  "question" : "公司员工有哪些福利？",
+  "evidence" : [ {
+    "evidenceId" : "doc001_chunk03",
+    "documentId" : "doc001",
+    "documentTitle" : "员工手册",
+    "section" : "年假制度",
+    "content" : "正式员工每年享有15天带薪年假，试用期员工不享有年假。",
+    "score" : 4.52,
+    "rank" : 1
+  }, {
+    "evidenceId" : "doc005_chunk02",
+    "documentId" : "doc005",
+    "documentTitle" : "福利规定",
+    "section" : "餐费补贴",
+    "content" : "正式员工可按规定申请工作日餐费补贴。",
+    "score" : 2.35,
+    "rank" : 2
+  } ],
+  "verification" : {
+    "requestId" : "req_4d2ab363b596",
+    "verificationState" : "COMPLETED",
+    "failureReason" : null,
+    "answer" : null,
+    "totalClaims" : 2,
+    "supportedClaims" : 1,
+    "insufficientClaims" : 1,
+    "unsupportedRatio" : 0.5,
+    "truncated" : false,
+    "claims" : [ {
+      "claimId" : "c1",
+      "claim" : "员工每年享有15天年假",
+      "originalText" : null,
+      "startIndex" : null,
+      "endIndex" : null,
+      "modelSupported" : true,
+      "status" : "SUPPORTED",
+      "evidenceId" : "doc001_chunk03",
+      "quote" : "正式员工每年享有15天带薪年假",
+      "quoteExists" : true,
+      "insufficientReason" : null
+    }, {
+      "claimId" : "c2",
+      "claim" : "员工每月有2000元交通补贴",
+      "originalText" : null,
+      "startIndex" : null,
+      "endIndex" : null,
+      "modelSupported" : false,
+      "status" : "INSUFFICIENT",
+      "evidenceId" : null,
+      "quote" : null,
+      "quoteExists" : null,
+      "insufficientReason" : "MODEL_UNSUPPORTED"
+    } ],
+    "verifierName" : "batch",
+    "llmCalls" : 0
+  },
+  "guard" : {
+    "strategy" : "block",
+    "blockThreshold" : 0.3,
+    "action" : "BLOCKED",
+    "answerVisible" : false,
+    "displayAnswer" : null,
+    "message" : "当前回答中有较多结论缺乏充分证据，系统已限制输出，请核对原始资料。",
+    "unsupportedRatio" : 0.5
+  },
+  "timing" : {
+    "retrievalMs" : 1,
+    "generationMs" : 0,
+    "verificationMs" : 0,
+    "totalMs" : 12
+  },
+  "createdAt" : "2026-11-12T21:17:28.508+08:00"
+}
