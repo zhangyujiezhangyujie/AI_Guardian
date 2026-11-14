@@ -64,13 +64,13 @@ export function normalizeError(error) {
     }
   }
 
-  // 后端未启动时，Vite 代理返回 5xx 且响应体为空
+  // 后端未启动时，Vite 代理返回 5xx 且响应体为空；该状态码来自代理而非后端，不展示
   if (status >= 500 && isEmptyBody(data)) {
     return {
       errorCode: null,
       message: MSG_NETWORK,
       requestId: null,
-      httpStatus: status
+      httpStatus: null
     }
   }
 

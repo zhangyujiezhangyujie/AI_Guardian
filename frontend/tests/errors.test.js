@@ -64,7 +64,8 @@ describe('normalizeError', () => {
     const result = normalizeError(httpError(500, ''))
 
     expect(result.message).toBe(MSG_NETWORK)
-    expect(result.httpStatus).toBe(500)
+    // 状态码来自 Vite 代理而不是后端，不展示，避免误导排查
+    expect(result.httpStatus).toBeNull()
   })
 
   it('非契约格式的错误体给出通用提示，不伪造错误码', () => {
