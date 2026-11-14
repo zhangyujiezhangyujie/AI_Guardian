@@ -1,0 +1,152 @@
+[
+  {
+    "id": "V01",
+    "question": "年假有几天？",
+    "answer": "正式员工每年享有15天带薪年假。",
+    "evidence": {
+      "evidenceId": "doc001_chunk01",
+      "documentId": "doc001",
+      "documentTitle": "虚构企业制度样例",
+      "section": "福利与报销",
+      "content": "正式员工每年享有15天带薪年假，试用期员工不享有年假。报销申请须在费用发生后30天内提交，并附发票。员工每月餐费补贴为500元。",
+      "score": 1.0,
+      "rank": 1
+    },
+    "expected": "COMPLETED；1 条支持"
+  },
+  {
+    "id": "V02",
+    "question": "员工有哪些福利？",
+    "answer": "正式员工每年享有15天带薪年假，每月还有2000元交通补贴。",
+    "evidence": {
+      "evidenceId": "doc001_chunk01",
+      "documentId": "doc001",
+      "documentTitle": "虚构企业制度样例",
+      "section": "福利与报销",
+      "content": "正式员工每年享有15天带薪年假，试用期员工不享有年假。报销申请须在费用发生后30天内提交，并附发票。员工每月餐费补贴为500元。",
+      "score": 1.0,
+      "rank": 1
+    },
+    "expected": "COMPLETED；年假支持，交通补贴证据不足"
+  },
+  {
+    "id": "V03",
+    "question": "有交通补贴吗？",
+    "answer": "所有员工每月有2000元交通补贴。",
+    "evidence": {
+      "evidenceId": "doc001_chunk01",
+      "documentId": "doc001",
+      "documentTitle": "虚构企业制度样例",
+      "section": "福利与报销",
+      "content": "正式员工每年享有15天带薪年假，试用期员工不享有年假。报销申请须在费用发生后30天内提交，并附发票。员工每月餐费补贴为500元。",
+      "score": 1.0,
+      "rank": 1
+    },
+    "expected": "COMPLETED；证据不足"
+  },
+  {
+    "id": "V04",
+    "question": "试用期有年假吗？",
+    "answer": "试用期员工每年也享有15天带薪年假。",
+    "evidence": {
+      "evidenceId": "doc001_chunk01",
+      "documentId": "doc001",
+      "documentTitle": "虚构企业制度样例",
+      "section": "福利与报销",
+      "content": "正式员工每年享有15天带薪年假，试用期员工不享有年假。报销申请须在费用发生后30天内提交，并附发票。员工每月餐费补贴为500元。",
+      "score": 1.0,
+      "rank": 1
+    },
+    "expected": "COMPLETED；与证据矛盾"
+  },
+  {
+    "id": "V05",
+    "question": "报销期限？",
+    "answer": "报销申请须在费用发生后30天内提交。",
+    "evidence": {
+      "evidenceId": "doc001_chunk01",
+      "documentId": "doc001",
+      "documentTitle": "虚构企业制度样例",
+      "section": "福利与报销",
+      "content": "正式员工每年享有15天带薪年假，试用期员工不享有年假。报销申请须在费用发生后30天内提交，并附发票。员工每月餐费补贴为500元。",
+      "score": 1.0,
+      "rank": 1
+    },
+    "expected": "COMPLETED；支持"
+  },
+  {
+    "id": "V06",
+    "question": "报销需要什么？",
+    "answer": "报销申请必须附发票。",
+    "evidence": {
+      "evidenceId": "doc001_chunk01",
+      "documentId": "doc001",
+      "documentTitle": "虚构企业制度样例",
+      "section": "福利与报销",
+      "content": "正式员工每年享有15天带薪年假，试用期员工不享有年假。报销申请须在费用发生后30天内提交，并附发票。员工每月餐费补贴为500元。",
+      "score": 1.0,
+      "rank": 1
+    },
+    "expected": "COMPLETED；支持"
+  },
+  {
+    "id": "V07",
+    "question": "补贴多少？",
+    "answer": "员工每月餐费补贴为５００元。",
+    "evidence": {
+      "evidenceId": "doc001_chunk01",
+      "documentId": "doc001",
+      "documentTitle": "虚构企业制度样例",
+      "section": "福利与报销",
+      "content": "正式员工每年享有15天带薪年假，试用期员工不享有年假。报销申请须在费用发生后30天内提交，并附发票。员工每月餐费补贴为500元。",
+      "score": 1.0,
+      "rank": 1
+    },
+    "expected": "COMPLETED；支持，原文全角数字定位"
+  },
+  {
+    "id": "V08",
+    "question": "你有什么建议？",
+    "answer": "建议向人事部门咨询适合自己的休假安排。",
+    "evidence": {
+      "evidenceId": "doc001_chunk01",
+      "documentId": "doc001",
+      "documentTitle": "虚构企业制度样例",
+      "section": "福利与报销",
+      "content": "正式员工每年享有15天带薪年假，试用期员工不享有年假。报销申请须在费用发生后30天内提交，并附发票。员工每月餐费补贴为500元。",
+      "score": 1.0,
+      "rank": 1
+    },
+    "expected": "NO_CLAIMS"
+  },
+  {
+    "id": "V09",
+    "question": "年假和报销制度？",
+    "answer": "😀正式员工每年享有15天带薪年假。报销申请须附发票。",
+    "evidence": {
+      "evidenceId": "doc001_chunk01",
+      "documentId": "doc001",
+      "documentTitle": "虚构企业制度样例",
+      "section": "福利与报销",
+      "content": "正式员工每年享有15天带薪年假，试用期员工不享有年假。报销申请须在费用发生后30天内提交，并附发票。员工每月餐费补贴为500元。",
+      "score": 1.0,
+      "rank": 1
+    },
+    "expected": "COMPLETED；两条支持，UTF-16 定位"
+  },
+  {
+    "id": "V10",
+    "question": "多条制度如何？",
+    "answer": "正式员工每年享有15天带薪年假。试用期员工不享有年假。报销须附发票。员工每月餐费补贴为500元。每月交通补贴2000元。周末食堂免费。每天工作6小时。每年体检三次。每月额外休假两天。",
+    "evidence": {
+      "evidenceId": "doc001_chunk01",
+      "documentId": "doc001",
+      "documentTitle": "虚构企业制度样例",
+      "section": "福利与报销",
+      "content": "正式员工每年享有15天带薪年假，试用期员工不享有年假。报销申请须在费用发生后30天内提交，并附发票。员工每月餐费补贴为500元。",
+      "score": 1.0,
+      "rank": 1
+    },
+    "expected": "PARTIAL；最多8条，truncated=true"
+  }
+]
