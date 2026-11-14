@@ -4,7 +4,7 @@ Vue 3 + Vite + Element Plus + axios + vue-router。规格见任务卡 `06_任务
 
 ## 运行
 
-需要 Node 18+（开发时使用 Node 22）。
+需要 Node.js 20.19 及以上或 22.12 及以上（Vite 7 的要求，`package.json` 的 `engines` 已声明）。启动步骤与常见问题见[仓库根目录 README](../README.md#快速启动)。
 
 ```bash
 cd frontend
