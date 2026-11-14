@@ -4,6 +4,7 @@ import ChatView from '@/views/ChatView.vue'
 import AuditListView from '@/views/AuditListView.vue'
 import AuditDetailView from '@/views/AuditDetailView.vue'
 import DemoView from '@/views/DemoView.vue'
+import { USE_MOCK } from '@/mock'
 
 const routes = [
   {
@@ -48,6 +49,18 @@ const routes = [
     redirect: '/chat'
   }
 ]
+
+// 前端 Mock 专用页面：仅 VITE_USE_MOCK=true 时注册，答辩环境不可访问
+if (USE_MOCK) {
+  routes.unshift({
+    path: '/dev/cards',
+    name: 'dev-cards',
+    component: () => import('@/views/dev/AnswerCardGallery.vue'),
+    meta: {
+      title: 'AnswerCard 展示一览'
+    }
+  })
+}
 
 const router = createRouter({
   history: createWebHistory(),

@@ -195,13 +195,47 @@ export const SCENARIO_PRIORITY = {
 }
 
 /**
+ * 审计页“模型初判 → 程序校验”列（任务卡 6.7）：ClaimVerification.modelSupported（boolean）。
+ * 键为字符串化的值。
+ */
+export const MODEL_JUDGEMENT = {
+  true: {
+    text: '有依据',
+    type: 'success'
+  },
+  false: {
+    text: '无依据',
+    type: 'warning'
+  }
+}
+
+/**
+ * ClaimVerification.quoteExists（Boolean，可空）：null = 未执行校验。
+ * 键为字符串化的值。
+ */
+export const QUOTE_CHECK = {
+  true: {
+    text: '引用通过',
+    type: 'success'
+  },
+  false: {
+    text: '引用未通过',
+    type: 'danger'
+  },
+  null: {
+    text: '未校验',
+    type: 'info'
+  }
+}
+
+/**
  * 取某个枚举值的中文文案；未知值（含 null）原样返回，避免页面因后端新增值而报错。
  */
 export function labelText(map, value) {
-  if (value === null || value === undefined) {
+  if (value === undefined || (value === null && !('null' in map))) {
     return ''
   }
-  const entry = map[value]
+  const entry = map[String(value)]
   return entry ? entry.text : String(value)
 }
 
@@ -209,7 +243,10 @@ export function labelText(map, value) {
  * 取某个枚举值对应的 Element Plus type；未知值返回 info。
  */
 export function labelType(map, value) {
-  const entry = value === null || value === undefined ? undefined : map[value]
+  if (value === undefined || (value === null && !('null' in map))) {
+    return 'info'
+  }
+  const entry = map[String(value)]
   return entry ? entry.type : 'info'
 }
 
