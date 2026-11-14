@@ -31,13 +31,13 @@ describe('Mock 适配器', () => {
   })
 
   it('未配置的接口以 404 错误响应抛出，可被统一错误处理识别', async () => {
-    const error = await client.get('/audit').catch((e) => e)
+    const error = await client.get('/not-a-contract-api').catch((e) => e)
 
     expect(error.response.status).toBe(404)
     expect(normalizeError(error)).toMatchObject({
       errorCode: 'MOCK_NOT_CONFIGURED',
       httpStatus: 404
     })
-    expect(normalizeError(error).message).toContain('GET /audit')
+    expect(normalizeError(error).message).toContain('GET /not-a-contract-api')
   })
 })

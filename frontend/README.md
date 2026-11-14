@@ -27,6 +27,37 @@ Mock 模式下页面顶部会显示橙色标签“前端 Mock 模式（答辩前
 
 > 安装依赖如遇 npm 10 报错 `Cannot read properties of null (reading 'edgesOut')`（npm 自身缺陷，仅在新增依赖时出现），可用 `npx npm@11 install`。日常 `npm ci` 不受影响。
 
+## Mock 数据（`npm run dev:mock`）
+
+数据定义在 `src/mock/fixtures/`，规则如下：
+
+- `cases.js` 只放数据，每种策略的处理结果都直接写出，Mock 不做“比例与阈值比较”。
+- `builder.js` 按契约机械推导下标、计数，并做遮蔽。
+- `tests/mockFixtures.test.js` 逐条核对契约规则，并与成员 1 的 `docs/examples` 比对字段。
+
+问答页根据问题中的关键词选择用例，按下表从上往下取第一个匹配：
+
+| 问题包含 | 结果 |
+| --- | --- |
+| 生成失败 | 502 `LLM_GENERATION_FAILED` |
+| xss / html / 标签 | 回答含 `<img onerror>`、`<script>`（XSS 测试） |
+| 长回答 / 详细介绍 | 约 1000 字回答，含重叠结论和定位不到的结论 |
+| 暂停 | `NOT_VERIFIED`（block，不展示正文） |
+| 核验失败 / 保修 | `NOT_VERIFIED`（annotate，展示正文带警告） |
+| 超时 / 迟到 | `NOT_VERIFIED`（核验超时） |
+| 拦截 | `BLOCKED` |
+| 报销 / 补贴政策 | SC03 用 annotate：`ANNOTATED`，3 条结论 2 条证据不足 |
+| 引用 / 请假 | SC04 引用无效 |
+| 截断 / 员工手册 | `PARTIAL` 截断（M2P） |
+| 年假 | 全部有证据（M1） |
+| 福利 | 部分证据不足（M2） |
+| 怎样提问 / 你好 | `NO_CLAIMS` |
+| 其他 | `NO_EVIDENCE` |
+
+演示页提供 SC01–SC09，另有 4 个前端 Mock 专用场景：MK01 XSS、MK02 长回答、MK03 截断、MK04 比对不符合预期。Mock 不模拟阈值，结果中的阈值固定为 0.5。问答和演示的每次请求都会写入内存审计记录，另预置 24 条历史记录用于测试分页，刷新页面后重置。
+
+模拟知识库只供前端开发使用，正式知识库由成员 2 维护。
+
 ## 路由
 
 | 路由 | 页面 |
