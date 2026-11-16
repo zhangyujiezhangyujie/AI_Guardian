@@ -1,4 +1,4 @@
-# AI Guardian 接口契约附录 v1.0
+# AI Guardian 接口契约附录 v1.1
 
 > 适用项目：AI Guardian（AI 幻觉防火墙）V1.2
 > 契约负责人：成员 1
@@ -200,6 +200,8 @@ public enum AuditEventType {
 | content | String | 否 | 片段原文，**与索引中存储的文本逐字一致** |
 | score | double | 否 | BM25 相关性分数，**不是可信度概率** |
 | rank | int | 否 | 本次检索中的排名，从 1 开始 |
+
+生成片段时，在统一换行为 `\n` 的文档正文中按起止下标直接截取连续区间，保留区间内原有的换行与空行。即使跨段落，`content` 也必须是该正文的连续子串。
 
 ```json
 {
@@ -961,7 +963,7 @@ events 按 createdAt 升序。不存在返回 404 AUDIT_NOT_FOUND。
 
 ### 7.10 P1 预留接口
 
-`POST /api/tools/execute`：仅在 11-23 决定启动工具网关后，由成员 4 补充到本文件第 11 章，届时契约升级为 v1.1。
+`POST /api/tools/execute`：仅在 11-23 决定启动工具网关后，由成员 4 补充到本文件，届时按 0.2 流程升级契约版本。
 
 ---
 
@@ -1276,6 +1278,7 @@ aiguardian:
     chunk-min-chars: 200
     chunk-max-chars: 400
     chunk-overlap-chars: 40
+    stopwords: ["公司"]
   verification:
     verifier: batch              # batch / per-claim
     max-claims: 8
@@ -1289,6 +1292,7 @@ aiguardian:
 ```
 
 - 所有配置通过 `AiGuardianProperties`（成员 1）以 `@ConfigurationProperties(prefix = "aiguardian")` 注入，其他模块不得用 `@Value` 直接读取。
+- `aiguardian.retrieval.stopwords` 为字符串列表，默认仅含“公司”。索引和查询共用该停用词列表，配置 `[]` 表示禁用停用词过滤。修改后重启后端以重建索引。
 - API Key 只从环境变量读取。仓库中提供 `.env.example`，真实 `.env` 加入 `.gitignore`。
 
 ---
@@ -1339,6 +1343,7 @@ section 为 null 时省略 `· 章节` 部分。片段之间空一行。
 - `dev`：日常集成分支。
 - 功能分支：`feature/{模块}`，如 `feature/retrieval`、`feature/verifier`、`feature/audit`、`feature/frontend-chat`。
 - 合并到 dev 前：本模块单元测试全部通过，另一名成员看过代码。
+- 成员 4 在包含真实检索和核验实现的 `dev` 分支上运行场景回归。
 - 提交信息格式：`[模块] 做了什么`，如 `[verifier] 增加 JSON 重试逻辑`。
 
 ---
@@ -1348,3 +1353,4 @@ section 为 null 时省略 `· 章节` 部分。片段之间空一行。
 | 版本 | 日期 | 修改人 | 内容 |
 | --- | --- | --- | --- |
 | v1.0 | 2026-11-13 | 成员 1 | 初始冻结版 |
+| v1.1 | 2026-11-16 | 成员 1 | 配置检索停用词，明确证据片段保留正文原有换行和空行，规定在 dev 上运行集成回归 |

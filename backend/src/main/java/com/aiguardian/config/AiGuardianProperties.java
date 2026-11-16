@@ -1,5 +1,6 @@
 package com.aiguardian.config;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -33,6 +34,7 @@ public class AiGuardianProperties {
         private int chunkMinChars = 200;
         private int chunkMaxChars = 400;
         private int chunkOverlapChars = 40;
+        private List<String> stopwords = List.of("公司");
     }
 
     @Getter

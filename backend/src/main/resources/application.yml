@@ -25,6 +25,7 @@ aiguardian:
     chunk-min-chars: 200
     chunk-max-chars: 400
     chunk-overlap-chars: 40
+    stopwords: ["公司"]
   verification:
     verifier: batch
     max-claims: 8
