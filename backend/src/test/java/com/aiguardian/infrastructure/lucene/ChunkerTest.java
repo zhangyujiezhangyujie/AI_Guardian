@@ -84,6 +84,25 @@ class ChunkerTest {
     }
 
     @Test
+    void overlapsExactlyConfiguredCharacters() {
+        properties.getRetrieval().setChunkMinChars(200);
+        properties.getRetrieval().setChunkMaxChars(400);
+        properties.getRetrieval().setChunkOverlapChars(40);
+        String first = "第一段内容".repeat(50);
+        String second = "第二段内容".repeat(50);
+        String body = "## 测试章节\n\n" + first + "\n\n" + second + "\n";
+        LoadedDocument document = new LoadedDocument("doc010", "测试文档", "doc010_测试文档.md", body);
+
+        List<Evidence> chunks = chunker.chunk(document);
+        assertEquals(2, chunks.size(), "两段各 250 字，应拆成两个片段");
+        String previous = chunks.get(0).getContent();
+        String tail = previous.substring(previous.length() - 40);
+        assertTrue(chunks.get(1).getContent().startsWith(tail),
+                "第二段应以上一片段末尾 40 个字符开头");
+        assertEquals(40, tail.length());
+    }
+
+    @Test
     void numbersChunksSequentiallyPerDocument() {
         String body = "## 总则\n\n" + "员工应遵守公司各项规定。".repeat(15) + "\n";
         LoadedDocument document = new LoadedDocument("doc008", "内部操作规范", "doc008_内部操作规范.md", body);

@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
  *       因此每个片段的 content 必然是原文的子串，满足契约 3.2“与索引中存储的文本逐字一致”
  *       和 EvidenceContentTest 的要求。</li>
  *   <li>正文段落之间本来就有空行，累加时保留原文的空行，不用单换行重排。</li>
- *   <li>重叠取“源文中片段起点之前的字符”，而不是把上一段的尾部字符串拼过来；
- *       正常切分时两者等价，边界情况下前者仍保证 content 是原文子串。</li>
+ *   <li>重叠取“源文中上一片段结束位置往前 overlap 个字符”的区间，因此重叠长度严格等于配置值，
+ *       且 content 仍是原文子串（不会把上一段的尾部字符串拼接过来造成非子串）。</li>
  * </ul>
  *
  * <p>切分结果与输入完全确定：同样的文档和参数每次得到相同的 evidenceId 和 content。
@@ -39,8 +39,11 @@ public class Chunker {
 
         List<Evidence> chunks = new ArrayList<>();
         for (Section section : sections(body)) {
+            int previousEnd = -1;
             for (int[] range : chunkRanges(body, section, min, max)) {
-                int start = Math.max(section.start(), range[0] - overlap);
+                int start = previousEnd < 0 || overlap == 0
+                        ? range[0]
+                        : Math.max(section.start(), previousEnd - overlap);
                 chunks.add(Evidence.builder()
                         .documentId(document.documentId())
                         .documentTitle(document.title())
@@ -49,6 +52,7 @@ public class Chunker {
                         .score(0)
                         .rank(0)
                         .build());
+                previousEnd = range[1];
             }
         }
         for (int index = 0; index < chunks.size(); index++) {

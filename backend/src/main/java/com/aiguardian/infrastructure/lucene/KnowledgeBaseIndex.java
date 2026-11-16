@@ -149,11 +149,14 @@ public class KnowledgeBaseIndex {
     }
 
     public Optional<Evidence> findById(String evidenceId) {
-        return evidenceId == null ? Optional.empty() : Optional.ofNullable(byId.get(evidenceId));
+        return evidenceId == null ? Optional.empty() : Optional.ofNullable(byId.get(evidenceId)).map(KnowledgeBaseIndex::copy);
     }
 
     public List<KnowledgeDocument> documents() {
-        return List.copyOf(documents);
+        return documents.stream()
+                .map(document -> new KnowledgeDocument(document.documentId(), document.title(), document.fileName(),
+                        document.body(), document.chunks().stream().map(KnowledgeBaseIndex::copy).toList()))
+                .toList();
     }
 
     public Optional<KnowledgeDocument> document(String documentId) {
@@ -166,6 +169,19 @@ public class KnowledgeBaseIndex {
         closeQuietly(reader);
         closeQuietly(analyzer);
         closeQuietly(directory);
+    }
+
+    /** 返回副本，避免调用方修改 Evidence 影响索引内部数据。 */
+    private static Evidence copy(Evidence source) {
+        return Evidence.builder()
+                .evidenceId(source.getEvidenceId())
+                .documentId(source.getDocumentId())
+                .documentTitle(source.getDocumentTitle())
+                .section(source.getSection())
+                .content(source.getContent())
+                .score(source.getScore())
+                .rank(source.getRank())
+                .build();
     }
 
     private Document toDocument(Evidence chunk) {

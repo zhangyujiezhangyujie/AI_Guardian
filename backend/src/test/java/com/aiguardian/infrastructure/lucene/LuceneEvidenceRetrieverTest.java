@@ -93,6 +93,19 @@ class LuceneEvidenceRetrieverTest {
     }
 
     @Test
+    void findByIdReturnsCopySoCallersCannotCorruptIndex() {
+        String evidenceId = index.documents().get(0).chunks().get(0).getEvidenceId();
+        String original = retriever.findById(evidenceId).orElseThrow().getContent();
+
+        retriever.findById(evidenceId).orElseThrow().setContent("被调用方改写");
+        retriever.findById(evidenceId).orElseThrow().setScore(999);
+
+        Evidence again = retriever.findById(evidenceId).orElseThrow();
+        assertEquals(original, again.getContent());
+        assertEquals(0, again.getScore());
+    }
+
+    @Test
     void canteenQuestionScoresLowerThanAnnualLeaveQuestion() {
         double canteen = maxScore(retriever.retrieve("公司食堂周末几点开门？", 3));
         double annualLeave = maxScore(retriever.retrieve("员工一年有多少天年假", 3));
