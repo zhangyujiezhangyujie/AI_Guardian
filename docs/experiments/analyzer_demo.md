@@ -2,14 +2,14 @@
 
 2026 年 11 月 14 日，Java 22 + Lucene 9.11.1。对应任务卡第 5 节“阶段一”第 3、4 条：建索引、用 SmartChineseAnalyzer 分词、打印“员工一年有多少天年假”的 Top 3 与分词结果，确认“年假”“带薪年假”能被正确切分。
 
-验证入口：`backend/src/test/java/com/aiguardian/infrastructure/lucene/LuceneTokenizerDemoTest.java`。
+> 阶段一记录。当时用的临时切分与临时测试类已在阶段二被正式实现取代，本文的片段编号与分数仅作历史对照；正式切分与调参结果见 [retrieval_tuning.md](retrieval_tuning.md)，对应验证由 `ChunkerTest`、`EvidenceContentTest`、`LuceneEvidenceRetrieverTest` 承担。
+
+验证入口（阶段二起）：
 
 ```powershell
 cd backend
-mvn test '-Dtest=LuceneTokenizerDemoTest'
+mvn test '-Dtest=ChunkerTest,EvidenceContentTest,LuceneEvidenceRetrieverTest'
 ```
-
-输出同时写入 `backend/target/lucene-demo.txt`。
 
 ## 验证范围与限制
 
