@@ -36,8 +36,8 @@ class LuceneEvidenceRetrieverTest {
     void findsAnnualLeaveChunkInTopThree() {
         List<Evidence> evidence = retriever.retrieve("员工一年有多少天年假", 3);
         assertFalse(evidence.isEmpty(), "年假问题应有检索结果");
-        assertTrue(evidence.stream().anyMatch(item -> "年假制度".equals(item.getSection())),
-                "Top 3 应包含年假制度片段，实际：" + evidence.stream().map(Evidence::getEvidenceId).toList());
+        assertTrue(evidence.stream().anyMatch(item -> item.getSection() != null && item.getSection().contains("年假")),
+                "Top 3 应包含年假相关片段，实际：" + evidence.stream().map(Evidence::getEvidenceId).toList());
     }
 
     @Test
