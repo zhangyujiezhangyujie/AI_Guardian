@@ -1,0 +1,39 @@
+{
+  "scenarioId": "SC05",
+  "name": "核验返回无效 JSON",
+  "description": "核验模型两次都返回非 JSON 文本，核验失败，不得当作核验成功。",
+  "priority": "P0",
+  "question": "产品的保修期是多久？",
+  "supportsReal": false,
+  "recommendedStrategies": ["annotate", "block"],
+  "mock": {
+    "GENERATE_ANSWER": [
+      {
+        "type": "TEXT",
+        "content": "产品自签收之日起享受2年免费保修。"
+      }
+    ],
+    "VERIFY_CLAIMS": [
+      {
+        "type": "TEXT",
+        "content": "好的，我来核验一下这段回答。"
+      },
+      {
+        "type": "TEXT",
+        "content": "好的，我来核验一下这段回答。"
+      }
+    ]
+  },
+  "expected": {
+    "httpStatus": 200,
+    "errorCode": null,
+    "evidenceIdsContain": ["doc007_chunk01"],
+    "verificationState": "FAILED",
+    "failureReason": "INVALID_JSON",
+    "claims": [],
+    "guardByStrategy": {
+      "annotate": "NOT_VERIFIED",
+      "block": "NOT_VERIFIED"
+    }
+  }
+}

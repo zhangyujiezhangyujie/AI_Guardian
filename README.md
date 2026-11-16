@@ -41,6 +41,6 @@ mvn test '-DexportChatExamples=true'
 第二条命令将五种输出动作的联调样例写入 `backend/target/chat-examples/`。LLM 适配器测试使用本地 HTTP 服务验证协议、异常和超时。全组固定场景回归需要成员 2 的场景文件和成员 4 的测试框架，合入后从后端执行 Maven 测试。
 
 - [问答与输出策略接口](docs/api.md)
-- [接口契约附录 v1.0](docs/interface-contract.md)
+- [接口契约附录 v1.1](docs/interface-contract.md)
 - [架构设计与报告素材](docs/architecture/member1.md)
 - [可修改性实验](docs/modifiability.md)
