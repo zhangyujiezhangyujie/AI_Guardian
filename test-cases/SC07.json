@@ -1,0 +1,22 @@
+{
+  "scenarioId": "SC07",
+  "name": "知识库无相关资料",
+  "description": "知识库没有食堂相关内容，检索为空，不调用模型生成回答。",
+  "priority": "P0",
+  "question": "公司食堂周末几点开门？",
+  "supportsReal": true,
+  "recommendedStrategies": ["annotate"],
+  "mock": {},
+  "expected": {
+    "httpStatus": 200,
+    "errorCode": null,
+    "evidenceIdsContain": [],
+    "verificationState": "NO_EVIDENCE",
+    "failureReason": null,
+    "claims": [],
+    "guardByStrategy": {
+      "annotate": "NO_EVIDENCE",
+      "block": "NO_EVIDENCE"
+    }
+  }
+}
