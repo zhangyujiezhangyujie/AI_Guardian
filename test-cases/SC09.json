@@ -1,0 +1,25 @@
+{
+  "scenarioId": "SC09",
+  "name": "生成失败",
+  "description": "生成回答的模型调用失败，接口返回 502，不进入核验流程。",
+  "priority": "P0",
+  "question": "报销需要提交哪些材料？",
+  "supportsReal": false,
+  "recommendedStrategies": [],
+  "mock": {
+    "GENERATE_ANSWER": [
+      {
+        "type": "API_ERROR"
+      }
+    ]
+  },
+  "expected": {
+    "httpStatus": 502,
+    "errorCode": "LLM_GENERATION_FAILED",
+    "evidenceIdsContain": [],
+    "verificationState": null,
+    "failureReason": null,
+    "claims": [],
+    "guardByStrategy": {}
+  }
+}

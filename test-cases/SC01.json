@@ -1,0 +1,41 @@
+{
+  "scenarioId": "SC01",
+  "name": "完整证据支持",
+  "description": "知识库明确规定了年假天数，模拟回答与证据一致。",
+  "priority": "P0",
+  "question": "公司正式员工一年有多少天年假？",
+  "supportsReal": true,
+  "recommendedStrategies": ["annotate"],
+  "mock": {
+    "GENERATE_ANSWER": [
+      {
+        "type": "TEXT",
+        "content": "公司正式员工每年享有15天带薪年假，试用期员工不享有年假。"
+      }
+    ],
+    "VERIFY_CLAIMS": [
+      {
+        "type": "TEXT",
+        "content": "{\"claims\":[{\"claim\":\"正式员工每年享有15天带薪年假\",\"originalText\":\"正式员工每年享有15天带薪年假\",\"supported\":true,\"evidenceId\":\"doc001_chunk02\",\"quote\":\"正式员工每年享有15天带薪年假\"}],\"truncated\":false}"
+      }
+    ]
+  },
+  "expected": {
+    "httpStatus": 200,
+    "errorCode": null,
+    "evidenceIdsContain": ["doc001_chunk02"],
+    "verificationState": "COMPLETED",
+    "failureReason": null,
+    "claims": [
+      {
+        "claimContains": "年假",
+        "status": "SUPPORTED",
+        "insufficientReason": null
+      }
+    ],
+    "guardByStrategy": {
+      "annotate": "ANNOTATED",
+      "block": "ANNOTATED"
+    }
+  }
+}
