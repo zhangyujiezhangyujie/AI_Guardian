@@ -1,6 +1,6 @@
 # AI Guardian
 
-AI Guardian 是面向企业制度知识库的问答与证据核验原型。仓库包含成员 1 负责的后端工程、模型适配器、问答编排、输出防护、共享契约与联调材料，以及成员 5 负责的 Vue 3 前端（`frontend/`）。
+AI Guardian 是面向企业制度知识库的问答与证据核验原型。`dev` 集成后端编排、Lucene 检索、模拟模型、批量核验与引用校验，以及 Vue 3 问答前端。
 
 ## 环境要求
 
@@ -59,7 +59,7 @@ Invoke-RestMethod 'http://localhost:8080/api/guard/config'
 
 ## 正式联调
 
-1. 合入成员 2 的知识库、检索及场景模拟模块，成员 3 的核验和引用校验模块，以及成员 4 的审计实现和 `db/init.sql`。正式运行启用这些 Bean，使用 `stub` profile 时只启用 Stub 依赖。模拟路由按 Bean 名 `mockLLMClient` 注入；核验器按 `ClaimVerifier.name()` 查找。
+1. 从 `dev` 开始联调。正式运行还需要合入成员 4 的审计实现和 `db/init.sql`。正式模式使用 Lucene 检索和批量核验，模拟路由按 Bean 名 `mockLLMClient` 注入，核验器按 `ClaimVerifier.name()` 查找。
 2. 使用 MySQL 8，在 MySQL 客户端执行成员 4 的 `db/init.sql`。默认连接 `localhost:3306/ai_guardian`。按根目录 `.env.example` 配置 `DB_USERNAME`、`DB_PASSWORD`、`LLM_BASE_URL`、`LLM_MODEL` 和 `LLM_API_KEY`。将这些键导出到启动后端的进程环境。Spring Boot 不会自动加载 `.env` 文件。
 3. 从 `backend/` 运行 `mvn spring-boot:run`。从该目录启动可正确解析知识库和场景文件的默认相对路径。
 4. 另开终端，从 `frontend/` 执行 `npm ci`（首次）和 `npm run dev`，浏览器打开 <http://localhost:5173>。前端通过 Vite 代理访问后端的 `/api`，正式联调不要使用 `npm run dev:mock`。
@@ -74,7 +74,7 @@ mvn test
 mvn test '-DexportChatExamples=true'
 ```
 
-第二条命令将五种输出动作的联调样例写入 `backend/target/chat-examples/`。LLM 适配器测试使用本地 HTTP 服务验证协议、异常和超时。全组固定场景回归需要成员 2 的场景文件和成员 4 的测试框架，合入后从后端执行 Maven 测试。
+第二条命令将五种输出动作的联调样例写入 `backend/target/chat-examples/`。LLM 适配器测试使用本地 HTTP 服务验证协议、异常和超时。成员 4 的场景回归套件合入后，在同时包含检索和核验实现的 `dev` 上从 `backend/` 运行 `mvn test`。
 
 前端单元测试不访问网络和后端：
 
