@@ -98,6 +98,6 @@ npm test
 
 - [前端说明](frontend/README.md)
 - [问答与输出策略接口](docs/api.md)
-- [接口契约附录 v1.1](docs/interface-contract.md)
+- [接口契约附录 v1.2](docs/interface-contract.md)
 - [架构设计与报告素材](docs/architecture/member1.md)
 - [可修改性实验](docs/modifiability.md)

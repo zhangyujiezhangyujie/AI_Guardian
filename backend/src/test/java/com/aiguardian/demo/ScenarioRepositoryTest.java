@@ -53,7 +53,8 @@ class ScenarioRepositoryTest {
     @Test
     void findsByIdAndReturnsEmptyForUnknown() {
         assertTrue(repository.findById("SC01").isPresent());
-        assertTrue(repository.findById("SC02").isEmpty());
+        assertTrue(repository.findById("SC02").isPresent());
+        assertTrue(repository.findById("SC99").isEmpty());
         assertTrue(repository.findById(null).isEmpty());
     }
 

@@ -21,7 +21,7 @@ function joined(segments) {
 describe('buildSegments（任务卡 6.5 高亮算法）', () => {
   const text = '员工每年享有15天年假，每月还有2,000元交通补贴。'
 
-  it('契约 3.7 示例：切成 结论/普通/结论/普通，拼接后与原文一致', () => {
+  it('切成 结论/普通/结论/普通，拼接后与原文一致', () => {
     const claims = [
       claim(text, '员工每年享有15天年假'),
       claim(text, '每月还有2,000元交通补贴', 'INSUFFICIENT')
