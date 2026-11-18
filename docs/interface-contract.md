@@ -1,4 +1,4 @@
-# AI Guardian 接口契约附录 v1.0
+# AI Guardian 接口契约附录 v1.2
 
 > 适用项目：AI Guardian（AI 幻觉防火墙）V1.2
 > 契约负责人：成员 1
@@ -201,6 +201,8 @@ public enum AuditEventType {
 | score | double | 否 | BM25 相关性分数，**不是可信度概率** |
 | rank | int | 否 | 本次检索中的排名，从 1 开始 |
 
+生成片段时，在统一换行为 `\n` 的文档正文中按起止下标直接截取连续区间，保留区间内原有的换行与空行。即使跨段落，`content` 也必须是该正文的连续子串。
+
 ```json
 {
   "evidenceId": "doc001_chunk03",
@@ -336,20 +338,38 @@ GuardResult：
   "question": "公司员工有哪些福利？",
   "evidence": [
     {
-      "evidenceId": "doc001_chunk03",
-      "documentId": "doc001",
-      "documentTitle": "员工手册",
-      "section": "年假制度",
-      "content": "正式员工每年享有15天带薪年假，试用期员工不享有年假。",
-      "score": 4.52,
+      "evidenceId": "doc005_chunk01",
+      "documentId": "doc005",
+      "documentTitle": "员工福利规定",
+      "section": "总则与餐费补贴",
+      "content": "为提升员工归属感，公司根据经营情况为员工提供多项福利。本规定适用于公司全体正式员工，试用期员工自转正之日起享受本规定中的福利项目。\n\n福利项目的具体标准和发放方式由人力资源部负责解释。公司可根据经营情况调整福利项目，调整前会提前告知员工。\n\n公司为员工提供餐费补贴，标准为每月300元，随工资发放。餐费补贴按实际出勤折算，当月缺勤超过5天的部分相应扣减。\n\n餐费补贴直接计入工资，员工无需另行申请。员工对餐费补贴金额有疑问的，可向人力资源部查询当月出勤记录。",
+      "score": 2.2112,
       "rank": 1
+    },
+    {
+      "evidenceId": "doc005_chunk03",
+      "documentId": "doc005",
+      "documentTitle": "员工福利规定",
+      "section": "其他福利",
+      "content": "员工生日当月发放200元生日礼金，随当月工资发放。各部门每季度组织一次团建活动，费用在部门预算内列支。\n\n公司为员工提供必要的办公设备和劳动保护用品。员工因公出差、加班产生的合理费用，按《报销制度》执行。\n\n团建活动应安排在非工作时间或经员工同意的工作时间，不得强制员工自费参加。各部门组织团建应提前报备，活动方案和费用预算需经部门经理审批。公司鼓励员工合理使用福利，福利项目不与考勤处罚相互抵扣。员工对福利发放有异议的，可在发放当月向人力资源部提出复核，人力资源部应在核实后答复。",
+      "score": 2.1641,
+      "rank": 2
+    },
+    {
+      "evidenceId": "doc005_chunk02",
+      "documentId": "doc005",
+      "documentTitle": "员工福利规定",
+      "section": "健康体检与节日福利",
+      "content": "公司每年为员工安排一次免费体检，体检项目由公司统一确定。体检时间一般安排在工作日，员工参加体检视为正常出勤。体检结果仅用于员工健康管理，不作为岗位调整的依据。\n\n员工因个人原因未参加统一体检的，可在当年内申请补检一次。新入职员工在转正后参加次年的统一体检。\n\n春节、中秋发放节日礼品，具体形式由公司统一安排。节日礼品在节前发放，员工应在规定时间内领取。\n\n公司在其他传统节日可根据经营情况安排慰问活动，具体以人力资源部通知为准。",
+      "score": 1.4327,
+      "rank": 3
     }
   ],
   "verification": {
     "requestId": "req_3f9a1c0b7d2e",
     "verificationState": "COMPLETED",
     "failureReason": null,
-    "answer": "员工每年享有15天年假，每月还有2,000元交通补贴。",
+    "answer": "公司每月提供 300 元餐费补贴，每月还提供 2,000 元交通补贴。",
     "totalClaims": 2,
     "supportedClaims": 1,
     "insufficientClaims": 1,
@@ -360,23 +380,23 @@ GuardResult：
     "claims": [
       {
         "claimId": "c1",
-        "claim": "员工每年享有15天年假",
-        "originalText": "员工每年享有15天年假",
+        "claim": "公司每月提供 300 元餐费补贴",
+        "originalText": "公司每月提供 300 元餐费补贴",
         "startIndex": 0,
-        "endIndex": 11,
+        "endIndex": 16,
         "modelSupported": true,
         "status": "SUPPORTED",
-        "evidenceId": "doc001_chunk03",
-        "quote": "正式员工每年享有15天带薪年假",
+        "evidenceId": "doc005_chunk01",
+        "quote": "公司为员工提供餐费补贴，标准为每月300元，随工资发放。",
         "quoteExists": true,
         "insufficientReason": null
       },
       {
         "claimId": "c2",
-        "claim": "员工每月有2000元交通补贴",
-        "originalText": "每月还有2,000元交通补贴",
-        "startIndex": 12,
-        "endIndex": 26,
+        "claim": "公司每月还提供 2,000 元交通补贴",
+        "originalText": "每月还提供 2,000 元交通补贴",
+        "startIndex": 17,
+        "endIndex": 34,
         "modelSupported": false,
         "status": "INSUFFICIENT",
         "evidenceId": null,
@@ -391,7 +411,7 @@ GuardResult：
     "blockThreshold": 0.5,
     "action": "ANNOTATED",
     "answerVisible": true,
-    "displayAnswer": "员工每年享有15天年假，每月还有2,000元交通补贴。",
+    "displayAnswer": "公司每月提供 300 元餐费补贴，每月还提供 2,000 元交通补贴。",
     "message": "部分结论未在知识库中找到充分证据，已用黄色标出。",
     "unsupportedRatio": 0.5
   },
@@ -828,7 +848,7 @@ availableStrategies 由 OutputGuardRegistry 动态生成。
   {
     "scenarioId": "SC02",
     "name": "部分结论证据不足",
-    "description": "知识库只有年假规定，模拟回答额外声称有交通补贴。",
+    "description": "知识库有餐费补贴规定，模拟回答额外声称有交通补贴。",
     "question": "公司员工有哪些福利？",
     "priority": "P0",
     "supportsReal": true,
@@ -932,8 +952,8 @@ availableStrategies 由 OutputGuardRegistry 动态生成。
   "mode": "MOCK",
   "scenarioId": "SC02",
   "question": "公司员工有哪些福利？",
-  "rawAnswer": "员工每年享有15天年假，每月还有2,000元交通补贴。",
-  "evidence": [],
+  "rawAnswer": "公司每月提供 300 元餐费补贴，每月还提供 2,000 元交通补贴。",
+  "evidence": [{ "...": "同 3.7 的三个 Evidence 对象" }],
   "verification": { "...": "VerificationReport，未遮蔽" },
   "guard": { "...": "GuardResult" },
   "timing": { "...": "Timing" },
@@ -944,7 +964,7 @@ availableStrategies 由 OutputGuardRegistry 动态生成。
       "success": true,
       "durationMs": 18,
       "errorCode": null,
-      "detail": { "topK": 3, "hitCount": 1, "evidenceIds": ["doc001_chunk03"] },
+      "detail": { "topK": 3, "hitCount": 3, "evidenceIds": ["doc005_chunk01", "doc005_chunk03", "doc005_chunk02"], "topScore": 2.2112 },
       "createdAt": "2026-11-20T14:03:21.480+08:00"
     }
   ]
@@ -961,7 +981,7 @@ events 按 createdAt 升序。不存在返回 404 AUDIT_NOT_FOUND。
 
 ### 7.10 P1 预留接口
 
-`POST /api/tools/execute`：仅在 11-23 决定启动工具网关后，由成员 4 补充到本文件第 11 章，届时契约升级为 v1.1。
+`POST /api/tools/execute`：仅在 11-23 决定启动工具网关后，由成员 4 补充到本文件，届时按 0.2 流程升级契约版本。
 
 ---
 
@@ -1093,7 +1113,7 @@ CREATE TABLE audit_event (
 {
   "scenarioId": "SC02",
   "name": "部分结论证据不足",
-  "description": "知识库只有年假规定，模拟回答额外声称有交通补贴。",
+  "description": "知识库有餐费补贴规定，模拟回答额外声称有交通补贴。",
   "priority": "P0",
   "question": "公司员工有哪些福利？",
   "supportsReal": true,
@@ -1102,24 +1122,24 @@ CREATE TABLE audit_event (
     "GENERATE_ANSWER": [
       {
         "type": "TEXT",
-        "content": "员工每年享有15天年假，每月还有2,000元交通补贴。"
+        "content": "公司每月提供 300 元餐费补贴，每月还提供 2,000 元交通补贴。"
       }
     ],
     "VERIFY_CLAIMS": [
       {
         "type": "TEXT",
-        "content": "{\"claims\":[{\"claim\":\"员工每年享有15天年假\",\"originalText\":\"员工每年享有15天年假\",\"supported\":true,\"evidenceId\":\"doc001_chunk03\",\"quote\":\"正式员工每年享有15天带薪年假\"},{\"claim\":\"员工每月有2000元交通补贴\",\"originalText\":\"每月还有2,000元交通补贴\",\"supported\":false,\"evidenceId\":null,\"quote\":null}],\"truncated\":false}"
+        "content": "{\"claims\":[{\"claim\":\"公司每月提供 300 元餐费补贴\",\"originalText\":\"公司每月提供 300 元餐费补贴\",\"supported\":true,\"evidenceId\":\"doc005_chunk01\",\"quote\":\"公司为员工提供餐费补贴，标准为每月300元，随工资发放。\"},{\"claim\":\"公司每月还提供 2,000 元交通补贴\",\"originalText\":\"每月还提供 2,000 元交通补贴\",\"supported\":false,\"evidenceId\":null,\"quote\":null}],\"truncated\":false}"
       }
     ]
   },
   "expected": {
     "httpStatus": 200,
     "errorCode": null,
-    "evidenceIdsContain": ["doc001_chunk03"],
+    "evidenceIdsContain": ["doc005_chunk01"],
     "verificationState": "COMPLETED",
     "failureReason": null,
     "claims": [
-      { "claimContains": "年假", "status": "SUPPORTED", "insufficientReason": null },
+      { "claimContains": "餐费补贴", "status": "SUPPORTED", "insufficientReason": null },
       { "claimContains": "交通补贴", "status": "INSUFFICIENT", "insufficientReason": "MODEL_UNSUPPORTED" }
     ],
     "guardByStrategy": {
@@ -1161,7 +1181,7 @@ CREATE TABLE audit_event (
 | 编号 | 名称 | question | 关键 mock | 期望 state | annotate | block（阈值 0.5） |
 | --- | --- | --- | --- | --- | --- | --- |
 | SC01 | 完整证据支持 | 公司正式员工一年有多少天年假？ | 1 条 supported 结论，引用正确 | COMPLETED | ANNOTATED | ANNOTATED |
-| SC02 | 部分结论证据不足 | 公司员工有哪些福利？ | 年假 supported，交通补贴 unsupported | COMPLETED | ANNOTATED | ANNOTATED（0.5 不大于 0.5） |
+| SC02 | 部分结论证据不足 | 公司员工有哪些福利？ | 餐费补贴 supported（doc005_chunk01），交通补贴 unsupported | COMPLETED | ANNOTATED | ANNOTATED（0.5 不大于 0.5） |
 | SC03 | 输出策略切换 | 公司的报销和补贴政策是什么？ | 3 条结论：1 条 supported，2 条 unsupported | COMPLETED | ANNOTATED | BLOCKED（0.6667） |
 | SC04 | 引用无效 | 员工请假需要提前几天申请？ | c1 的 evidenceId 不在检索结果中；c2 的 quote 是编造的；c3 正确 | COMPLETED | ANNOTATED | ANNOTATED 或 BLOCKED，按实际比例写入 expected |
 | SC05 | 核验返回无效 JSON | 产品的保修期是多久？ | VERIFY_CLAIMS 两次都返回非 JSON 文本 | FAILED / INVALID_JSON | NOT_VERIFIED | NOT_VERIFIED |
@@ -1276,6 +1296,7 @@ aiguardian:
     chunk-min-chars: 200
     chunk-max-chars: 400
     chunk-overlap-chars: 40
+    stopwords: ["公司"]
   verification:
     verifier: batch              # batch / per-claim
     max-claims: 8
@@ -1289,6 +1310,7 @@ aiguardian:
 ```
 
 - 所有配置通过 `AiGuardianProperties`（成员 1）以 `@ConfigurationProperties(prefix = "aiguardian")` 注入，其他模块不得用 `@Value` 直接读取。
+- `aiguardian.retrieval.stopwords` 为字符串列表，默认仅含“公司”。索引和查询共用该停用词列表，配置 `[]` 表示禁用停用词过滤。修改后重启后端以重建索引。
 - API Key 只从环境变量读取。仓库中提供 `.env.example`，真实 `.env` 加入 `.gitignore`。
 
 ---
@@ -1339,6 +1361,7 @@ section 为 null 时省略 `· 章节` 部分。片段之间空一行。
 - `dev`：日常集成分支。
 - 功能分支：`feature/{模块}`，如 `feature/retrieval`、`feature/verifier`、`feature/audit`、`feature/frontend-chat`。
 - 合并到 dev 前：本模块单元测试全部通过，另一名成员看过代码。
+- 成员 4 在包含真实检索和核验实现的 `dev` 分支上运行场景回归。
 - 提交信息格式：`[模块] 做了什么`，如 `[verifier] 增加 JSON 重试逻辑`。
 
 ---
@@ -1348,3 +1371,5 @@ section 为 null 时省略 `· 章节` 部分。片段之间空一行。
 | 版本 | 日期 | 修改人 | 内容 |
 | --- | --- | --- | --- |
 | v1.0 | 2026-11-13 | 成员 1 | 初始冻结版 |
+| v1.1 | 2026-11-16 | 成员 1 | 配置检索停用词，明确证据片段保留正文原有换行和空行，规定在 dev 上运行集成回归 |
+| v1.2 | 2026-11-17 | 成员 1 | 保留 SC02 原问题，将模拟回答中的年假改为本次检索可支持的餐费补贴，更新相关示例 |

@@ -6,10 +6,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.aiguardian.config.AiGuardianProperties;
 import com.aiguardian.domain.model.Evidence;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.springframework.boot.context.properties.bind.Bindable;
+import org.springframework.boot.context.properties.bind.Binder;
+import org.springframework.boot.env.YamlPropertySourceLoader;
+import org.springframework.core.env.StandardEnvironment;
+import org.springframework.core.io.ByteArrayResource;
 
 class LuceneEvidenceRetrieverTest {
 
@@ -80,6 +88,28 @@ class LuceneEvidenceRetrieverTest {
         for (String question : List.of("公司正式员工一年有多少天年假？", "员工请假需要提前几天申请？",
                 "产品的保修期是多久？", "员工迟到如何处理？", "报销需要提交哪些材料？")) {
             assertFalse(retriever.retrieve(question, 3).isEmpty(), "正常问题不应被阈值压掉：" + question);
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource(delimiter = '|', value = {"[公司] | false | true", "[年假] | true | false", "[] | true | true"})
+    void appliesYamlStopwordsToSearch(String configuredStopwords, boolean findsCompany, boolean findsLeave)
+            throws Exception {
+        String yaml = "aiguardian:\n  retrieval:\n    stopwords: " + configuredStopwords + "\n";
+        var resource = new ByteArrayResource(yaml.getBytes(StandardCharsets.UTF_8));
+        var source = new YamlPropertySourceLoader().load("stopwords", resource).get(0);
+        var environment = new StandardEnvironment();
+        environment.getPropertySources().addFirst(source);
+        var config = new AiGuardianProperties();
+        Binder.get(environment).bind("aiguardian", Bindable.ofInstance(config));
+
+        var configuredIndex = new KnowledgeBaseIndex(config, new KnowledgeBaseLoader(config), new Chunker(config));
+        try {
+            configuredIndex.build();
+            assertEquals(findsCompany, !configuredIndex.search("公司", 3).isEmpty());
+            assertEquals(findsLeave, !configuredIndex.search("年假", 3).isEmpty());
+        } finally {
+            configuredIndex.close();
         }
     }
 

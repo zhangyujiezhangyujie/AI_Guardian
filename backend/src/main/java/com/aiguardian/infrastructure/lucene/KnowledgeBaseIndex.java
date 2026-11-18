@@ -11,7 +11,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.CharArraySet;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
@@ -42,14 +41,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Profile("!stub")
 public class KnowledgeBaseIndex {
-
-    /**
-     * 停用词（调参结论，见 docs/experiments/retrieval_tuning.md）。
-     * 只停“公司”：它几乎出现在每份文档里，没有区分度，却让“公司食堂周末几点开门？”
-     * 之类的无证据问题也能召回一堆无关片段。契约第 11 章没有 stopwords 配置键，
-     * 暂以常量实现，待成员 1 确认后再迁移到配置。
-     */
-    static final Set<String> STOPWORDS = Set.of("公司");
 
     private static final String FIELD_SEARCH = "searchText";
 
@@ -113,7 +104,7 @@ public class KnowledgeBaseIndex {
 
     /** 索引与查询共用同一个分析器实例；单独抽出便于调参实验替换停用词集合。 */
     protected Analyzer createAnalyzer() {
-        return new SmartChineseAnalyzer(new CharArraySet(STOPWORDS, true));
+        return new SmartChineseAnalyzer(new CharArraySet(properties.getRetrieval().getStopwords(), true));
     }
 
     /** 按 BM25 分数降序返回最多 topK 条，丢弃低于 {@code min-score} 的结果。 */
