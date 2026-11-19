@@ -1,0 +1,35 @@
+{
+  "scenarioId": "SC08",
+  "name": "核验超时",
+  "description": "核验调用超时，系统记录核验失败并暂停展示，不得伪装成核验成功。",
+  "priority": "P0",
+  "question": "员工迟到如何处理？",
+  "supportsReal": false,
+  "recommendedStrategies": ["annotate", "block"],
+  "mock": {
+    "GENERATE_ANSWER": [
+      {
+        "type": "TEXT",
+        "content": "迟到30分钟以内，每次扣款50元。"
+      }
+    ],
+    "VERIFY_CLAIMS": [
+      {
+        "type": "TIMEOUT",
+        "delayMs": 2000
+      }
+    ]
+  },
+  "expected": {
+    "httpStatus": 200,
+    "errorCode": null,
+    "evidenceIdsContain": ["doc004_chunk02"],
+    "verificationState": "FAILED",
+    "failureReason": "LLM_TIMEOUT",
+    "claims": [],
+    "guardByStrategy": {
+      "annotate": "NOT_VERIFIED",
+      "block": "NOT_VERIFIED"
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "scenarioId": "SC04",
+  "name": "引用无效",
+  "description": "核验模型给出不存在的证据编号和编造的引用原文，由程序校验识破。",
+  "priority": "P0",
+  "question": "员工请假需要提前几天申请？",
+  "supportsReal": true,
+  "recommendedStrategies": ["annotate", "block"],
+  "mock": {
+    "GENERATE_ANSWER": [
+      {
+        "type": "TEXT",
+        "content": "事假需提前2个工作日申请，病假需在3个工作日内补交证明，婚假为10天。"
+      }
+    ],
+    "VERIFY_CLAIMS": [
+      {
+        "type": "TEXT",
+        "content": "{\"claims\":[{\"claim\":\"事假需提前2个工作日申请\",\"originalText\":\"事假需提前2个工作日申请\",\"supported\":true,\"evidenceId\":\"doc099_chunk01\",\"quote\":\"事假需提前2个工作日申请\"},{\"claim\":\"病假需在3个工作日内补交证明\",\"originalText\":\"病假需在3个工作日内补交证明\",\"supported\":true,\"evidenceId\":\"doc002_chunk01\",\"quote\":\"病假需在5个工作日内补交证明\"},{\"claim\":\"婚假为10天\",\"originalText\":\"婚假为10天\",\"supported\":true,\"evidenceId\":\"doc002_chunk02\",\"quote\":\"可享受婚假10天\"}],\"truncated\":false}"
+      }
+    ]
+  },
+  "expected": {
+    "httpStatus": 200,
+    "errorCode": null,
+    "evidenceIdsContain": ["doc002_chunk01", "doc002_chunk02"],
+    "verificationState": "COMPLETED",
+    "failureReason": null,
+    "claims": [
+      {
+        "claimContains": "事假",
+        "status": "INSUFFICIENT",
+        "insufficientReason": "EVIDENCE_NOT_IN_CONTEXT"
+      },
+      {
+        "claimContains": "病假",
+        "status": "INSUFFICIENT",
+        "insufficientReason": "QUOTE_NOT_FOUND"
+      },
+      {
+        "claimContains": "婚假",
+        "status": "SUPPORTED",
+        "insufficientReason": null
+      }
+    ],
+    "guardByStrategy": {
+      "annotate": "ANNOTATED",
+      "block": "BLOCKED"
+    }
+  }
+}

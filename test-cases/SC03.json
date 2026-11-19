@@ -1,0 +1,51 @@
+{
+  "scenarioId": "SC03",
+  "name": "输出策略切换",
+  "description": "三条结论中只有餐费补贴有证据，交通补贴和话费补贴都是知识库没有的内容。",
+  "priority": "P0",
+  "question": "公司的报销和补贴政策是什么？",
+  "supportsReal": true,
+  "recommendedStrategies": ["annotate", "block"],
+  "mock": {
+    "GENERATE_ANSWER": [
+      {
+        "type": "TEXT",
+        "content": "员工每月有300元餐费补贴，另有每月500元交通补贴和每月100元话费补贴。"
+      }
+    ],
+    "VERIFY_CLAIMS": [
+      {
+        "type": "TEXT",
+        "content": "{\"claims\":[{\"claim\":\"员工每月有300元餐费补贴\",\"originalText\":\"每月有300元餐费补贴\",\"supported\":true,\"evidenceId\":\"doc005_chunk01\",\"quote\":\"餐费补贴，标准为每月300元\"},{\"claim\":\"员工每月有500元交通补贴\",\"originalText\":\"每月500元交通补贴\",\"supported\":false,\"evidenceId\":null,\"quote\":null},{\"claim\":\"员工每月有100元话费补贴\",\"originalText\":\"每月100元话费补贴\",\"supported\":false,\"evidenceId\":null,\"quote\":null}],\"truncated\":false}"
+      }
+    ]
+  },
+  "expected": {
+    "httpStatus": 200,
+    "errorCode": null,
+    "evidenceIdsContain": ["doc005_chunk01"],
+    "verificationState": "COMPLETED",
+    "failureReason": null,
+    "claims": [
+      {
+        "claimContains": "餐费补贴",
+        "status": "SUPPORTED",
+        "insufficientReason": null
+      },
+      {
+        "claimContains": "交通补贴",
+        "status": "INSUFFICIENT",
+        "insufficientReason": "MODEL_UNSUPPORTED"
+      },
+      {
+        "claimContains": "话费补贴",
+        "status": "INSUFFICIENT",
+        "insufficientReason": "MODEL_UNSUPPORTED"
+      }
+    ],
+    "guardByStrategy": {
+      "annotate": "ANNOTATED",
+      "block": "BLOCKED"
+    }
+  }
+}

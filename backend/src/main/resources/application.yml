@@ -21,10 +21,11 @@ aiguardian:
   retrieval:
     knowledge-base-dir: ../knowledge-base
     top-k: 3
-    min-score: 0.0
+    min-score: 1.0
     chunk-min-chars: 200
     chunk-max-chars: 400
     chunk-overlap-chars: 40
+    stopwords: ["公司"]
   verification:
     verifier: batch
     max-claims: 8
