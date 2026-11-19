@@ -9,7 +9,10 @@ import com.aiguardian.domain.evidence.EvidenceRetriever;
 import com.aiguardian.domain.guard.AnnotateOutputGuard;
 import com.aiguardian.domain.guard.BlockOutputGuard;
 import com.aiguardian.domain.guard.OutputGuardRegistry;
+import com.aiguardian.domain.model.AuditEvent;
+import com.aiguardian.domain.model.AuditEventType;
 import com.aiguardian.domain.model.ChatResponse;
+import com.aiguardian.domain.model.RequestRecord;
 import com.aiguardian.domain.model.RunMode;
 import com.aiguardian.domain.verification.CitationValidator;
 import com.aiguardian.domain.verification.ClaimVerifier;
@@ -20,7 +23,6 @@ import com.aiguardian.infrastructure.lucene.Chunker;
 import com.aiguardian.infrastructure.lucene.KnowledgeBaseIndex;
 import com.aiguardian.infrastructure.lucene.KnowledgeBaseLoader;
 import com.aiguardian.infrastructure.lucene.LuceneEvidenceRetriever;
-import com.aiguardian.stub.LoggingAuditService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,6 +32,10 @@ import java.util.Map;
 import java.util.TreeSet;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Offline end-to-end replay of each scenario JSON currently present in test-cases/. */
@@ -53,18 +59,18 @@ class ScenarioReplayRegressionTest {
             AnnotateOutputGuard annotate = new AnnotateOutputGuard();
             OutputGuardRegistry guards = new OutputGuardRegistry(List.of(
                     annotate, new BlockOutputGuard(annotate)));
-            AuditService audit = new LoggingAuditService();
-            var orchestrator = new ChatOrchestratorImpl(properties, retriever, mockLLM,
-                    List.of(verifier), citationValidator, guards, audit, json);
+            RecordingAuditService audit = new RecordingAuditService();
             ScenarioExpectationChecker checker = new DefaultScenarioExpectationChecker();
 
             for (Scenario scenario : scenarios.findAll()) {
                 for (String strategy : strategiesToReplay(scenario)) {
+                    audit.reset();
                     ChatResponse response = null;
                     int httpStatus = 200;
                     String errorCode = null;
                     try {
-                        response = orchestrator.handle(ChatCommand.builder()
+                        response = orchestrator(properties, retriever, mockLLM, verifier,
+                                citationValidator, guards, audit, json).handle(ChatCommand.builder()
                                 .question(scenario.getQuestion())
                                 .mode(RunMode.MOCK)
                                 .scenarioId(scenario.getScenarioId())
@@ -79,11 +85,82 @@ class ScenarioReplayRegressionTest {
                     assertTrue(result.checked(), scenario.getScenarioId() + " was not checked");
                     assertTrue(Boolean.TRUE.equals(result.passed()),
                             scenario.getScenarioId() + "/" + strategy + ": " + result.mismatches());
+                    assertAuditOutcome(scenario, response, httpStatus, audit);
                 }
             }
         } finally {
             index.close();
         }
+    }
+
+    private static ChatOrchestratorImpl orchestrator(AiGuardianProperties properties,
+                                                      EvidenceRetriever retriever,
+                                                      MockLLMClient mockLLM,
+                                                      ClaimVerifier verifier,
+                                                      CitationValidator citationValidator,
+                                                      OutputGuardRegistry guards,
+                                                      AuditService audit,
+                                                      ObjectMapper json) {
+        return new ChatOrchestratorImpl(properties, retriever, mockLLM, List.of(verifier),
+                citationValidator, guards, audit, json);
+    }
+
+    private static void assertAuditOutcome(Scenario scenario, ChatResponse response, int httpStatus,
+                                           RecordingAuditService audit) {
+        List<AuditEvent> events = audit.events();
+        assertFalse(events.isEmpty(), scenario.getScenarioId() + " wrote no audit events");
+        assertEquals(AuditEventType.REQUEST_RECEIVED, events.get(0).getEventType());
+        assertEquals(1, audit.records().size(), scenario.getScenarioId() + " did not save one request record");
+
+        RequestRecord request = audit.records().get(0);
+        assertEquals(scenario.getScenarioId(), request.getScenarioId());
+        if (httpStatus == 200) {
+            assertEquals(AuditEventType.REQUEST_COMPLETED, events.get(events.size() - 1).getEventType());
+            assertTrue(events.get(events.size() - 1).isSuccess());
+            assertNull(request.getErrorCode());
+        } else {
+            assertEquals(AuditEventType.REQUEST_FAILED, events.get(events.size() - 1).getEventType());
+            assertFalse(events.get(events.size() - 1).isSuccess());
+            assertEquals(scenario.getExpected().getErrorCode(), request.getErrorCode());
+        }
+
+        switch (scenario.getScenarioId()) {
+            case "SC04" -> {
+                AuditEvent citation = event(events, AuditEventType.CITATION_CHECKED);
+                assertNotNull(citation);
+                @SuppressWarnings("unchecked")
+                Map<String, Integer> failedReasons = (Map<String, Integer>) citation.getDetail().get("failedReasons");
+                assertTrue(failedReasons.containsKey("EVIDENCE_NOT_IN_CONTEXT"));
+                assertTrue(failedReasons.containsKey("QUOTE_NOT_FOUND"));
+            }
+            case "SC05", "SC08" -> {
+                AuditEvent verification = event(events, AuditEventType.VERIFICATION_DONE);
+                assertNotNull(verification);
+                assertFalse(verification.isSuccess());
+                assertEquals("FAILED", verification.getDetail().get("state").toString());
+                AuditEvent guard = event(events, AuditEventType.GUARD_APPLIED);
+                assertNotNull(guard);
+                assertEquals("NOT_VERIFIED", guard.getDetail().get("action").toString());
+                assertTrue(request.getReport().getClaims().isEmpty(),
+                        scenario.getScenarioId() + " must not turn a failed verification into supported claims");
+            }
+            case "SC07" -> {
+                assertEquals("NO_EVIDENCE", response.getVerification().getVerificationState().name());
+                assertNull(event(events, AuditEventType.GENERATION_DONE));
+                assertNull(event(events, AuditEventType.VERIFICATION_DONE));
+            }
+            case "SC09" -> {
+                AuditEvent generation = event(events, AuditEventType.GENERATION_FAILED);
+                assertNotNull(generation);
+                assertEquals("API_ERROR", generation.getDetail().get("llmErrorType"));
+                assertNull(event(events, AuditEventType.VERIFICATION_DONE));
+            }
+            default -> { }
+        }
+    }
+
+    private static AuditEvent event(List<AuditEvent> events, AuditEventType type) {
+        return events.stream().filter(item -> item.getEventType() == type).findFirst().orElse(null);
     }
 
     private static List<String> strategiesToReplay(Scenario scenario) {
@@ -125,5 +202,33 @@ class ScenarioReplayRegressionTest {
             return parent;
         }
         throw new IllegalStateException("无法定位包含 knowledge-base/ 和 test-cases/ 的项目根目录。");
+    }
+
+    private static final class RecordingAuditService implements AuditService {
+        private final List<AuditEvent> events = new ArrayList<>();
+        private final List<RequestRecord> records = new ArrayList<>();
+
+        @Override
+        public void record(AuditEvent event) {
+            events.add(event);
+        }
+
+        @Override
+        public void saveRequestRecord(RequestRecord record) {
+            records.add(record);
+        }
+
+        void reset() {
+            events.clear();
+            records.clear();
+        }
+
+        List<AuditEvent> events() {
+            return List.copyOf(events);
+        }
+
+        List<RequestRecord> records() {
+            return List.copyOf(records);
+        }
     }
 }

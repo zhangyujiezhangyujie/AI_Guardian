@@ -10,6 +10,7 @@ import com.aiguardian.domain.model.GuardResult;
 import com.aiguardian.domain.model.RequestRecord;
 import com.aiguardian.domain.model.RunMode;
 import com.aiguardian.domain.model.Timing;
+import com.aiguardian.domain.model.VerificationFailureReason;
 import com.aiguardian.domain.model.VerificationReport;
 import com.aiguardian.domain.model.VerificationState;
 import com.aiguardian.common.ShanghaiTime;
@@ -130,6 +131,95 @@ class JdbcAuditPersistenceIntegrationTest {
                     .andExpect(jsonPath("$.verification.claims[0].status").value("SUPPORTED"))
                     .andExpect(jsonPath("$.guard.strategy").value("annotate"))
                     .andExpect(jsonPath("$.events[0].eventType").value("REQUEST_RECEIVED"));
+        } finally {
+            jdbc.update("DELETE FROM audit_event WHERE request_id = ?", requestId);
+            jdbc.update("DELETE FROM claim_record WHERE request_id = ?", requestId);
+            jdbc.update("DELETE FROM chat_message WHERE request_id = ?", requestId);
+            jdbc.update("DELETE FROM verification_record WHERE request_id = ?", requestId);
+            jdbc.update("DELETE FROM chat_session WHERE id = ?", sessionId);
+        }
+    }
+
+    @Test
+    void persistsFailedVerificationWithoutMarkingItSupported() throws Exception {
+        String suffix = UUID.randomUUID().toString().replace("-", "").substring(0, 12);
+        String requestId = "req_it_" + suffix;
+        String sessionId = "ses_it_" + suffix;
+        var createdAt = ShanghaiTime.now();
+        VerificationReport report = VerificationReport.builder()
+                .requestId(requestId)
+                .verificationState(VerificationState.FAILED)
+                .failureReason(VerificationFailureReason.LLM_TIMEOUT)
+                .answer("员工回答内容")
+                .claims(List.of())
+                .verifierName("batch")
+                .llmCalls(1)
+                .build();
+        report.recalculate();
+        GuardResult guard = GuardResult.builder()
+                .strategy("block")
+                .blockThreshold(0.5)
+                .action(GuardAction.NOT_VERIFIED)
+                .answerVisible(false)
+                .unsupportedRatio(null)
+                .build();
+        RequestRecord record = RequestRecord.builder()
+                .requestId(requestId)
+                .sessionId(sessionId)
+                .mode(RunMode.MOCK)
+                .scenarioId("SC08")
+                .question("员工迟到如何处理？")
+                .rawAnswer(report.getAnswer())
+                .evidence(List.of())
+                .report(report)
+                .guard(guard)
+                .timing(new Timing(4, 3L, 2000L, 2010))
+                .createdAt(createdAt)
+                .build();
+
+        try {
+            auditService.saveRequestRecord(record);
+            auditService.record(AuditEvent.builder()
+                    .requestId(requestId)
+                    .eventType(AuditEventType.REQUEST_RECEIVED)
+                    .success(true)
+                    .detail(Map.of("mode", "MOCK", "scenarioId", "SC08", "questionLength", 9))
+                    .createdAt(createdAt)
+                    .build());
+            auditService.record(AuditEvent.builder()
+                    .requestId(requestId)
+                    .eventType(AuditEventType.VERIFICATION_DONE)
+                    .success(false)
+                    .errorCode("LLM_TIMEOUT")
+                    .detail(Map.of("verifierName", "batch", "state", "FAILED",
+                            "failureReason", "LLM_TIMEOUT", "totalClaims", 0, "llmCalls", 1))
+                    .createdAt(createdAt.plusSeconds(1))
+                    .build());
+            auditService.record(AuditEvent.builder()
+                    .requestId(requestId)
+                    .eventType(AuditEventType.GUARD_APPLIED)
+                    .success(true)
+                    .detail(Map.of("strategy", "block", "blockThreshold", 0.5,
+                            "action", "NOT_VERIFIED", "overridden", false))
+                    .createdAt(createdAt.plusSeconds(2))
+                    .build());
+            auditService.record(AuditEvent.builder()
+                    .requestId(requestId)
+                    .eventType(AuditEventType.REQUEST_COMPLETED)
+                    .success(true)
+                    .detail(Map.of("totalMs", 2010, "action", "NOT_VERIFIED"))
+                    .createdAt(createdAt.plusSeconds(3))
+                    .build());
+
+            mvc.perform(get("/api/audit/{requestId}", requestId))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.verification.verificationState").value("FAILED"))
+                    .andExpect(jsonPath("$.verification.failureReason").value("LLM_TIMEOUT"))
+                    .andExpect(jsonPath("$.verification.totalClaims").value(0))
+                    .andExpect(jsonPath("$.verification.supportedClaims").value(0))
+                    .andExpect(jsonPath("$.guard.action").value("NOT_VERIFIED"))
+                    .andExpect(jsonPath("$.events[1].eventType").value("VERIFICATION_DONE"))
+                    .andExpect(jsonPath("$.events[1].success").value(false));
         } finally {
             jdbc.update("DELETE FROM audit_event WHERE request_id = ?", requestId);
             jdbc.update("DELETE FROM claim_record WHERE request_id = ?", requestId);
