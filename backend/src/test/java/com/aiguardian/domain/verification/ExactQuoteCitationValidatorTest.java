@@ -65,4 +65,30 @@ class ExactQuoteCitationValidatorTest {
         assertEquals("\"abc\",'x':2000;ok!?.,", TextNormalizer.normalize("「ＡＢＣ」，‘X’：２,０００；OK！？。、\u3000\n"));
         assertEquals("", TextNormalizer.normalize(null));
     }
+
+    @Test void repeatedTextUsesFirstOccurrenceAndKeepsUnsupportedOffsets() {
+        var c = claim("e1", "缺失的证据引用");
+        c.setStatus(ClaimStatus.INSUFFICIENT);
+        c.setInsufficientReason(InsufficientReason.MODEL_UNSUPPORTED);
+        var report = VerificationReport.builder().answer("😀年假15天。年假15天")
+                .verificationState(VerificationState.COMPLETED).claims(List.of(c)).build();
+        validator.validate(report, List.of());
+        assertEquals(2, c.getStartIndex());
+        assertEquals(7, c.getEndIndex());
+        assertEquals(InsufficientReason.MODEL_UNSUPPORTED, c.getInsufficientReason());
+    }
+
+    @Test void missingTextClearsStaleOffsetsAndNeverUsesNormalizedSearch() {
+        for (String original : new String[]{"年假１５天", "年假 15天", "不存在", "", null}) {
+            var c = claim("missing", "不存在的证据");
+            c.setOriginalText(original);
+            c.setStartIndex(99);
+            c.setEndIndex(100);
+            var report = VerificationReport.builder().answer("年假15天")
+                    .verificationState(VerificationState.PARTIAL).claims(List.of(c)).build();
+            validator.validate(report, List.of());
+            assertNull(c.getStartIndex());
+            assertNull(c.getEndIndex());
+        }
+    }
 }

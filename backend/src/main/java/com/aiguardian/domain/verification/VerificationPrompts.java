@@ -34,4 +34,14 @@ public final class VerificationPrompts {
         data.put("evidence", EvidenceFormatter.format(input.getEvidence()));
         return json.writeValueAsString(data);
     }
+
+    public static String extraction(int limit) {
+        return system(limit) + "\n本轮仅提取 answer 中的事实性结论，不做证据支持判断。"
+                + "所有结论的 supported 固定为 false，evidenceId、quote 固定为 null。";
+    }
+
+    public static String single() {
+        return system(1) + "\n本轮只核验 user 数据中的 target，不重新提取其他结论。"
+                + "恰好返回一条结论，claim 和 originalText 必须与 target 逐字相同，truncated=false。";
+    }
 }

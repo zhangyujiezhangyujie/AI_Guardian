@@ -1,0 +1,515 @@
+{
+  "version": "0.1-candidate",
+  "status": "PENDING_HUMAN_REVIEW",
+  "provenance": "AI 辅助生成的独立虚构制度与候选标签；尚未由成员3和成员2人工确认，不是已完成人工标注的金标准。",
+  "sourceIntegrationStatus": "成员2知识库尚未提供；这些片段不是正式知识库文件。",
+  "sources": [
+    {
+      "evidenceId": "doc001_chunk01",
+      "documentId": "doc001",
+      "documentTitle": "虚构员工手册",
+      "section": "年假与请假",
+      "content": "正式员工每年享有15天带薪年假。试用期员工不享有年假。普通事假须提前3个工作日提交申请。",
+      "score": 1.0,
+      "rank": 1
+    },
+    {
+      "evidenceId": "doc002_chunk01",
+      "documentId": "doc002",
+      "documentTitle": "虚构报销规范",
+      "section": "费用报销",
+      "content": "报销申请须在费用发生后30天内提交。单次差旅住宿报销上限为500元。报销须提供发票及部门负责人审批记录。",
+      "score": 1.0,
+      "rank": 1
+    },
+    {
+      "evidenceId": "doc003_chunk01",
+      "documentId": "doc003",
+      "documentTitle": "虚构福利规定",
+      "section": "补贴与培训",
+      "content": "员工每月餐费补贴为500元。完成试用期的员工每年可申请一次岗位培训。岗位培训须经部门负责人审批。",
+      "score": 1.0,
+      "rank": 1
+    },
+    {
+      "evidenceId": "doc004_chunk01",
+      "documentId": "doc004",
+      "documentTitle": "虚构办公安排",
+      "section": "远程办公",
+      "content": "正式员工每周最多可申请2天远程办公。远程办公申请须提前1个工作日提交。远程办公期间须在10:00至16:00保持在线。",
+      "score": 1.0,
+      "rank": 1
+    },
+    {
+      "evidenceId": "doc005_chunk01",
+      "documentId": "doc005",
+      "documentTitle": "虚构信息安全规范",
+      "section": "设备与账号",
+      "content": "员工领取办公电脑须登记资产编号。账号离职停用由信息技术部门在离职当日办理。遗失办公设备须在发现后24小时内报告信息技术部门。",
+      "score": 1.0,
+      "rank": 1
+    }
+  ],
+  "cases": [
+    {
+      "caseId": "A01_1",
+      "question": "年假与请假有哪些规定？",
+      "answer": "正式员工每年享有15天带薪年假。试用期员工不享有年假。正式员工每年享有30天带薪年假。",
+      "evidenceIds": [
+        "doc001_chunk01"
+      ],
+      "claims": [
+        {
+          "id": "L01",
+          "claim": "正式员工每年享有15天带薪年假。",
+          "originalText": "正式员工每年享有15天带薪年假。",
+          "proposedStatus": "SUPPORTED",
+          "referenceEvidenceId": "doc001_chunk01",
+          "referenceQuote": "正式员工每年享有15天带薪年假。",
+          "rationale": "当前证据逐字规定该结论。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L02",
+          "claim": "试用期员工不享有年假。",
+          "originalText": "试用期员工不享有年假。",
+          "proposedStatus": "SUPPORTED",
+          "referenceEvidenceId": "doc001_chunk01",
+          "referenceQuote": "试用期员工不享有年假。",
+          "rationale": "当前证据逐字规定该结论。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L03",
+          "claim": "正式员工每年享有30天带薪年假。",
+          "originalText": "正式员工每年享有30天带薪年假。",
+          "proposedStatus": "INSUFFICIENT",
+          "referenceEvidenceId": null,
+          "referenceQuote": null,
+          "rationale": "与证据规定的15天矛盾。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        }
+      ]
+    },
+    {
+      "caseId": "A01_2",
+      "question": "年假与请假有哪些规定？",
+      "answer": "普通事假须提前3个工作日提交申请。员工每月另有2000元交通补贴。普通事假当天提交即可自动批准。",
+      "evidenceIds": [
+        "doc001_chunk01"
+      ],
+      "claims": [
+        {
+          "id": "L04",
+          "claim": "普通事假须提前3个工作日提交申请。",
+          "originalText": "普通事假须提前3个工作日提交申请。",
+          "proposedStatus": "SUPPORTED",
+          "referenceEvidenceId": "doc001_chunk01",
+          "referenceQuote": "普通事假须提前3个工作日提交申请。",
+          "rationale": "当前证据逐字规定该结论。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L05",
+          "claim": "员工每月另有2000元交通补贴。",
+          "originalText": "员工每月另有2000元交通补贴。",
+          "proposedStatus": "INSUFFICIENT",
+          "referenceEvidenceId": null,
+          "referenceQuote": null,
+          "rationale": "当前证据未提及交通补贴。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L06",
+          "claim": "普通事假当天提交即可自动批准。",
+          "originalText": "普通事假当天提交即可自动批准。",
+          "proposedStatus": "INSUFFICIENT",
+          "referenceEvidenceId": null,
+          "referenceQuote": null,
+          "rationale": "不符合提前3个工作日申请的规定，且未规定自动批准。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        }
+      ]
+    },
+    {
+      "caseId": "A02_1",
+      "question": "费用报销有哪些规定？",
+      "answer": "报销申请须在费用发生后30天内提交。单次差旅住宿报销上限为500元。报销申请可在费用发生后60天内提交。",
+      "evidenceIds": [
+        "doc002_chunk01"
+      ],
+      "claims": [
+        {
+          "id": "L07",
+          "claim": "报销申请须在费用发生后30天内提交。",
+          "originalText": "报销申请须在费用发生后30天内提交。",
+          "proposedStatus": "SUPPORTED",
+          "referenceEvidenceId": "doc002_chunk01",
+          "referenceQuote": "报销申请须在费用发生后30天内提交。",
+          "rationale": "当前证据逐字规定该结论。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L08",
+          "claim": "单次差旅住宿报销上限为500元。",
+          "originalText": "单次差旅住宿报销上限为500元。",
+          "proposedStatus": "SUPPORTED",
+          "referenceEvidenceId": "doc002_chunk01",
+          "referenceQuote": "单次差旅住宿报销上限为500元。",
+          "rationale": "当前证据逐字规定该结论。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L09",
+          "claim": "报销申请可在费用发生后60天内提交。",
+          "originalText": "报销申请可在费用发生后60天内提交。",
+          "proposedStatus": "INSUFFICIENT",
+          "referenceEvidenceId": null,
+          "referenceQuote": null,
+          "rationale": "与证据规定的30天矛盾。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        }
+      ]
+    },
+    {
+      "caseId": "A02_2",
+      "question": "费用报销有哪些规定？",
+      "answer": "报销须提供发票及部门负责人审批记录。公司报销员工所有私人购物费用。只要提供发票就无需部门负责人审批。",
+      "evidenceIds": [
+        "doc002_chunk01"
+      ],
+      "claims": [
+        {
+          "id": "L10",
+          "claim": "报销须提供发票及部门负责人审批记录。",
+          "originalText": "报销须提供发票及部门负责人审批记录。",
+          "proposedStatus": "SUPPORTED",
+          "referenceEvidenceId": "doc002_chunk01",
+          "referenceQuote": "报销须提供发票及部门负责人审批记录。",
+          "rationale": "当前证据逐字规定该结论。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L11",
+          "claim": "公司报销员工所有私人购物费用。",
+          "originalText": "公司报销员工所有私人购物费用。",
+          "proposedStatus": "INSUFFICIENT",
+          "referenceEvidenceId": null,
+          "referenceQuote": null,
+          "rationale": "当前证据未规定私人购物报销。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L12",
+          "claim": "只要提供发票就无需部门负责人审批。",
+          "originalText": "只要提供发票就无需部门负责人审批。",
+          "proposedStatus": "INSUFFICIENT",
+          "referenceEvidenceId": null,
+          "referenceQuote": null,
+          "rationale": "遗漏证据明确要求的负责人审批条件。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        }
+      ]
+    },
+    {
+      "caseId": "A03_1",
+      "question": "补贴与培训有哪些规定？",
+      "answer": "员工每月餐费补贴为500元。完成试用期的员工每年可申请一次岗位培训。员工每月餐费补贴为800元。",
+      "evidenceIds": [
+        "doc003_chunk01"
+      ],
+      "claims": [
+        {
+          "id": "L13",
+          "claim": "员工每月餐费补贴为500元。",
+          "originalText": "员工每月餐费补贴为500元。",
+          "proposedStatus": "SUPPORTED",
+          "referenceEvidenceId": "doc003_chunk01",
+          "referenceQuote": "员工每月餐费补贴为500元。",
+          "rationale": "当前证据逐字规定该结论。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L14",
+          "claim": "完成试用期的员工每年可申请一次岗位培训。",
+          "originalText": "完成试用期的员工每年可申请一次岗位培训。",
+          "proposedStatus": "SUPPORTED",
+          "referenceEvidenceId": "doc003_chunk01",
+          "referenceQuote": "完成试用期的员工每年可申请一次岗位培训。",
+          "rationale": "当前证据逐字规定该结论。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L15",
+          "claim": "员工每月餐费补贴为800元。",
+          "originalText": "员工每月餐费补贴为800元。",
+          "proposedStatus": "INSUFFICIENT",
+          "referenceEvidenceId": null,
+          "referenceQuote": null,
+          "rationale": "与证据规定的500元矛盾。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        }
+      ]
+    },
+    {
+      "caseId": "A03_2",
+      "question": "补贴与培训有哪些规定？",
+      "answer": "岗位培训须经部门负责人审批。员工家属也能领取每月餐费补贴。试用期内的员工无需审批即可申请岗位培训。",
+      "evidenceIds": [
+        "doc003_chunk01"
+      ],
+      "claims": [
+        {
+          "id": "L16",
+          "claim": "岗位培训须经部门负责人审批。",
+          "originalText": "岗位培训须经部门负责人审批。",
+          "proposedStatus": "SUPPORTED",
+          "referenceEvidenceId": "doc003_chunk01",
+          "referenceQuote": "岗位培训须经部门负责人审批。",
+          "rationale": "当前证据逐字规定该结论。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L17",
+          "claim": "员工家属也能领取每月餐费补贴。",
+          "originalText": "员工家属也能领取每月餐费补贴。",
+          "proposedStatus": "INSUFFICIENT",
+          "referenceEvidenceId": null,
+          "referenceQuote": null,
+          "rationale": "当前证据未规定家属补贴。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L18",
+          "claim": "试用期内的员工无需审批即可申请岗位培训。",
+          "originalText": "试用期内的员工无需审批即可申请岗位培训。",
+          "proposedStatus": "INSUFFICIENT",
+          "referenceEvidenceId": null,
+          "referenceQuote": null,
+          "rationale": "违反完成试用期及审批两个条件。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        }
+      ]
+    },
+    {
+      "caseId": "A04_1",
+      "question": "远程办公有哪些规定？",
+      "answer": "正式员工每周最多可申请2天远程办公。远程办公申请须提前1个工作日提交。正式员工每周可申请5天远程办公。",
+      "evidenceIds": [
+        "doc004_chunk01"
+      ],
+      "claims": [
+        {
+          "id": "L19",
+          "claim": "正式员工每周最多可申请2天远程办公。",
+          "originalText": "正式员工每周最多可申请2天远程办公。",
+          "proposedStatus": "SUPPORTED",
+          "referenceEvidenceId": "doc004_chunk01",
+          "referenceQuote": "正式员工每周最多可申请2天远程办公。",
+          "rationale": "当前证据逐字规定该结论。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L20",
+          "claim": "远程办公申请须提前1个工作日提交。",
+          "originalText": "远程办公申请须提前1个工作日提交。",
+          "proposedStatus": "SUPPORTED",
+          "referenceEvidenceId": "doc004_chunk01",
+          "referenceQuote": "远程办公申请须提前1个工作日提交。",
+          "rationale": "当前证据逐字规定该结论。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L21",
+          "claim": "正式员工每周可申请5天远程办公。",
+          "originalText": "正式员工每周可申请5天远程办公。",
+          "proposedStatus": "INSUFFICIENT",
+          "referenceEvidenceId": null,
+          "referenceQuote": null,
+          "rationale": "超过证据规定的每周最多2天。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        }
+      ]
+    },
+    {
+      "caseId": "A04_2",
+      "question": "远程办公有哪些规定？",
+      "answer": "远程办公期间须在10:00至16:00保持在线。员工远程办公可额外领取设备补贴。所有员工都可以无须申请直接远程办公。",
+      "evidenceIds": [
+        "doc004_chunk01"
+      ],
+      "claims": [
+        {
+          "id": "L22",
+          "claim": "远程办公期间须在10:00至16:00保持在线。",
+          "originalText": "远程办公期间须在10:00至16:00保持在线。",
+          "proposedStatus": "SUPPORTED",
+          "referenceEvidenceId": "doc004_chunk01",
+          "referenceQuote": "远程办公期间须在10:00至16:00保持在线。",
+          "rationale": "当前证据逐字规定该结论。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L23",
+          "claim": "员工远程办公可额外领取设备补贴。",
+          "originalText": "员工远程办公可额外领取设备补贴。",
+          "proposedStatus": "INSUFFICIENT",
+          "referenceEvidenceId": null,
+          "referenceQuote": null,
+          "rationale": "当前证据未规定设备补贴。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L24",
+          "claim": "所有员工都可以无须申请直接远程办公。",
+          "originalText": "所有员工都可以无须申请直接远程办公。",
+          "proposedStatus": "INSUFFICIENT",
+          "referenceEvidenceId": null,
+          "referenceQuote": null,
+          "rationale": "扩大正式员工的适用范围并删除申请条件。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        }
+      ]
+    },
+    {
+      "caseId": "A05_1",
+      "question": "设备与账号有哪些规定？",
+      "answer": "员工领取办公电脑须登记资产编号。账号离职停用由信息技术部门在离职当日办理。员工领取办公电脑无需登记资产编号。",
+      "evidenceIds": [
+        "doc005_chunk01"
+      ],
+      "claims": [
+        {
+          "id": "L25",
+          "claim": "员工领取办公电脑须登记资产编号。",
+          "originalText": "员工领取办公电脑须登记资产编号。",
+          "proposedStatus": "SUPPORTED",
+          "referenceEvidenceId": "doc005_chunk01",
+          "referenceQuote": "员工领取办公电脑须登记资产编号。",
+          "rationale": "当前证据逐字规定该结论。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L26",
+          "claim": "账号离职停用由信息技术部门在离职当日办理。",
+          "originalText": "账号离职停用由信息技术部门在离职当日办理。",
+          "proposedStatus": "SUPPORTED",
+          "referenceEvidenceId": "doc005_chunk01",
+          "referenceQuote": "账号离职停用由信息技术部门在离职当日办理。",
+          "rationale": "当前证据逐字规定该结论。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L27",
+          "claim": "员工领取办公电脑无需登记资产编号。",
+          "originalText": "员工领取办公电脑无需登记资产编号。",
+          "proposedStatus": "INSUFFICIENT",
+          "referenceEvidenceId": null,
+          "referenceQuote": null,
+          "rationale": "与证据要求登记资产编号矛盾。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        }
+      ]
+    },
+    {
+      "caseId": "A05_2",
+      "question": "设备与账号有哪些规定？",
+      "answer": "遗失办公设备须在发现后24小时内报告信息技术部门。员工每年可以免费领取一台私人电脑。遗失办公设备只需要在一周内告知同事。",
+      "evidenceIds": [
+        "doc005_chunk01"
+      ],
+      "claims": [
+        {
+          "id": "L28",
+          "claim": "遗失办公设备须在发现后24小时内报告信息技术部门。",
+          "originalText": "遗失办公设备须在发现后24小时内报告信息技术部门。",
+          "proposedStatus": "SUPPORTED",
+          "referenceEvidenceId": "doc005_chunk01",
+          "referenceQuote": "遗失办公设备须在发现后24小时内报告信息技术部门。",
+          "rationale": "当前证据逐字规定该结论。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L29",
+          "claim": "员工每年可以免费领取一台私人电脑。",
+          "originalText": "员工每年可以免费领取一台私人电脑。",
+          "proposedStatus": "INSUFFICIENT",
+          "referenceEvidenceId": null,
+          "referenceQuote": null,
+          "rationale": "当前证据未规定私人电脑福利。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        },
+        {
+          "id": "L30",
+          "claim": "遗失办公设备只需要在一周内告知同事。",
+          "originalText": "遗失办公设备只需要在一周内告知同事。",
+          "proposedStatus": "INSUFFICIENT",
+          "referenceEvidenceId": null,
+          "referenceQuote": null,
+          "rationale": "违反24小时内向信息技术部门报告的要求。",
+          "reviewStatus": "PENDING_HUMAN_REVIEW",
+          "annotator": null,
+          "reviewer": null
+        }
+      ]
+    }
+  ]
+}
