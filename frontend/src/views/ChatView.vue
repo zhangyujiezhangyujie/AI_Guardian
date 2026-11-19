@@ -257,10 +257,11 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+/* 占满内容区可见高度（上下内边距 28px × 2，Mock 提示条高度见 App.vue），消息列表内部滚动 */
 .chat-view {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 56px - 48px);
+  height: calc(100vh - 56px - var(--ag-banner-height, 0px));
   min-height: 420px;
 }
 

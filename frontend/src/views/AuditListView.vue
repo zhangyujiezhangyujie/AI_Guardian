@@ -255,7 +255,7 @@ function openDetail(row) {
 
         <el-table-column
           label="时间"
-          width="122"
+          width="118"
           fixed="left"
         >
           <template #default="{ row }">
@@ -301,7 +301,7 @@ function openDetail(row) {
 
         <el-table-column
           label="问题"
-          min-width="100"
+          min-width="90"
           show-overflow-tooltip
         >
           <template #default="{ row }">
@@ -340,7 +340,7 @@ function openDetail(row) {
 
         <el-table-column
           label="处理结果"
-          width="112"
+          width="108"
           align="center"
         >
           <template #default="{ row }">
@@ -358,7 +358,7 @@ function openDetail(row) {
 
         <el-table-column
           label="结论"
-          width="64"
+          width="60"
           align="center"
         >
           <template #default="{ row }">
@@ -373,7 +373,7 @@ function openDetail(row) {
 
         <el-table-column
           label="耗时"
-          width="72"
+          width="70"
           align="right"
         >
           <template #default="{ row }">

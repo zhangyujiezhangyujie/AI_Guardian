@@ -20,12 +20,14 @@ body {
 
 /* 内容区统一最大宽度（任务卡 6.9） */
 .page-container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .page-title {
-  margin: 0 0 16px;
-  font-size: 20px;
-  font-weight: 600;
+  margin: 0 0 20px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
 }

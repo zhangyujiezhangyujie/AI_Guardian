@@ -23,6 +23,7 @@ Mock 模式下页面顶部会显示橙色标签“前端 Mock 模式（答辩前
 
 - `src/api/`：每个接口一个函数，路径与参数按契约第 7 章；`http.js` 统一处理错误（契约 3.8），失败时弹出提示并以 `{ errorCode, message, requestId, httpStatus }` reject，传 `{ silent: true }` 可不弹提示。
 - `src/constants/labels.js`：全部枚举 → 中文文案、颜色。
+- `src/styles/theme.css`：视觉主题（深色导航、浅色主界面、蓝色主操作、语义化风险色），只覆盖 Element Plus 的 CSS 变量。改配色只需改这个文件。
 - `src/mock/`：Mock 模式下替换 axios adapter，路由表在 `routes.js`；未配置的接口返回 404 `MOCK_NOT_CONFIGURED`。
 
 > 安装依赖如遇 npm 10 报错 `Cannot read properties of null (reading 'edgesOut')`（npm 自身缺陷，仅在新增依赖时出现），可用 `npx npm@11 install`。日常 `npm ci` 不受影响。
