@@ -1,0 +1,151 @@
+[ {
+  "claimId" : "R01",
+  "oldEvidenceId" : "doc001_chunk03",
+  "newEvidenceId" : "doc001_chunk02",
+  "labelChanged" : false
+}, {
+  "claimId" : "R02",
+  "oldEvidenceId" : "doc001_chunk03",
+  "newEvidenceId" : "doc001_chunk02",
+  "labelChanged" : false
+}, {
+  "claimId" : "R03",
+  "oldEvidenceId" : "doc001_chunk03",
+  "newEvidenceId" : "doc001_chunk02",
+  "labelChanged" : false
+}, {
+  "claimId" : "R04",
+  "oldEvidenceId" : "doc002_chunk02",
+  "newEvidenceId" : "doc002_chunk01",
+  "labelChanged" : false
+}, {
+  "claimId" : "R05",
+  "oldEvidenceId" : "doc002_chunk02",
+  "newEvidenceId" : "doc002_chunk01",
+  "labelChanged" : false
+}, {
+  "claimId" : "R06",
+  "oldEvidenceId" : "doc002_chunk03",
+  "newEvidenceId" : "doc002_chunk02",
+  "labelChanged" : false
+}, {
+  "claimId" : "R07",
+  "oldEvidenceId" : "doc003_chunk02",
+  "newEvidenceId" : "doc003_chunk01",
+  "labelChanged" : false
+}, {
+  "claimId" : "R08",
+  "oldEvidenceId" : "doc003_chunk03",
+  "newEvidenceId" : "doc003_chunk02",
+  "labelChanged" : false
+}, {
+  "claimId" : "R09",
+  "oldEvidenceId" : "doc003_chunk02",
+  "newEvidenceId" : "doc003_chunk01",
+  "labelChanged" : false
+}, {
+  "claimId" : "R10",
+  "oldEvidenceId" : "doc003_chunk04",
+  "newEvidenceId" : "doc003_chunk02",
+  "labelChanged" : false
+}, {
+  "claimId" : "R11",
+  "oldEvidenceId" : "doc003_chunk04",
+  "newEvidenceId" : "doc003_chunk02",
+  "labelChanged" : false
+}, {
+  "claimId" : "R12",
+  "oldEvidenceId" : "doc003_chunk04",
+  "newEvidenceId" : "doc003_chunk02",
+  "labelChanged" : false
+}, {
+  "claimId" : "R13",
+  "oldEvidenceId" : "doc004_chunk01",
+  "newEvidenceId" : "doc004_chunk01",
+  "labelChanged" : false
+}, {
+  "claimId" : "R14",
+  "oldEvidenceId" : "doc004_chunk02",
+  "newEvidenceId" : "doc004_chunk01",
+  "labelChanged" : false
+}, {
+  "claimId" : "R15",
+  "oldEvidenceId" : "doc004_chunk03",
+  "newEvidenceId" : "doc004_chunk02",
+  "labelChanged" : false
+}, {
+  "claimId" : "R16",
+  "oldEvidenceId" : "doc005_chunk02",
+  "newEvidenceId" : "doc005_chunk01",
+  "labelChanged" : false
+}, {
+  "claimId" : "R17",
+  "oldEvidenceId" : "doc005_chunk02",
+  "newEvidenceId" : "doc005_chunk01",
+  "labelChanged" : false
+}, {
+  "claimId" : "R18",
+  "oldEvidenceId" : "doc005_chunk02",
+  "newEvidenceId" : "doc005_chunk01",
+  "labelChanged" : false
+}, {
+  "claimId" : "R19",
+  "oldEvidenceId" : "doc006_chunk02",
+  "newEvidenceId" : "doc006_chunk01",
+  "labelChanged" : false
+}, {
+  "claimId" : "R20",
+  "oldEvidenceId" : "doc006_chunk03",
+  "newEvidenceId" : "doc006_chunk02",
+  "labelChanged" : false
+}, {
+  "claimId" : "R21",
+  "oldEvidenceId" : "doc006_chunk04",
+  "newEvidenceId" : "doc006_chunk02",
+  "labelChanged" : false
+}, {
+  "claimId" : "R22",
+  "oldEvidenceId" : "doc006_chunk05",
+  "newEvidenceId" : "doc006_chunk03",
+  "labelChanged" : false
+}, {
+  "claimId" : "R23",
+  "oldEvidenceId" : "doc006_chunk05",
+  "newEvidenceId" : "doc006_chunk03",
+  "labelChanged" : false
+}, {
+  "claimId" : "R24",
+  "oldEvidenceId" : "doc006_chunk05",
+  "newEvidenceId" : "doc006_chunk03",
+  "labelChanged" : false
+}, {
+  "claimId" : "R25",
+  "oldEvidenceId" : "doc007_chunk02",
+  "newEvidenceId" : "doc007_chunk01",
+  "labelChanged" : false
+}, {
+  "claimId" : "R26",
+  "oldEvidenceId" : "doc007_chunk03",
+  "newEvidenceId" : "doc007_chunk02",
+  "labelChanged" : false
+}, {
+  "claimId" : "R27",
+  "oldEvidenceId" : "doc007_chunk02",
+  "newEvidenceId" : "doc007_chunk01",
+  "labelChanged" : false
+}, {
+  "claimId" : "R28",
+  "oldEvidenceId" : "doc008_chunk03",
+  "newEvidenceId" : "doc008_chunk02",
+  "labelChanged" : false
+}, {
+  "claimId" : "R29",
+  "oldEvidenceId" : "doc008_chunk03",
+  "newEvidenceId" : "doc008_chunk02",
+  "labelChanged" : false
+}, {
+  "claimId" : "R30",
+  "oldEvidenceId" : "doc008_chunk04",
+  "newEvidenceId" : "doc008_chunk02",
+  "labelChanged" : false
+} ]
