@@ -6,3 +6,6 @@ node_modules/
 index/
 .idea/
 *.iml
+
+# Local proof references backend/target reports; regenerate on each machine.
+docs/experiments/performance/regression-gate.json

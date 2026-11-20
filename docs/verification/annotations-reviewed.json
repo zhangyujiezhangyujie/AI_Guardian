@@ -1,9 +1,10 @@
 {
-  "version" : "1.1-ai-reviewed",
-  "status" : "AI_REVIEWED",
-  "humanReviewed" : false,
-  "reviewDate" : "2026-11-16",
-  "provenance" : "用户授权 Codex 直接逐条对照正式仓库知识库复核；不代表成员2或成员3人工签字。",
+  "version" : "1.2-human-confirmed",
+  "status" : "REVIEWED",
+  "humanReviewed" : true,
+  "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19",
+  "provenance" : "Codex (AI) 编制并对照正式知识库复核；成员3于2026-11-19在本对话确认，其与成员2均已查看复核集并全部认同。记录为对AI复核结果的人工确认，不声称双人独立盲标。",
+  "humanReviewConfirmation" : { "confirmedOn" : "2026-11-19", "reviewers" : [ "成员2", "成员3" ], "reportedBy" : "成员3（用户）", "source" : "本对话用户明确确认", "scope" : "R01–R30全部结论、标签、引文及复核理由", "decision" : "全部认同，原标签与内容不变", "method" : "共同认可既有AI复核集；不声明独立标注或盲审" },
   "knowledgeBaseCommit" : "d331eb5",
   "evidenceIdStatus" : "OFFICIAL_CHUNKER_IDS",
   "chunking" : "正式KnowledgeBaseLoader和Chunker；min=200,max=400,overlap=40，保留空行",
@@ -400,11 +401,12 @@
       "reviewEvidenceId" : "doc001_chunk02",
       "reviewQuote" : "正式员工每年享有15天带薪年假",
       "rationale" : "原文直接支持正式员工的年假天数。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R02",
       "claim" : "试用期员工不享有年假。",
@@ -415,11 +417,12 @@
       "reviewEvidenceId" : "doc001_chunk02",
       "reviewQuote" : "试用期员工不享有年假",
       "rationale" : "原文明确排除试用期员工。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R03",
       "claim" : "正式员工每年享有30天带薪年假。",
@@ -430,11 +433,12 @@
       "reviewEvidenceId" : "doc001_chunk02",
       "reviewQuote" : "正式员工每年享有15天带薪年假",
       "rationale" : "30天与15天矛盾。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     } ]
   }, {
     "caseId" : "R02",
@@ -451,11 +455,12 @@
       "reviewEvidenceId" : "doc002_chunk01",
       "reviewQuote" : "事假需提前2个工作日在系统中提交申请",
       "rationale" : "保留一般情况限定，不否认突发情况补申请的例外。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R05",
       "claim" : "普通事假必须提前3个工作日申请。",
@@ -466,11 +471,12 @@
       "reviewEvidenceId" : "doc002_chunk01",
       "reviewQuote" : "事假需提前2个工作日在系统中提交申请",
       "rationale" : "将2个工作日改成3个工作日。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R06",
       "claim" : "连续病假超过3天也不需要医院证明。",
@@ -481,11 +487,12 @@
       "reviewEvidenceId" : "doc002_chunk02",
       "reviewQuote" : "连续病假超过3天的，需提供二级以上医院出具的证明",
       "rationale" : "否定原文明确要求的医院证明。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     } ]
   }, {
     "caseId" : "R03",
@@ -502,11 +509,12 @@
       "reviewEvidenceId" : "doc003_chunk01",
       "reviewQuote" : "报销需提交发票原件、费用审批单和行程单，三者缺一不可。",
       "rationale" : "三项材料均由原文列明。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R08",
       "claim" : "费用发生后30日内提交报销申请。",
@@ -517,11 +525,12 @@
       "reviewEvidenceId" : "doc003_chunk02",
       "reviewQuote" : "费用发生后30日内提交报销申请，逾期不予受理。",
       "rationale" : "时限和起算点与原文一致。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R09",
       "claim" : "只提供发票就足以完成报销材料提交。",
@@ -532,11 +541,12 @@
       "reviewEvidenceId" : "doc003_chunk01",
       "reviewQuote" : "报销需提交发票原件、费用审批单和行程单，三者缺一不可。",
       "rationale" : "遗漏费用审批单和行程单两个必要条件。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     } ]
   }, {
     "caseId" : "R04",
@@ -553,11 +563,12 @@
       "reviewEvidenceId" : "doc003_chunk02",
       "reviewQuote" : "国内出差住宿标准为每晚不超过400元，超标部分由个人承担。",
       "rationale" : "保留国内、每晚和上限三个限定。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R11",
       "claim" : "国内出差住宿每晚上限为500元。",
@@ -568,11 +579,12 @@
       "reviewEvidenceId" : "doc003_chunk02",
       "reviewQuote" : "国内出差住宿标准为每晚不超过400元",
       "rationale" : "500元与400元矛盾。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R12",
       "claim" : "出差住宿超标部分也全部由公司承担。",
@@ -583,11 +595,12 @@
       "reviewEvidenceId" : "doc003_chunk02",
       "reviewQuote" : "超标部分由个人承担",
       "rationale" : "承担主体与原文相反。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     } ]
   }, {
     "caseId" : "R05",
@@ -604,11 +617,12 @@
       "reviewEvidenceId" : "doc004_chunk01",
       "reviewQuote" : "工作时间为每天9:00至18:00",
       "rationale" : "原文直接规定工作时间。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R14",
       "claim" : "员工每天需打卡两次。",
@@ -619,11 +633,12 @@
       "reviewEvidenceId" : "doc004_chunk01",
       "reviewQuote" : "员工每天需打卡两次，分别为上班打卡和下班打卡。",
       "rationale" : "打卡次数与原文一致。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R15",
       "claim" : "迟到30分钟以内每次扣款100元。",
@@ -634,11 +649,12 @@
       "reviewEvidenceId" : "doc004_chunk02",
       "reviewQuote" : "迟到30分钟以内，每次扣款50元。",
       "rationale" : "100元与50元矛盾。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     } ]
   }, {
     "caseId" : "R06",
@@ -655,11 +671,12 @@
       "reviewEvidenceId" : "doc005_chunk01",
       "reviewQuote" : "标准为每月300元，随工资发放。餐费补贴按实际出勤折算",
       "rationale" : "金额与折算条件一致；正式员工范围见该文总则。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R17",
       "claim" : "正式员工餐费补贴标准为每月500元。",
@@ -670,11 +687,12 @@
       "reviewEvidenceId" : "doc005_chunk01",
       "reviewQuote" : "标准为每月300元",
       "rationale" : "500元与300元矛盾。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R18",
       "claim" : "员工每月另有2000元交通补贴。",
@@ -685,11 +703,12 @@
       "reviewEvidenceId" : "doc005_chunk01",
       "reviewQuote" : "公司为员工提供餐费补贴，标准为每月300元",
       "rationale" : "福利文档未规定交通补贴；全8份文档复查亦无该规定，证据不足不等于现实中必然没有。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     } ]
   }, {
     "caseId" : "R07",
@@ -706,11 +725,12 @@
       "reviewEvidenceId" : "doc006_chunk01",
       "reviewQuote" : "智能门锁 A1 售价1299元",
       "rationale" : "总则限定为含税零售指导价，不承诺实际成交价。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R20",
       "claim" : "智能摄像头C3的含税零售指导价为399元。",
@@ -721,11 +741,12 @@
       "reviewEvidenceId" : "doc006_chunk02",
       "reviewQuote" : "智能摄像头 C3 售价399元",
       "rationale" : "指导价与型号对应正确。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R21",
       "claim" : "智能门铃D1的含税零售指导价为399元。",
@@ -736,11 +757,12 @@
       "reviewEvidenceId" : "doc006_chunk02",
       "reviewQuote" : "智能门铃 D1 售价259元",
       "rationale" : "混淆门铃D1与摄像头C3的价格。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     } ]
   }, {
     "caseId" : "R08",
@@ -757,11 +779,12 @@
       "reviewEvidenceId" : "doc006_chunk03",
       "reviewQuote" : "企业客户单次采购满50台，可享受9折优惠。批量采购的具体折扣以销售合同约定为准",
       "rationale" : "保留客户类型、采购门槛和合同限定。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R23",
       "claim" : "所有客户采购一台也可享9折优惠。",
@@ -772,11 +795,12 @@
       "reviewEvidenceId" : "doc006_chunk03",
       "reviewQuote" : "企业客户单次采购满50台，可享受9折优惠",
       "rationale" : "扩大客户范围并删除满50台门槛。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R24",
       "claim" : "产品指导价已经包含安装服务费。",
@@ -787,11 +811,12 @@
       "reviewEvidenceId" : "doc006_chunk03",
       "reviewQuote" : "以上价格不含安装服务费。",
       "rationale" : "与明确排除安装费用的原文相反。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     } ]
   }, {
     "caseId" : "R09",
@@ -808,11 +833,12 @@
       "reviewEvidenceId" : "doc007_chunk01",
       "reviewQuote" : "产品自签收之日起享受2年免费保修。",
       "rationale" : "期限与起算点均与原文相同，非保修情形另见对应章节。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R26",
       "claim" : "人为损坏不在保修范围内。",
@@ -823,11 +849,12 @@
       "reviewEvidenceId" : "doc007_chunk02",
       "reviewQuote" : "人为损坏不在保修范围内，包括跌落、进水、私自拆机、非授权维修等情形。",
       "rationale" : "原文明确排除人为损坏。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R27",
       "claim" : "产品自签收之日起享受5年免费保修。",
@@ -838,11 +865,12 @@
       "reviewEvidenceId" : "doc007_chunk01",
       "reviewQuote" : "产品自签收之日起享受2年免费保修。",
       "rationale" : "5年与2年矛盾。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     } ]
   }, {
     "caseId" : "R10",
@@ -859,11 +887,12 @@
       "reviewEvidenceId" : "doc008_chunk02",
       "reviewQuote" : "删除业务记录需部门经理审批，审批通过后由系统管理员执行。",
       "rationale" : "保留审批人与执行人的职责区别。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R29",
       "claim" : "员工可不经审批自行删除业务记录。",
@@ -874,11 +903,12 @@
       "reviewEvidenceId" : "doc008_chunk02",
       "reviewQuote" : "员工不得自行删除记录，也不得通过技术手段规避审批流程。",
       "rationale" : "否定审批和管理员执行要求。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     }, {
       "id" : "R30",
       "claim" : "系统账号允许多人共用。",
@@ -889,11 +919,12 @@
       "reviewEvidenceId" : "doc008_chunk02",
       "reviewQuote" : "系统账号禁止多人共用",
       "rationale" : "允许共用与禁止共用矛盾。",
-      "reviewStatus" : "AI_REVIEWED",
+      "reviewStatus" : "REVIEWED",
       "annotator" : "Codex (AI)",
-      "reviewer" : "Codex (AI document review; not independent human review)",
-      "humanReviewed" : false,
-      "reviewDate" : "2026-11-16"
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
     } ]
   } ],
   "sourceIntegrationStatus" : "正式知识库及正式切分器已对齐；AI标签复核，不冒充人工标注"
