@@ -1,6 +1,5 @@
 package com.aiguardian.infrastructure.lucene;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.aiguardian.config.AiGuardianProperties;
@@ -9,6 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
@@ -20,7 +21,7 @@ import org.springframework.core.io.ClassPathResource;
  * 阶段四：10 条口语化问题的 Top 1 / Top 3 命中率评测（离线，不联网）。
  *
  * <p>问题由成员 2 设计并人工标注正确片段，问题不与 8 个固定场景重复。
- * 评测使用生产配置（{@code topK=3}、{@code min-score}、停用词均取自 application.yml），
+ * 评测使用生产配置（topK、min-score、停用词、切分参数均取自 application.yml），
  * 因此结果就是系统当前对员工自然提问的实际召回表现。
  *
  * <p>输出写入 {@code target/retrieval-eval.md}，同时打印到控制台；结果记录见
@@ -54,32 +55,35 @@ class RetrievalEvalTest {
                 new Chunker(properties));
         index.build();
 
-        int topK = properties.getRetrieval().getTopK();
+        var retrieval = properties.getRetrieval();
         StringBuilder report = new StringBuilder();
         report.append("# 检索 Top 1 / Top 3 命中率评测\n\n");
-        report.append("- 知识库片段数：").append(index.documents().stream()
-                .mapToInt(document -> document.chunks().size()).sum()).append('\n');
-        report.append("- topK：").append(topK)
-                .append("；min-score：").append(properties.getRetrieval().getMinScore())
-                .append("；停用词：").append(properties.getRetrieval().getStopwords()).append("\n\n");
-        report.append("| # | 问题 | 标注正确片段 | 实际 Top 1 | Top 1 命中 | Top 3 命中 |\n");
-        report.append("| ---: | --- | --- | --- | --- | --- |\n");
+        report.append("- 知识库：8 篇文档，").append(index.documents().stream()
+                .mapToInt(document -> document.chunks().size()).sum()).append(" 个片段\n");
+        report.append("- 切分参数：chunk-min-chars=").append(retrieval.getChunkMinChars())
+                .append("，chunk-max-chars=").append(retrieval.getChunkMaxChars())
+                .append("，chunk-overlap-chars=").append(retrieval.getChunkOverlapChars()).append('\n');
+        report.append("- 检索参数：topK=").append(retrieval.getTopK())
+                .append("，min-score=").append(retrieval.getMinScore())
+                .append("，stopwords=").append(retrieval.getStopwords()).append("\n\n");
+        report.append("| # | 问题 | 预期片段（文档·章节） | Top 1 | Top 2 | Top 3 | Top 1 命中 | Top 3 命中 |\n");
+        report.append("| ---: | --- | --- | --- | --- | --- | --- | --- |\n");
 
         int topOneHits = 0;
         int topThreeHits = 0;
         try {
             for (int position = 0; position < CASES.size(); position++) {
                 Case testCase = CASES.get(position);
-                List<Evidence> evidence = index.search(testCase.question(), topK);
+                List<Evidence> evidence = index.search(testCase.question(), retrieval.getTopK());
                 List<String> actualIds = evidence.stream().map(Evidence::getEvidenceId).toList();
                 boolean topOne = !actualIds.isEmpty() && testCase.expectedIds().contains(actualIds.get(0));
                 boolean topThree = actualIds.stream().anyMatch(testCase.expectedIds()::contains);
                 topOneHits += topOne ? 1 : 0;
                 topThreeHits += topThree ? 1 : 0;
 
-                report.append(String.format("| %d | %s | %s | %s | %s | %s |%n",
-                        position + 1, testCase.question(), String.join("、", testCase.expectedIds()),
-                        actualIds.isEmpty() ? "（空）" : describe(evidence.get(0)),
+                report.append(String.format("| %d | %s | %s | %s | %s | %s | %s | %s |%n",
+                        position + 1, testCase.question(), describeExpected(index, testCase.expectedIds()),
+                        describe(evidence, 0), describe(evidence, 1), describe(evidence, 2),
                         topOne ? "是" : "**否**", topThree ? "是" : "**否**"));
             }
         } finally {
@@ -99,9 +103,22 @@ class RetrievalEvalTest {
         assertTrue(topThreeRate >= 0.7, "Top 3 命中率低于 70%：" + topThreeRate);
     }
 
-    private static String describe(Evidence evidence) {
-        return evidence.getEvidenceId() + "（" + evidence.getSection() + "，"
-                + String.format(java.util.Locale.ROOT, "%.2f", evidence.getScore()) + "）";
+    /** 把标注的片段 ID 渲染成“ID（文档·章节）”，便于报告直接引用。 */
+    private static String describeExpected(KnowledgeBaseIndex index, List<String> expectedIds) {
+        return expectedIds.stream()
+                .map(id -> index.findById(id)
+                        .map(evidence -> id + "（" + evidence.getDocumentTitle() + "·" + evidence.getSection() + "）")
+                        .orElse(id))
+                .collect(Collectors.joining("、"));
+    }
+
+    private static String describe(List<Evidence> evidence, int position) {
+        if (position >= evidence.size()) {
+            return "（无）";
+        }
+        Evidence item = evidence.get(position);
+        return item.getEvidenceId() + "（" + item.getSection() + "，"
+                + String.format(Locale.ROOT, "%.2f", item.getScore()) + "）";
     }
 
     private record Case(String question, List<String> expectedIds) {
