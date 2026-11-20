@@ -90,7 +90,7 @@
       "partialReports": 14,
       "apiErrors": 0,
       "timeouts": 0,
-      "member2Top3": "用户确认尚未交付，报告待补"
+      "member2Top3": "已交付并复跑：Top1=70%，Top3=80%；早期待补字段保留为当时记录。"
     }
   },
   "offlineValidation": {
@@ -195,5 +195,31 @@
       "origin/feature/retrieval d331eb59c138f09f38ef6e8dc7c04d30531aa156",
       "origin/feature/verifier 9f92ec33be01d4b5794cd128e9096c31b1f13524"
     ]
+  },
+  "retrievalEvaluation": {
+    "status": "COMPLETED",
+    "date": "2026-11-20",
+    "owner": "成员2",
+    "sourceCommit": "bc7c671",
+    "integratedDev": "fe08796",
+    "document": "docs/experiments/retrieval_eval.md",
+    "test": "RetrievalEvalTest",
+    "questions": 10,
+    "top1Hits": 7,
+    "top3Hits": 8,
+    "top1Rate": 0.7,
+    "top3Rate": 0.8,
+    "localReplay": "PASSED, Java21",
+    "scope": "生产检索配置下的片段命中，不是端到端回答准确率",
+    "remainingExternalDependencies": []
+  },
+  "regressionAfterRetrievalIntegration": {
+    "date": "2026-11-20",
+    "tests": 149,
+    "passed": 144,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 5,
+    "realExperimentsEnabled": false
   }
 }

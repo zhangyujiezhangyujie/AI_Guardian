@@ -2,7 +2,7 @@
 
 本目录交付核验效果评估方法、显式真实实验入口及原始数据位置。报告统稿材料见member3-report.md；完整业务链路性能规程见../../experiments/performance/protocol.md。
 
-2026-11-19已获用户明确授权并完成本轮10次真实调用。结果见[results.md](results.md)：28/30条对齐，27条正确；条件准确率96.43%，全标注正确覆盖率90%。不得省略对齐覆盖率。正式A/B/C各20次已于2026-11-20完成，见../../experiments/performance/results.md；成员2的检索统计尚待交付。
+2026-11-19已获用户明确授权并完成本轮10次真实调用。结果见[results.md](results.md)：28/30条对齐，27条正确；条件准确率96.43%，全标注正确覆盖率90%。不得省略对齐覆盖率。正式A/B/C各20次已于2026-11-20完成，见../../experiments/performance/results.md；成员2的检索统计已交付并复跑，Top1为70%、Top3为80%，见[检索评估](../../experiments/retrieval_eval.md)及统稿材料。
 
 - 数据来源：../annotations-reviewed.json，AI辅助编制，成员2和成员3人工确认；保留原始标签与来源，不声称独立盲标。
 - 方法预注册：[method.md](method.md)，包含阳性定义、指标分母、位置对齐和失败处理。
