@@ -221,7 +221,7 @@ describe('任务卡 6.4：至少 8 种 ChatResponse', () => {
     const r = find('partial', 'annotate')
     expect(r.guard.message).toBe('部分结论未在知识库中找到充分证据，已用黄色标出。')
     expect(r.verification.unsupportedRatio).toBe(0.5)
-    expect(r.verification.claims.map((c) => [c.startIndex, c.endIndex])).toEqual([[0, 11], [12, 26]])
+    expect(r.verification.claims.map((c) => [c.startIndex, c.endIndex])).toEqual([[0, 16], [17, 34]])
   })
 
   it('截断：PARTIAL + M2P', () => {

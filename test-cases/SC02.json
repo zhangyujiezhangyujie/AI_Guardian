@@ -1,0 +1,46 @@
+{
+  "scenarioId": "SC02",
+  "name": "部分结论证据不足",
+  "description": "知识库有餐费补贴规定，模拟回答额外声称有交通补贴。",
+  "priority": "P0",
+  "question": "公司员工有哪些福利？",
+  "supportsReal": true,
+  "recommendedStrategies": ["annotate"],
+  "mock": {
+    "GENERATE_ANSWER": [
+      {
+        "type": "TEXT",
+        "content": "公司每月提供 300 元餐费补贴，每月还提供 2,000 元交通补贴。"
+      }
+    ],
+    "VERIFY_CLAIMS": [
+      {
+        "type": "TEXT",
+        "content": "{\"claims\":[{\"claim\":\"公司每月提供 300 元餐费补贴\",\"originalText\":\"公司每月提供 300 元餐费补贴\",\"supported\":true,\"evidenceId\":\"doc005_chunk01\",\"quote\":\"公司为员工提供餐费补贴，标准为每月300元，随工资发放。\"},{\"claim\":\"公司每月还提供 2,000 元交通补贴\",\"originalText\":\"每月还提供 2,000 元交通补贴\",\"supported\":false,\"evidenceId\":null,\"quote\":null}],\"truncated\":false}"
+      }
+    ]
+  },
+  "expected": {
+    "httpStatus": 200,
+    "errorCode": null,
+    "evidenceIdsContain": ["doc005_chunk01"],
+    "verificationState": "COMPLETED",
+    "failureReason": null,
+    "claims": [
+      {
+        "claimContains": "餐费补贴",
+        "status": "SUPPORTED",
+        "insufficientReason": null
+      },
+      {
+        "claimContains": "交通补贴",
+        "status": "INSUFFICIENT",
+        "insufficientReason": "MODEL_UNSUPPORTED"
+      }
+    ],
+    "guardByStrategy": {
+      "annotate": "ANNOTATED",
+      "block": "ANNOTATED"
+    }
+  }
+}

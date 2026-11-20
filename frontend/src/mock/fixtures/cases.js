@@ -108,16 +108,18 @@ export const CASES = {
   partial: {
     question: '公司员工有哪些福利？',
     evidence: [
-      ['doc001_chunk03', 4.52]
+      ['doc005_chunk01', 2.2112],
+      ['doc005_chunk03', 2.1641],
+      ['doc005_chunk02', 1.4327]
     ],
-    answer: '员工每年享有15天年假，每月还有2,000元交通补贴。',
+    answer: '公司每月提供 300 元餐费补贴，每月还提供 2,000 元交通补贴。',
     verificationState: 'COMPLETED',
     failureReason: null,
     truncated: false,
     llmCalls: 1,
     claims: [
-      supported('员工每年享有15天年假', '员工每年享有15天年假', 'doc001_chunk03', '正式员工每年享有15天带薪年假'),
-      unsupported('员工每月有2000元交通补贴', '每月还有2,000元交通补贴')
+      supported('公司每月提供 300 元餐费补贴', '公司每月提供 300 元餐费补贴', 'doc005_chunk01', '公司为员工提供餐费补贴，标准为每月300元，随工资发放。'),
+      unsupported('公司每月还提供 2,000 元交通补贴', '每月还提供 2,000 元交通补贴')
     ],
     // 比例 0.5 不大于阈值 0.5，block 也不拦截（契约 10.5）
     guards: SAME_FOR_BOTH(SHOWN('ANNOTATED')),

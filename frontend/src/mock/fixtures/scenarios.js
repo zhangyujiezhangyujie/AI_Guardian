@@ -18,7 +18,7 @@ export const SCENARIOS = [
   {
     scenarioId: 'SC02',
     name: '部分结论证据不足',
-    description: '知识库只有年假规定，模拟回答额外声称有交通补贴。',
+    description: '知识库有餐费补贴规定，模拟回答额外声称有交通补贴。',
     question: '公司员工有哪些福利？',
     priority: 'P0',
     supportsReal: true,
