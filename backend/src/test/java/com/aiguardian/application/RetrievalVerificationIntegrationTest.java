@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class RetrievalVerificationIntegrationTest {
     @Autowired ChatOrchestrator orchestrator;
     @Autowired ScenarioRepository scenarios;
+    // This test covers retrieval and verification; the member 4 MySQL integration test covers audit persistence.
     @MockBean AuditService audit;
     @MockBean AuditQueryService auditQueryService;
     @MockBean JdbcAuditPersistenceRepository auditPersistenceRepository;

@@ -2,7 +2,7 @@
 
 执行日期：2026-11-20
 
-代码基线：本地 `backend` 已合入 `origin/dev` 的 `408627f`（SC02 集成）。
+代码基线：本地 `backend` 已合入 `origin/dev` 的 `9fecd28`（成员 3 阶段三交付）。
 
 ## 验证范围
 
@@ -22,7 +22,7 @@
 
 - 成员 4 的回归、期望比对、仓库读取和审计单元测试：12 项通过。
 - `RetrievalVerificationIntegrationTest`：5 项通过。测试关闭数据源自动配置，并 mock `AuditQueryService` 与 `JdbcAuditPersistenceRepository`，保留真实 Lucene 检索和核验链路，将数据库审计隔离给成员 4 的独立测试。
-- 完整 `mvn test`：110 项，0 失败、0 错误、3 项按默认规则跳过（真实 API 与默认关闭的两个 MySQL 测试）。
+- 完整 `mvn test`：142 项，0 失败、0 错误、3 项按默认规则跳过（真实 API 与默认关闭的两个 MySQL 测试）。
 - 成员 4 的 MySQL 审计集成测试：2 项通过，覆盖正常记录和核验失败记录；测试后清理记录并删除临时低权限数据库账号。
 - `JdbcAuditServiceTest` 验证审计 detail 会丢弃 `apiKey`、完整 prompt 等契约外字段；审计写入异常不会向问答调用方抛出。
 
