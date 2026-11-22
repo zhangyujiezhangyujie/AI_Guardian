@@ -79,3 +79,20 @@ CREATE TABLE IF NOT EXISTS audit_event (
     created_at   DATETIME(3) NOT NULL,
     INDEX idx_ae_request (request_id)
 );
+
+-- P1 工具调用安全网关（契约 v1.3 第 9 章）：模拟业务记录，所有工具只操作这张表
+CREATE TABLE IF NOT EXISTS mock_business_record (
+    id          BIGINT       NOT NULL PRIMARY KEY,
+    title       VARCHAR(100) NOT NULL,
+    owner       VARCHAR(20)  NOT NULL,
+    status      VARCHAR(16)  NOT NULL,
+    deleted     TINYINT(1)   NOT NULL DEFAULT 0,
+    updated_at  DATETIME(3)  NOT NULL
+);
+
+INSERT IGNORE INTO mock_business_record (id, title, owner, status, deleted, updated_at) VALUES
+    (1001, '客户合同归档（华东区）', 'user',    'OPEN',     0, '2026-11-22 10:00:00.000'),
+    (1002, '季度采购对账单',         'user',    'OPEN',     0, '2026-11-22 10:00:00.000'),
+    (1003, '供应商资质复核',         'manager', 'OPEN',     0, '2026-11-22 10:00:00.000'),
+    (1004, '客户投诉处理记录',       'user',    'CLOSED',   0, '2026-11-22 10:00:00.000'),
+    (1005, '年度设备盘点表',         'manager', 'ARCHIVED', 0, '2026-11-22 10:00:00.000');

@@ -2,15 +2,21 @@ package com.aiguardian.controller;
 
 import com.aiguardian.application.ChatCommand;
 import com.aiguardian.application.ChatOrchestrator;
+import com.aiguardian.application.ToolCallService;
 import com.aiguardian.common.BusinessException;
 import com.aiguardian.common.ErrorCode;
 import com.aiguardian.demo.Scenario;
 import com.aiguardian.demo.ScenarioCheckResult;
 import com.aiguardian.demo.ScenarioExpectationChecker;
 import com.aiguardian.demo.ScenarioRepository;
+import com.aiguardian.demo.ScenarioToolCall;
+import com.aiguardian.demo.ToolExpectationChecker;
 import com.aiguardian.domain.guard.OutputGuardRegistry;
 import com.aiguardian.domain.model.ChatResponse;
 import com.aiguardian.domain.model.RunMode;
+import com.aiguardian.domain.model.ToolCallRequest;
+import com.aiguardian.domain.model.ToolCallResult;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
@@ -39,6 +45,7 @@ public class DemoController {
     private final ChatOrchestrator orchestrator;
     private final ScenarioExpectationChecker checker;
     private final OutputGuardRegistry guards;
+    private final ToolCallService tools;
 
     /** 7.6 场景列表，按 scenarioId 升序，不返回 mock 与 expected。 */
     @GetMapping("/scenarios")
@@ -89,7 +96,29 @@ public class DemoController {
         ScenarioCheckResult check = request.mode() == RunMode.MOCK
                 ? checker.check(scenario, response, httpStatus, errorCode)
                 : new ScenarioCheckResult(false, null, List.of());
-        return new DemoRunResponse(response, check);
+
+        // v1.3（契约 7.7、10.7）：场景中模型提出的工具调用交给工具网关，依据为本次核验报告
+        ToolCallResult toolCall = null;
+        if (scenario.getToolCall() != null && request.mode() == RunMode.MOCK && response != null) {
+            ScenarioToolCall proposed = scenario.getToolCall();
+            toolCall = tools.executeWithBasis(ToolCallRequest.builder()
+                            .toolName(proposed.getToolName())
+                            .arguments(proposed.getArguments())
+                            .basedOnRequestId(response.getRequestId())
+                            .build(),
+                    proposed.getUser(),
+                    response.getVerification());
+        }
+        if (request.mode() == RunMode.MOCK && scenario.getExpected().getToolCall() != null) {
+            List<String> toolMismatches = ToolExpectationChecker.mismatches(
+                    scenario.getExpected().getToolCall(), toolCall);
+            if (!toolMismatches.isEmpty()) {
+                List<String> merged = new ArrayList<>(check.mismatches());
+                merged.addAll(toolMismatches);
+                check = new ScenarioCheckResult(true, false, merged);
+            }
+        }
+        return new DemoRunResponse(response, check, toolCall);
     }
 
     private static void validate(RunRequest request) {
@@ -116,6 +145,6 @@ public class DemoController {
                              String verifier) {
     }
 
-    public record DemoRunResponse(ChatResponse response, ScenarioCheckResult check) {
+    public record DemoRunResponse(ChatResponse response, ScenarioCheckResult check, ToolCallResult toolCall) {
     }
 }

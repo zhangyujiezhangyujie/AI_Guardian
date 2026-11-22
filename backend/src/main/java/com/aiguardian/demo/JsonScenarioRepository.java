@@ -98,5 +98,17 @@ public class JsonScenarioRepository implements ScenarioRepository {
         if (scenario.getExpected() == null || scenario.getExpected().getHttpStatus() <= 0) {
             throw new IllegalStateException("场景缺少 expected.httpStatus：" + fileName);
         }
+        ScenarioToolCall toolCall = scenario.getToolCall();
+        if (toolCall != null) {
+            // 契约 10.7：工具调用属于模拟的模型输出，真实模式不支持
+            if (scenario.isSupportsReal()) {
+                throw new IllegalStateException("带 toolCall 的场景必须 supportsReal=false：" + fileName);
+            }
+            if (toolCall.getToolName() == null || toolCall.getToolName().isBlank()
+                    || toolCall.getArguments() == null
+                    || !("user".equals(toolCall.getUser()) || "manager".equals(toolCall.getUser()))) {
+                throw new IllegalStateException("场景 toolCall 需要 toolName、arguments，user 为 user 或 manager：" + fileName);
+            }
+        }
     }
 }

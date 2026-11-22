@@ -20,4 +20,6 @@ public class ScenarioExpected {
     private String failureReason;
     private List<ExpectedClaim> claims;
     private Map<String, String> guardByStrategy;
+    /** v1.3，可空：对工具网关决策的期望（契约 10.7）。 */
+    private ExpectedToolCall toolCall;
 }

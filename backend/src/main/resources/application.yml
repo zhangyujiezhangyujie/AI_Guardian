@@ -36,3 +36,9 @@ aiguardian:
     strict-for-tool-call: true
   demo:
     test-cases-dir: ../test-cases
+  tool-gateway:
+    allowed-tools: [search_document, update_record, delete_record]
+    roles:
+      user: [search_document]
+      manager: [search_document, update_record, delete_record]
+    approval-required: [delete_record]

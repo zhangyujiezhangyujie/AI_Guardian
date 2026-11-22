@@ -16,6 +16,11 @@ public final class IdGenerator {
         return "ses_" + randomHex();
     }
 
+    /** P1 工具调用编号（契约 3.11）。 */
+    public static String toolCallId() {
+        return "tool_" + randomHex();
+    }
+
     private static String randomHex() {
         byte[] bytes = new byte[6];
         RANDOM.nextBytes(bytes);

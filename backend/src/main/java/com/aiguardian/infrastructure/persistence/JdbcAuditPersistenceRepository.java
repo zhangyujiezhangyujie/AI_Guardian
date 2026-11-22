@@ -29,18 +29,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class JdbcAuditPersistenceRepository {
     private static final ZoneId SHANGHAI = ZoneId.of("Asia/Shanghai");
 
-    private static final Map<AuditEventType, Set<String>> EVENT_DETAIL_KEYS = Map.of(
-            AuditEventType.REQUEST_RECEIVED, Set.of("mode", "scenarioId", "questionLength"),
-            AuditEventType.RETRIEVAL_DONE, Set.of("topK", "hitCount", "evidenceIds", "topScore"),
-            AuditEventType.GENERATION_DONE, Set.of("answerLength"),
-            AuditEventType.GENERATION_FAILED, Set.of("llmErrorType"),
-            AuditEventType.VERIFICATION_DONE,
-            Set.of("verifierName", "state", "failureReason", "totalClaims", "llmCalls"),
-            AuditEventType.CITATION_CHECKED, Set.of("checkedCount", "passedCount", "failedReasons"),
-            AuditEventType.GUARD_APPLIED,
-            Set.of("strategy", "blockThreshold", "action", "unsupportedRatio", "overridden"),
-            AuditEventType.REQUEST_COMPLETED, Set.of("totalMs", "action"),
-            AuditEventType.REQUEST_FAILED, Set.of("errorCode", "stage"));
+    // 契约 8.2：只持久化约定的 detail 键（v1.3 增加三个工具调用事件，超过 Map.of 的 10 项上限，改用 ofEntries）
+    private static final Map<AuditEventType, Set<String>> EVENT_DETAIL_KEYS = Map.ofEntries(
+            Map.entry(AuditEventType.REQUEST_RECEIVED, Set.of("mode", "scenarioId", "questionLength")),
+            Map.entry(AuditEventType.RETRIEVAL_DONE, Set.of("topK", "hitCount", "evidenceIds", "topScore")),
+            Map.entry(AuditEventType.GENERATION_DONE, Set.of("answerLength")),
+            Map.entry(AuditEventType.GENERATION_FAILED, Set.of("llmErrorType")),
+            Map.entry(AuditEventType.VERIFICATION_DONE,
+                    Set.of("verifierName", "state", "failureReason", "totalClaims", "llmCalls")),
+            Map.entry(AuditEventType.CITATION_CHECKED, Set.of("checkedCount", "passedCount", "failedReasons")),
+            Map.entry(AuditEventType.GUARD_APPLIED,
+                    Set.of("strategy", "blockThreshold", "action", "unsupportedRatio", "overridden")),
+            Map.entry(AuditEventType.REQUEST_COMPLETED, Set.of("totalMs", "action")),
+            Map.entry(AuditEventType.REQUEST_FAILED, Set.of("errorCode", "stage")),
+            Map.entry(AuditEventType.TOOL_CALL_REQUESTED,
+                    Set.of("toolCallId", "toolName", "user", "basedOnRequestId")),
+            Map.entry(AuditEventType.TOOL_CALL_DECIDED, Set.of("toolCallId", "decision", "denyReason")),
+            Map.entry(AuditEventType.TOOL_CALL_EXECUTED, Set.of("toolCallId", "toolName", "recordId")));
 
     private final JdbcTemplate jdbc;
     private final ObjectMapper objectMapper;
