@@ -164,7 +164,10 @@ public class ToolCallService {
         return result;
     }
 
-    /** 记录类工具：决策之后读取目标记录，展示数据是否被修改（契约 3.11 record）。 */
+    /**
+     * 记录类工具：决策之后读取目标记录，展示数据是否被修改（契约 3.11 record）。
+     * 这只是展示信息：读取失败（如数据库不可用）时返回 null 并记录日志，不影响已经做出的决策。
+     */
     private BusinessRecord currentRecord(ToolCallRequest request) {
         if (!catalog.isRecordTool(request.getToolName()) || request.getArguments() == null) {
             return null;
@@ -173,7 +176,12 @@ public class ToolCallService {
         if (!(rawId instanceof Integer) && !(rawId instanceof Long)) {
             return null;
         }
-        return records.findById(((Number) rawId).longValue()).orElse(null);
+        try {
+            return records.findById(((Number) rawId).longValue()).orElse(null);
+        } catch (RuntimeException e) {
+            log.error("recordId={} recordSnapshotFailed exceptionType={}", rawId, e.getClass().getName());
+            return null;
+        }
     }
 
     private static void requireOneRow(int rows) {

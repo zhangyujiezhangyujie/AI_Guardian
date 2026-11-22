@@ -160,6 +160,34 @@ class ToolCallServiceTest {
     }
 
     @Test
+    void denialSurvivesUnavailableDatabaseForTheDisplaySnapshot() {
+        var down = new InMemoryBusinessRecordRepository() {
+            @Override
+            public Optional<BusinessRecord> findById(long recordId) {
+                throw new IllegalStateException("db down");
+            }
+        };
+        // 权限检查在读库之前完成：数据库不可用时仍返回 DENY，record 为 null
+        ToolCallResult result = service(down).execute(new ToolCallRequest("delete_record", Map.of("recordId", 1001), null), "user");
+        assertEquals(ToolDenyReason.PERMISSION_DENIED, result.getDenyReason());
+        assertNull(result.getRecord());
+    }
+
+    @Test
+    void authorizedRecordToolFailsClosedWhenDatabaseIsUnavailable() {
+        var down = new InMemoryBusinessRecordRepository() {
+            @Override
+            public Optional<BusinessRecord> findById(long recordId) {
+                throw new IllegalStateException("db down");
+            }
+        };
+        // 记录存在性无法确认时不执行，异常向上抛出（接口返回 500），不会误放行
+        assertThrows(IllegalStateException.class, () -> service(down).execute(
+                new ToolCallRequest("update_record", Map.of("recordId", 1002, "status", "CLOSED"), null), "manager"));
+        assertEquals(0, down.writes());
+    }
+
+    @Test
     void recordSnapshotIsNullForUnparseableRecordId() {
         ToolCallResult result = service().execute(new ToolCallRequest("delete_record", Map.of("recordId", "1001"), null), "manager");
         assertEquals(ToolDenyReason.INVALID_ARGUMENTS, result.getDenyReason());
