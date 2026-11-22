@@ -103,6 +103,7 @@ const auditLink = computed(() => `/audit?mode=${props.run.mode}`)
       <ToolCallCard
         v-if="toolCall"
         :tool-call="toolCall"
+        :compact="showStrategy"
       />
 
       <el-card

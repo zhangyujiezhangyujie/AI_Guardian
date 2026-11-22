@@ -21,6 +21,11 @@ const props = defineProps({
   toolCall: {
     type: Object,
     required: true
+  },
+  // 对比运行时卡片较窄，详情改为单列
+  compact: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -61,7 +66,7 @@ const record = computed(() => props.toolCall.record)
     </template>
 
     <el-descriptions
-      :column="2"
+      :column="compact ? 1 : 2"
       border
       size="small"
     >
@@ -156,6 +161,11 @@ const record = computed(() => props.toolCall.record)
 .mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.tool-call-card :deep(.el-descriptions__label) {
+  white-space: nowrap;
 }
 
 .tool-call-card__decision :deep(.el-alert__title) {
