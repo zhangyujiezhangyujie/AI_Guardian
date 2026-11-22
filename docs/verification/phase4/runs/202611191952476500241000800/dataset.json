@@ -1,0 +1,931 @@
+{
+  "version" : "1.2-human-confirmed",
+  "status" : "REVIEWED",
+  "humanReviewed" : true,
+  "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19",
+  "provenance" : "Codex (AI) 编制并对照正式知识库复核；成员3于2026-11-19在本对话确认，其与成员2均已查看复核集并全部认同。记录为对AI复核结果的人工确认，不声称双人独立盲标。",
+  "humanReviewConfirmation" : { "confirmedOn" : "2026-11-19", "reviewers" : [ "成员2", "成员3" ], "reportedBy" : "成员3（用户）", "source" : "本对话用户明确确认", "scope" : "R01–R30全部结论、标签、引文及复核理由", "decision" : "全部认同，原标签与内容不变", "method" : "共同认可既有AI复核集；不声明独立标注或盲审" },
+  "knowledgeBaseCommit" : "d331eb5",
+  "evidenceIdStatus" : "OFFICIAL_CHUNKER_IDS",
+  "chunking" : "正式KnowledgeBaseLoader和Chunker；min=200,max=400,overlap=40，保留空行",
+  "retrieval" : "标注集为固定证据，score/rank=0；真实BM25衔接另由集成测试验证。",
+  "sourceManifest" : [ {
+    "path" : "knowledge-base/doc001_员工手册.md",
+    "sha256" : "baef3671694528a917c1c95fd918c62da9ffd6253f5bee69a2bb6cb0d9ff8751"
+  }, {
+    "path" : "knowledge-base/doc002_请假制度.md",
+    "sha256" : "2be1df768a2c83e24c8989f52c288165deb7b0529f1ee61b561acd6eb93deab9"
+  }, {
+    "path" : "knowledge-base/doc003_报销制度.md",
+    "sha256" : "45f3729540e0afe400688d0b9e4c4be298940a150ab375649dd6f0b416439eba"
+  }, {
+    "path" : "knowledge-base/doc004_考勤制度.md",
+    "sha256" : "5dbc51eccf2e4c1977e910a28ad790c60d333f6b42c627deeb200b2eb61fe108"
+  }, {
+    "path" : "knowledge-base/doc005_员工福利规定.md",
+    "sha256" : "5f98f2d48f489924e53b47f1eb570c19865e89d9fe8edc23511b22099f0c7515"
+  }, {
+    "path" : "knowledge-base/doc006_产品价格说明.md",
+    "sha256" : "6295a7db7e9cf69fe9c1ce23dae75cbdb379c5e89401704927102e64912e8c28"
+  }, {
+    "path" : "knowledge-base/doc007_产品售后政策.md",
+    "sha256" : "438f653e5f615e1d8278c0bde643100bf5df4dab35101168777c05c7ee2d2838"
+  }, {
+    "path" : "knowledge-base/doc008_内部操作规范.md",
+    "sha256" : "0d292529bb7a96d191866ca814b851f09feaf228b7ac09e0f020d77cdaab7814"
+  } ],
+  "evidenceManifest" : [ {
+    "evidenceId" : "doc001_chunk01",
+    "path" : "knowledge-base/doc001_员工手册.md",
+    "bodyStartUtf16" : 13,
+    "bodyEndUtf16" : 319,
+    "contentSha256" : "117f8ab8e3fb5cab62320733b264e4d193b02fc56564fb7d09e9397faf35e98d"
+  }, {
+    "evidenceId" : "doc001_chunk02",
+    "path" : "knowledge-base/doc001_员工手册.md",
+    "bodyStartUtf16" : 330,
+    "bodyEndUtf16" : 539,
+    "contentSha256" : "15425644f42331b3ab475ea92b058944adc40c6b3f79ce509a0ed52696bbf23d"
+  }, {
+    "evidenceId" : "doc001_chunk03",
+    "path" : "knowledge-base/doc001_员工手册.md",
+    "bodyStartUtf16" : 553,
+    "bodyEndUtf16" : 794,
+    "contentSha256" : "d792b2e57e5a9d9574192c9a4bd17cf0851ab23c2dbc8c12fce15e895b5109ba"
+  }, {
+    "evidenceId" : "doc001_chunk04",
+    "path" : "knowledge-base/doc001_员工手册.md",
+    "bodyStartUtf16" : 808,
+    "bodyEndUtf16" : 1061,
+    "contentSha256" : "905bf2eeb3eec8145322fbadd3efe35b904568eec32fd261d0736de91888b345"
+  }, {
+    "evidenceId" : "doc002_chunk01",
+    "path" : "knowledge-base/doc002_请假制度.md",
+    "bodyStartUtf16" : 11,
+    "bodyEndUtf16" : 337,
+    "contentSha256" : "d80243031b2e4c146f55683ff767302b38a6ad91387fce36113f886a0bbe8646"
+  }, {
+    "evidenceId" : "doc002_chunk02",
+    "path" : "knowledge-base/doc002_请假制度.md",
+    "bodyStartUtf16" : 349,
+    "bodyEndUtf16" : 582,
+    "contentSha256" : "f465a944df250f125571d2f5e7ab48cdc0a5a26f23c7c0ad78bb76a5de7518d2"
+  }, {
+    "evidenceId" : "doc002_chunk03",
+    "path" : "knowledge-base/doc002_请假制度.md",
+    "bodyStartUtf16" : 595,
+    "bodyEndUtf16" : 802,
+    "contentSha256" : "05f489a720af3fb0c0b06f69b3939815f3096bdcee984bd424cd0bab2e8de657"
+  }, {
+    "evidenceId" : "doc003_chunk01",
+    "path" : "knowledge-base/doc003_报销制度.md",
+    "bodyStartUtf16" : 15,
+    "bodyEndUtf16" : 319,
+    "contentSha256" : "0282a459ae7f0749b9a334b712ae530109cc819841d9345cf6ec427cc5946a40"
+  }, {
+    "evidenceId" : "doc003_chunk02",
+    "path" : "knowledge-base/doc003_报销制度.md",
+    "bodyStartUtf16" : 335,
+    "bodyEndUtf16" : 579,
+    "contentSha256" : "fdcbbc9d5be6679288c691271eb79ebfa6899058dafc5aa5bbb8a923965f72fd"
+  }, {
+    "evidenceId" : "doc003_chunk03",
+    "path" : "knowledge-base/doc003_报销制度.md",
+    "bodyStartUtf16" : 591,
+    "bodyEndUtf16" : 794,
+    "contentSha256" : "eeca30b57ba6d1e06e640d82056ea7091ee45d72a37350b17851299b35aa4edd"
+  }, {
+    "evidenceId" : "doc004_chunk01",
+    "path" : "knowledge-base/doc004_考勤制度.md",
+    "bodyStartUtf16" : 13,
+    "bodyEndUtf16" : 412,
+    "contentSha256" : "55189f692080b23879e7dc668e1534af91c451b1ca08697840c47219c50f394f"
+  }, {
+    "evidenceId" : "doc004_chunk02",
+    "path" : "knowledge-base/doc004_考勤制度.md",
+    "bodyStartUtf16" : 427,
+    "bodyEndUtf16" : 634,
+    "contentSha256" : "88f0a6a7ed2e2226a414bfd3f0b0b9322531956345eb9437c528768c370df3ce"
+  }, {
+    "evidenceId" : "doc004_chunk03",
+    "path" : "knowledge-base/doc004_考勤制度.md",
+    "bodyStartUtf16" : 648,
+    "bodyEndUtf16" : 848,
+    "contentSha256" : "eb1fb3fc395e614c807ea6a75cf8ed6c9eb08c90aacaf268c5b217fbd8653a61"
+  }, {
+    "evidenceId" : "doc005_chunk01",
+    "path" : "knowledge-base/doc005_员工福利规定.md",
+    "bodyStartUtf16" : 13,
+    "bodyEndUtf16" : 242,
+    "contentSha256" : "b5ca472f03903456cd069451eaf0c76c54369acf33a535faec67bae54e8f0fc3"
+  }, {
+    "evidenceId" : "doc005_chunk02",
+    "path" : "knowledge-base/doc005_员工福利规定.md",
+    "bodyStartUtf16" : 258,
+    "bodyEndUtf16" : 472,
+    "contentSha256" : "708502d70f665a63418244dc9432331f10ff8e92f04eafc585dd27b460da3353"
+  }, {
+    "evidenceId" : "doc005_chunk03",
+    "path" : "knowledge-base/doc005_员工福利规定.md",
+    "bodyStartUtf16" : 483,
+    "bodyEndUtf16" : 724,
+    "contentSha256" : "1745b332dc8acab2841a54b26083f9d3cf87d9dc73de0a9efe4c889fec11d950"
+  }, {
+    "evidenceId" : "doc006_chunk01",
+    "path" : "knowledge-base/doc006_产品价格说明.md",
+    "bodyStartUtf16" : 14,
+    "bodyEndUtf16" : 258,
+    "contentSha256" : "a4aa40a4a45a6ca569b5721c1960262d3f9e458dc4b44c81eaa0378edca06feb"
+  }, {
+    "evidenceId" : "doc006_chunk02",
+    "path" : "knowledge-base/doc006_产品价格说明.md",
+    "bodyStartUtf16" : 275,
+    "bodyEndUtf16" : 490,
+    "contentSha256" : "e4390b54ea6cceb5d20b286c9231cac70ce5bb2a35311392d2e87d0305436a7f"
+  }, {
+    "evidenceId" : "doc006_chunk03",
+    "path" : "knowledge-base/doc006_产品价格说明.md",
+    "bodyStartUtf16" : 504,
+    "bodyEndUtf16" : 775,
+    "contentSha256" : "471b1f802a04121663e81a74b2d5863f12abd16650d948e2c87b3b5092214f3e"
+  }, {
+    "evidenceId" : "doc007_chunk01",
+    "path" : "knowledge-base/doc007_产品售后政策.md",
+    "bodyStartUtf16" : 13,
+    "bodyEndUtf16" : 350,
+    "contentSha256" : "66404566cbd7d0ee5f64c1364f10fe0bc567425ebd0c4a5f94a975d9e168724d"
+  }, {
+    "evidenceId" : "doc007_chunk02",
+    "path" : "knowledge-base/doc007_产品售后政策.md",
+    "bodyStartUtf16" : 366,
+    "bodyEndUtf16" : 585,
+    "contentSha256" : "1365efdee14caa0d8c443d8caa847f78c2b1bafec2bc01047f7b0197d551df36"
+  }, {
+    "evidenceId" : "doc007_chunk03",
+    "path" : "knowledge-base/doc007_产品售后政策.md",
+    "bodyStartUtf16" : 596,
+    "bodyEndUtf16" : 812,
+    "contentSha256" : "56a5b0458623d548d0630f816bb0206ed029a3473913b422513f9d64b3da007f"
+  }, {
+    "evidenceId" : "doc008_chunk01",
+    "path" : "knowledge-base/doc008_内部操作规范.md",
+    "bodyStartUtf16" : 15,
+    "bodyEndUtf16" : 332,
+    "contentSha256" : "1907b6fdbcb6e8d286bc8deb0e83e94cb440004956d9f45c6fd6111d9a1eacc4"
+  }, {
+    "evidenceId" : "doc008_chunk02",
+    "path" : "knowledge-base/doc008_内部操作规范.md",
+    "bodyStartUtf16" : 348,
+    "bodyEndUtf16" : 590,
+    "contentSha256" : "0a00c9c7fb63a5abf7b48efde7cb985066bc3553262fcf61bf112878c82135bc"
+  }, {
+    "evidenceId" : "doc008_chunk03",
+    "path" : "knowledge-base/doc008_内部操作规范.md",
+    "bodyStartUtf16" : 601,
+    "bodyEndUtf16" : 812,
+    "contentSha256" : "5524e0ecdbfdef733e647329b9f845e22dca6d077156ffba6f1321b1556ded25"
+  } ],
+  "sources" : [ {
+    "evidenceId" : "doc001_chunk01",
+    "documentId" : "doc001",
+    "documentTitle" : "员工手册",
+    "section" : "总则与入职管理",
+    "content" : "本手册适用于公司全体正式员工。为规范公司人力资源管理，明确员工的权利与义务，帮助员工了解公司各项制度，特制定本手册。本手册是公司规章制度的重要组成部分，员工入职时应完成阅读确认。\n\n员工应遵守国家法律法规和公司各项规定，维护公司利益和声誉。公司为本手册的执行提供必要的人力资源支持，员工在执行过程中遇到疑问，可向人力资源部咨询。\n\n新员工入职时需提交身份证明、学历证明、离职证明及公司要求的其他材料，并签署劳动合同和保密协议。入职材料由人力资源部核验后归档。\n\n新员工试用期为3个月。试用期内，员工由直属主管负责工作指导与考核，考核结果作为转正依据。试用期表现不符合岗位要求的，公司可依法调整岗位或解除劳动合同。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc001_chunk02",
+    "documentId" : "doc001",
+    "documentTitle" : "员工手册",
+    "section" : "年假制度",
+    "content" : "公司为员工提供带薪年休假，带薪年假是公司福利体系的重要组成部分。正式员工每年享有15天带薪年假，试用期员工不享有年假。年假当年有效，不可跨年累计。员工申请年假需提前5个工作日在系统中提交申请，由直属主管审批，超过5天的年假需部门经理审批。\n\n员工确因工作需要当年未休完年假的，按公司规定在次年安排补休，不得跨年累计。各部门应结合业务安排，合理规划员工休假时间，避免因集中休假影响正常工作。年假申请经审批通过后方可休假。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc001_chunk03",
+    "documentId" : "doc001",
+    "documentTitle" : "员工手册",
+    "section" : "工作时间与加班",
+    "content" : "公司实行标准工时制，具体考勤要求见《考勤制度》。员工应在规定时间内完成本职工作，合理安排工作节奏，保持与其他部门的协作效率。\n\n因工作需要加班的，应提前在系统中提交加班申请，经直属主管审批后方可计入加班。公司鼓励员工在正常工作时间内提高效率，不提倡无效加班。加班可按规定申请调休。\n\n员工应按时完成工作任务，因个人原因未完成而自行延长工作时间的，不计入加班。加班时长以系统审批记录为准，部门负责人应合理控制加班，保障员工的休息时间。加班申请应在加班发生前提交，事后补交的需说明原因。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc001_chunk04",
+    "documentId" : "doc001",
+    "documentTitle" : "员工手册",
+    "section" : "保密与离职管理",
+    "content" : "员工对公司商业秘密、客户信息和技术资料负有保密义务，未经授权不得对外披露或用于与工作无关的用途。保密义务在员工离职后继续有效。\n\n员工应遵守职业道德，不得利用职务之便谋取私利，不得收受与业务相关的礼品和礼金。员工之间应相互尊重，营造良好的协作氛围。\n\n员工离职需提前30日向人力资源部提交书面申请，经审批后按流程办理工作交接。试用期内离职的，按劳动合同约定执行。\n\n离职交接包括工作文档、账号权限和公司财物等，交接完成后由人力资源部出具离职证明。员工未按规定办理交接造成公司损失的，公司保留追究责任的权利。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc002_chunk01",
+    "documentId" : "doc002",
+    "documentTitle" : "请假制度",
+    "section" : "总则与事假",
+    "content" : "为规范员工请假管理，保障正常工作秩序，根据国家有关法律法规并结合公司实际，制定本制度。本制度适用于公司全体正式员工，试用期员工的请假参照执行。\n\n员工请假应本着诚信原则，如实说明请假事由。请假期间的工作由直属主管安排他人承接，请假人应在离岗前完成必要的工作交接。各部门负责人应掌握本部门员工的请假情况，合理安排人员，避免因集中请假影响业务办理。人力资源部负责本制度的解释和修订。\n\n员工因个人事务需要请假的，应申请事假。事假需提前2个工作日在系统中提交申请，经审批后方可离岗。突发情况无法提前申请的，应在当天及时告知直属主管，并于返岗后补交申请。\n\n事假期间不发放当日工资，当月事假天数在考勤中如实记录。事假不得用于处理与已批准的其他假期相冲突的日期。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc002_chunk02",
+    "documentId" : "doc002",
+    "documentTitle" : "请假制度",
+    "section" : "病假与婚假",
+    "content" : "员工因病需要休息的，应申请病假。病假需在3个工作日内补交医院证明，连续病假超过3天的，需提供二级以上医院出具的证明。\n\n病假期间的工资按国家和地方有关规定执行。员工不得以病假名义处理个人事务，一经查实按事假或旷工处理。\n\n员工依法登记结婚的，可享受婚假10天。婚假需在领取结婚证后6个月内使用，逾期未使用的视为放弃。婚假期间工资照常发放。\n\n女员工产假、男员工护理假按国家和地方有关规定执行。员工申请婚假、产假时，应提交结婚证、出生医学证明等材料，由人力资源部核验。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc002_chunk03",
+    "documentId" : "doc002",
+    "documentTitle" : "请假制度",
+    "section" : "请假审批流程",
+    "content" : "员工请假应在系统中填写请假类型、起止时间和事由。请假1天以内由直属主管审批；请假超过3天的，需部门经理审批，其余情形由直属主管审批。\n\n审批通过的请假记录作为考勤依据。未经审批擅自离岗的，按旷工处理。员工返岗后应及时销假，未销假的按请假记录延续处理。\n\n审批人应在收到申请后及时处理，避免影响员工休假安排。员工对审批结果有异议的，可向人力资源部申诉。假期结束后员工应按时返岗，未按时返岗且未办理续假的，按旷工处理。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc003_chunk01",
+    "documentId" : "doc003",
+    "documentTitle" : "报销制度",
+    "section" : "适用范围与报销材料",
+    "content" : "本制度适用于公司全体正式员工因公发生的费用报销。费用应真实、合理、与业务相关，员工不得虚报、重复报销或报销与工作无关的支出。\n\n公司实行预算管理，各部门应在预算范围内安排支出。超出预算的费用，需事先取得部门经理和财务负责人的书面同意。\n\n员工应妥善保管报销票据，票据遗失的，需提供开票方出具的证明并经财务负责人审批后方可报销。同一笔费用只能报销一次，已由公司统一支付的费用不得重复报销。\n\n报销需提交发票原件、费用审批单和行程单，三者缺一不可。发票抬头应为公司全称，发票内容应与实际业务一致。\n\n电子发票需打印后随报销单提交，并在系统中填写发票号码。材料不齐全的，财务有权退回补充，补充完成前不计入报销时限。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc003_chunk02",
+    "documentId" : "doc003",
+    "documentTitle" : "报销制度",
+    "section" : "报销时限与差旅标准",
+    "content" : "费用发生后30日内提交报销申请，逾期不予受理。跨年度费用应在当年内提交完毕，不得跨年挂账。\n\n报销申请提交后，由财务进行合规性审核。因材料问题退回的，员工应在收到通知后及时补充，补充期间不计入审核时限。\n\n员工因公出差应事先提交出差申请，注明出差事由、地点和预计天数，经直属主管审批后方可出行。\n\n国内出差住宿标准为每晚不超过400元，超标部分由个人承担。出差期间伙食补助为每天80元，按实际出差天数计算。\n\n出差结束后应及时提交报销申请，出差申请单与报销单一并归档，作为费用审核的依据。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc003_chunk03",
+    "documentId" : "doc003",
+    "documentTitle" : "报销制度",
+    "section" : "审批与打款",
+    "content" : "报销单需经直属主管审核后提交财务复核，审核通过后5个工作日内打款。打款账户为员工工资卡，账户信息变更应及时在系统中更新。\n\n对不符合规定的报销，财务有权拒绝支付并退回申请。员工对审核结果有异议的，可向财务负责人申诉。\n\n财务每月集中处理报销单据，员工可在系统中查看报销进度。报销款项到账后系统会发送提醒，员工应核对到账金额，如有差异及时向财务反馈。员工应在报销单上签字确认金额，签字后视为对报销内容的认可。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc004_chunk01",
+    "documentId" : "doc004",
+    "documentTitle" : "考勤制度",
+    "section" : "工作时间与打卡",
+    "content" : "公司实行标准工时制。工作时间为每天9:00至18:00，午休时间为12:00至13:00。员工应在工作时间内保持在工作状态，不得擅自离岗。\n\n因业务需要调整工作时间的部门，应报人力资源部备案，并保证员工休息时间符合法律规定。员工应按照排班安排准时到岗，提前做好工作准备。部门负责人应关注员工的作息情况，发现长期超时工作的应及时调整。人力资源部每月对考勤数据进行汇总核对，作为工资核算的依据。员工对考勤数据有疑问的，可在核对期内提出，由人力资源部复核后更正。\n\n员工每天需打卡两次，分别为上班打卡和下班打卡。打卡记录是考勤核算的依据，员工应亲自打卡，不得代打卡。\n\n因外出办事、出差等原因无法打卡的，应在系统中提交外勤申请，由直属主管确认。忘记打卡的，可在系统中提交补卡申请，经审批后补录。打卡设备故障时，员工应向直属主管报告，由人力资源部统一补录。外勤申请应注明外出地点和事由，作为考勤核对的依据。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc004_chunk02",
+    "documentId" : "doc004",
+    "documentTitle" : "考勤制度",
+    "section" : "迟到、早退与旷工",
+    "content" : "迟到30分钟以内，每次扣款50元。迟到超过30分钟的，按旷工半天处理。\n\n当月累计迟到3次以上，需提交书面说明，由部门经理签字后交人力资源部备案。\n\n早退30分钟以内按迟到标准处理。未经批准提前离岗超过30分钟的，按旷工处理。\n\n无故缺勤超过半天按旷工处理，旷工扣发当日工资。连续旷工达到公司规定天数的，公司可依法解除劳动合同。\n\n员工对考勤记录有异议的，应在次月工资发放前向人力资源部提出，逾期未提出的视为认可。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc004_chunk03",
+    "documentId" : "doc004",
+    "documentTitle" : "考勤制度",
+    "section" : "请假与考勤衔接",
+    "content" : "员工请假应先在系统中提交申请，审批通过后方可离岗。请假记录与考勤记录一并作为工资核算依据。\n\n员工休假、出差、外勤期间不计入迟到、旷工。因公受伤或突发疾病无法及时打卡的，应在恢复后及时补办手续。\n\n部门负责人应关注本部门员工的出勤与休假情况，发现异常及时核实。考勤数据与请假记录不一致时，以审批通过的请假记录为准，由人力资源部核实后修正。员工离职时，人力资源部应核对当月考勤记录，作为工资结算的依据。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc005_chunk01",
+    "documentId" : "doc005",
+    "documentTitle" : "员工福利规定",
+    "section" : "总则与餐费补贴",
+    "content" : "为提升员工归属感，公司根据经营情况为员工提供多项福利。本规定适用于公司全体正式员工，试用期员工自转正之日起享受本规定中的福利项目。\n\n福利项目的具体标准和发放方式由人力资源部负责解释。公司可根据经营情况调整福利项目，调整前会提前告知员工。\n\n公司为员工提供餐费补贴，标准为每月300元，随工资发放。餐费补贴按实际出勤折算，当月缺勤超过5天的部分相应扣减。\n\n餐费补贴直接计入工资，员工无需另行申请。员工对餐费补贴金额有疑问的，可向人力资源部查询当月出勤记录。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc005_chunk02",
+    "documentId" : "doc005",
+    "documentTitle" : "员工福利规定",
+    "section" : "健康体检与节日福利",
+    "content" : "公司每年为员工安排一次免费体检，体检项目由公司统一确定。体检时间一般安排在工作日，员工参加体检视为正常出勤。体检结果仅用于员工健康管理，不作为岗位调整的依据。\n\n员工因个人原因未参加统一体检的，可在当年内申请补检一次。新入职员工在转正后参加次年的统一体检。\n\n春节、中秋发放节日礼品，具体形式由公司统一安排。节日礼品在节前发放，员工应在规定时间内领取。\n\n公司在其他传统节日可根据经营情况安排慰问活动，具体以人力资源部通知为准。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc005_chunk03",
+    "documentId" : "doc005",
+    "documentTitle" : "员工福利规定",
+    "section" : "其他福利",
+    "content" : "员工生日当月发放200元生日礼金，随当月工资发放。各部门每季度组织一次团建活动，费用在部门预算内列支。\n\n公司为员工提供必要的办公设备和劳动保护用品。员工因公出差、加班产生的合理费用，按《报销制度》执行。\n\n团建活动应安排在非工作时间或经员工同意的工作时间，不得强制员工自费参加。各部门组织团建应提前报备，活动方案和费用预算需经部门经理审批。公司鼓励员工合理使用福利，福利项目不与考勤处罚相互抵扣。员工对福利发放有异议的，可在发放当月向人力资源部提出复核，人力资源部应在核实后答复。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc006_chunk01",
+    "documentId" : "doc006",
+    "documentTitle" : "产品价格说明",
+    "section" : "产品线与智能门锁",
+    "content" : "公司面向家庭和企业客户提供智能安防产品，主要产品包括智能门锁、智能摄像头和智能门铃三大系列。产品支持手机应用远程查看与操作，可与公司统一的设备管理平台对接。\n\n本说明所列价格为含税零售指导价，实际成交价格以销售合同为准。\n\n智能门锁 A1 售价1299元，采用指纹、密码和卡片三种开锁方式，支持临时密码授权。产品适用于家庭入户门，安装后可通过手机应用查看开锁记录。\n\n智能门锁 Pro B2 售价1899元，在 A1 的基础上增加人脸识别和远程视频查看功能，适用于对安全性要求较高的场景。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc006_chunk02",
+    "documentId" : "doc006",
+    "documentTitle" : "产品价格说明",
+    "section" : "智能摄像头与智能门铃",
+    "content" : "智能摄像头 C3 售价399元，支持高清录像、移动侦测和双向语音。设备可本地存储，也可开通云存储服务，云存储服务需另行订阅。\n\n摄像头支持壁挂和桌面两种安装方式，室外使用需选配防水外壳。产品说明书随包装附带，用户也可在官网下载电子版。\n\n智能门铃 D1 售价259元，支持访客呼叫、视频对讲和移动侦测。门铃可与智能门锁联动，访客按铃时手机应用同步提醒。\n\n门铃内置电池，正常使用情况下续航时间约为数月，具体时长与实际使用频率有关。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc006_chunk03",
+    "documentId" : "doc006",
+    "documentTitle" : "产品价格说明",
+    "section" : "价格与折扣说明",
+    "content" : "企业客户单次采购满50台，可享受9折优惠。批量采购的具体折扣以销售合同约定为准，不与其他促销活动叠加。\n\n以上价格不含安装服务费。安装服务由公司认证的服务商提供，费用根据现场情况另行报价。产品价格调整时，公司会提前在官网公示。\n\n经销商价格另行制定，不适用本说明所列零售指导价。公司提供统一的产品资料和演示样机，销售人员应按照最新资料向客户介绍产品，不得承诺资料之外的功能。产品资料以官网发布版本为准，内部宣传材料应与官网保持一致。客户在购买前应确认产品型号与安装环境，避免因选型不当造成退换货。经销商应在授权范围内销售，不得跨区域低价倾销。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc007_chunk01",
+    "documentId" : "doc007",
+    "documentTitle" : "产品售后政策",
+    "section" : "保修范围与期限",
+    "content" : "公司对销售的智能安防产品提供保修服务。保修期内维修不收取配件费和人工费。\n\n保修范围包括产品本身的质量问题，如无法开机、功能失效、非人为因素导致的硬件故障。保修服务由公司或公司授权的服务网点提供。用户在申请保修时应提供订单信息和故障说明，服务网点有权对故障原因进行检测，并在检测后告知用户处理方案。对保修范围内的故障，服务网点应免费维修；无法修复的，按公司规定更换同型号产品。\n\n产品自签收之日起享受2年免费保修。保修期自产品签收之日起计算，以订单签收记录为准。更换后的整机或配件，保修期按原产品剩余期限计算。保修期内的维修记录由服务网点保存，用户可凭订单号查询维修历史，维修记录作为后续服务的依据。\n\n保修期内维修的产品，维修完成后由服务网点出具维修记录，用户应妥善保管。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc007_chunk02",
+    "documentId" : "doc007",
+    "documentTitle" : "产品售后政策",
+    "section" : "非保修情形与退换货",
+    "content" : "人为损坏不在保修范围内，包括跌落、进水、私自拆机、非授权维修等情形。超出保修期限的产品，维修需收取配件费和人工费。\n\n因不可抗力造成的产品损坏，不在保修范围内。对非保修情形，服务网点会在检测后出具检测报告和维修报价，由用户决定是否维修。\n\n产品支持7天无理由退货，自签收之日起计算。退货商品需保持包装完整、配件齐全，不影响二次销售。\n\n产品出现质量问题的，可在收货后按平台或合同约定申请换货。定制产品和已激活的云存储服务不支持无理由退货。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc007_chunk03",
+    "documentId" : "doc007",
+    "documentTitle" : "产品售后政策",
+    "section" : "售后流程",
+    "content" : "售后申请需通过官网或客服热线提交，提供订单号、产品型号和故障描述。服务网点在收到申请后与用户联系，确认服务方式。\n\n用户寄修产品时应妥善包装，避免运输过程中二次损坏。维修完成后，服务网点将产品寄回用户提供的地址。\n\n服务网点应在承诺时限内完成检测与维修，无法当场修复的应与用户约定取件时间。维修更换下来的旧件由服务网点统一回收处理，用户要求保留的应提前说明。维修前应向用户说明故障原因、维修方案和预计费用，未经用户同意不得擅自维修。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc008_chunk01",
+    "documentId" : "doc008",
+    "documentTitle" : "内部操作规范",
+    "section" : "总则与客户数据管理",
+    "content" : "为规范公司内部系统操作，保护客户数据和业务记录安全，制定本规范。本规范适用于所有接触公司业务系统的员工，包括正式员工、试用期员工和外包人员。\n\n员工应按照岗位职责和授权范围操作系统，不得越权访问、修改或删除数据。发现异常操作或数据泄露风险时，应立即向部门经理和信息安全负责人报告。各部门负责人应组织本部门员工学习本规范，并将规范要求纳入新员工入职培训。\n\n客户数据只能在公司内网系统中查看，不得在公共网络环境下访问。员工因工作需要查询客户数据时，应遵循最小必要原则，仅查看与当前业务相关的内容。\n\n禁止将客户数据导出到个人设备，禁止通过个人邮箱、即时通讯工具传输客户数据。因业务需要对外提供客户数据的，应经部门经理审批并做好脱敏处理。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc008_chunk02",
+    "documentId" : "doc008",
+    "documentTitle" : "内部操作规范",
+    "section" : "业务记录与账号权限",
+    "content" : "删除业务记录需部门经理审批，审批通过后由系统管理员执行。员工不得自行删除记录，也不得通过技术手段规避审批流程。\n\n修改业务记录需留存操作日志，日志内容包括操作人、操作时间和修改原因。操作日志由系统自动记录，任何人不得删除或篡改。\n\n系统账号禁止多人共用，员工应使用本人账号登录并妥善保管密码。密码应定期更换，不得将密码告知他人或记录在容易被获取的位置。\n\n员工岗位调整或离职时，部门经理应及时通知系统管理员调整或注销账号权限。权限申请应说明用途和期限，超出期限的权限由系统管理员回收。",
+    "score" : 0.0,
+    "rank" : 0
+  }, {
+    "evidenceId" : "doc008_chunk03",
+    "documentId" : "doc008",
+    "documentTitle" : "内部操作规范",
+    "section" : "违规处理",
+    "content" : "违反本规范的，视情节给予警告直至解除劳动合同。造成客户数据泄露或公司损失的，公司保留追究法律责任的权利。\n\n员工发现他人违反本规范的行为，可向部门经理或信息安全负责人举报，公司对举报人信息予以保密。\n\n对违规行为的处理结果应书面告知当事人，并在部门范围内通报。员工对处理结果有异议的，可在收到通知后向人力资源部提出申诉，公司应在核实后答复。本规范由人力资源部负责解释，并根据业务变化及时修订。新员工入职时应签署规范确认书。",
+    "score" : 0.0,
+    "rank" : 0
+  } ],
+  "cases" : [ {
+    "caseId" : "R01",
+    "question" : "年假规定有哪些规定？",
+    "answer" : "正式员工每年享有15天带薪年假。试用期员工不享有年假。正式员工每年享有30天带薪年假。",
+    "evidenceIds" : [ "doc001_chunk02" ],
+    "claims" : [ {
+      "id" : "R01",
+      "claim" : "正式员工每年享有15天带薪年假。",
+      "originalText" : "正式员工每年享有15天带薪年假。",
+      "proposedStatus" : "SUPPORTED",
+      "referenceEvidenceId" : "doc001_chunk02",
+      "referenceQuote" : "正式员工每年享有15天带薪年假",
+      "reviewEvidenceId" : "doc001_chunk02",
+      "reviewQuote" : "正式员工每年享有15天带薪年假",
+      "rationale" : "原文直接支持正式员工的年假天数。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R02",
+      "claim" : "试用期员工不享有年假。",
+      "originalText" : "试用期员工不享有年假。",
+      "proposedStatus" : "SUPPORTED",
+      "referenceEvidenceId" : "doc001_chunk02",
+      "referenceQuote" : "试用期员工不享有年假",
+      "reviewEvidenceId" : "doc001_chunk02",
+      "reviewQuote" : "试用期员工不享有年假",
+      "rationale" : "原文明确排除试用期员工。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R03",
+      "claim" : "正式员工每年享有30天带薪年假。",
+      "originalText" : "正式员工每年享有30天带薪年假。",
+      "proposedStatus" : "INSUFFICIENT",
+      "referenceEvidenceId" : null,
+      "referenceQuote" : null,
+      "reviewEvidenceId" : "doc001_chunk02",
+      "reviewQuote" : "正式员工每年享有15天带薪年假",
+      "rationale" : "30天与15天矛盾。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    } ]
+  }, {
+    "caseId" : "R02",
+    "question" : "事假和病假有哪些规定？",
+    "answer" : "一般情况下，事假需提前2个工作日在系统中提交申请。普通事假必须提前3个工作日申请。连续病假超过3天也不需要医院证明。",
+    "evidenceIds" : [ "doc002_chunk01", "doc002_chunk02" ],
+    "claims" : [ {
+      "id" : "R04",
+      "claim" : "一般情况下，事假需提前2个工作日在系统中提交申请。",
+      "originalText" : "一般情况下，事假需提前2个工作日在系统中提交申请。",
+      "proposedStatus" : "SUPPORTED",
+      "referenceEvidenceId" : "doc002_chunk01",
+      "referenceQuote" : "事假需提前2个工作日在系统中提交申请",
+      "reviewEvidenceId" : "doc002_chunk01",
+      "reviewQuote" : "事假需提前2个工作日在系统中提交申请",
+      "rationale" : "保留一般情况限定，不否认突发情况补申请的例外。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R05",
+      "claim" : "普通事假必须提前3个工作日申请。",
+      "originalText" : "普通事假必须提前3个工作日申请。",
+      "proposedStatus" : "INSUFFICIENT",
+      "referenceEvidenceId" : null,
+      "referenceQuote" : null,
+      "reviewEvidenceId" : "doc002_chunk01",
+      "reviewQuote" : "事假需提前2个工作日在系统中提交申请",
+      "rationale" : "将2个工作日改成3个工作日。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R06",
+      "claim" : "连续病假超过3天也不需要医院证明。",
+      "originalText" : "连续病假超过3天也不需要医院证明。",
+      "proposedStatus" : "INSUFFICIENT",
+      "referenceEvidenceId" : null,
+      "referenceQuote" : null,
+      "reviewEvidenceId" : "doc002_chunk02",
+      "reviewQuote" : "连续病假超过3天的，需提供二级以上医院出具的证明",
+      "rationale" : "否定原文明确要求的医院证明。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    } ]
+  }, {
+    "caseId" : "R03",
+    "question" : "报销材料与时限有哪些规定？",
+    "answer" : "报销需提交发票原件、费用审批单和行程单。费用发生后30日内提交报销申请。只提供发票就足以完成报销材料提交。",
+    "evidenceIds" : [ "doc003_chunk01", "doc003_chunk02" ],
+    "claims" : [ {
+      "id" : "R07",
+      "claim" : "报销需提交发票原件、费用审批单和行程单。",
+      "originalText" : "报销需提交发票原件、费用审批单和行程单。",
+      "proposedStatus" : "SUPPORTED",
+      "referenceEvidenceId" : "doc003_chunk01",
+      "referenceQuote" : "报销需提交发票原件、费用审批单和行程单，三者缺一不可。",
+      "reviewEvidenceId" : "doc003_chunk01",
+      "reviewQuote" : "报销需提交发票原件、费用审批单和行程单，三者缺一不可。",
+      "rationale" : "三项材料均由原文列明。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R08",
+      "claim" : "费用发生后30日内提交报销申请。",
+      "originalText" : "费用发生后30日内提交报销申请。",
+      "proposedStatus" : "SUPPORTED",
+      "referenceEvidenceId" : "doc003_chunk02",
+      "referenceQuote" : "费用发生后30日内提交报销申请，逾期不予受理。",
+      "reviewEvidenceId" : "doc003_chunk02",
+      "reviewQuote" : "费用发生后30日内提交报销申请，逾期不予受理。",
+      "rationale" : "时限和起算点与原文一致。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R09",
+      "claim" : "只提供发票就足以完成报销材料提交。",
+      "originalText" : "只提供发票就足以完成报销材料提交。",
+      "proposedStatus" : "INSUFFICIENT",
+      "referenceEvidenceId" : null,
+      "referenceQuote" : null,
+      "reviewEvidenceId" : "doc003_chunk01",
+      "reviewQuote" : "报销需提交发票原件、费用审批单和行程单，三者缺一不可。",
+      "rationale" : "遗漏费用审批单和行程单两个必要条件。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    } ]
+  }, {
+    "caseId" : "R04",
+    "question" : "差旅标准有哪些规定？",
+    "answer" : "国内出差住宿标准为每晚不超过400元。国内出差住宿每晚上限为500元。出差住宿超标部分也全部由公司承担。",
+    "evidenceIds" : [ "doc003_chunk02" ],
+    "claims" : [ {
+      "id" : "R10",
+      "claim" : "国内出差住宿标准为每晚不超过400元。",
+      "originalText" : "国内出差住宿标准为每晚不超过400元。",
+      "proposedStatus" : "SUPPORTED",
+      "referenceEvidenceId" : "doc003_chunk02",
+      "referenceQuote" : "国内出差住宿标准为每晚不超过400元，超标部分由个人承担。",
+      "reviewEvidenceId" : "doc003_chunk02",
+      "reviewQuote" : "国内出差住宿标准为每晚不超过400元，超标部分由个人承担。",
+      "rationale" : "保留国内、每晚和上限三个限定。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R11",
+      "claim" : "国内出差住宿每晚上限为500元。",
+      "originalText" : "国内出差住宿每晚上限为500元。",
+      "proposedStatus" : "INSUFFICIENT",
+      "referenceEvidenceId" : null,
+      "referenceQuote" : null,
+      "reviewEvidenceId" : "doc003_chunk02",
+      "reviewQuote" : "国内出差住宿标准为每晚不超过400元",
+      "rationale" : "500元与400元矛盾。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R12",
+      "claim" : "出差住宿超标部分也全部由公司承担。",
+      "originalText" : "出差住宿超标部分也全部由公司承担。",
+      "proposedStatus" : "INSUFFICIENT",
+      "referenceEvidenceId" : null,
+      "referenceQuote" : null,
+      "reviewEvidenceId" : "doc003_chunk02",
+      "reviewQuote" : "超标部分由个人承担",
+      "rationale" : "承担主体与原文相反。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    } ]
+  }, {
+    "caseId" : "R05",
+    "question" : "考勤要求有哪些规定？",
+    "answer" : "工作时间为每天9:00至18:00。员工每天需打卡两次。迟到30分钟以内每次扣款100元。",
+    "evidenceIds" : [ "doc004_chunk01", "doc004_chunk02" ],
+    "claims" : [ {
+      "id" : "R13",
+      "claim" : "工作时间为每天9:00至18:00。",
+      "originalText" : "工作时间为每天9:00至18:00。",
+      "proposedStatus" : "SUPPORTED",
+      "referenceEvidenceId" : "doc004_chunk01",
+      "referenceQuote" : "工作时间为每天9:00至18:00",
+      "reviewEvidenceId" : "doc004_chunk01",
+      "reviewQuote" : "工作时间为每天9:00至18:00",
+      "rationale" : "原文直接规定工作时间。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R14",
+      "claim" : "员工每天需打卡两次。",
+      "originalText" : "员工每天需打卡两次。",
+      "proposedStatus" : "SUPPORTED",
+      "referenceEvidenceId" : "doc004_chunk01",
+      "referenceQuote" : "员工每天需打卡两次，分别为上班打卡和下班打卡。",
+      "reviewEvidenceId" : "doc004_chunk01",
+      "reviewQuote" : "员工每天需打卡两次，分别为上班打卡和下班打卡。",
+      "rationale" : "打卡次数与原文一致。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R15",
+      "claim" : "迟到30分钟以内每次扣款100元。",
+      "originalText" : "迟到30分钟以内每次扣款100元。",
+      "proposedStatus" : "INSUFFICIENT",
+      "referenceEvidenceId" : null,
+      "referenceQuote" : null,
+      "reviewEvidenceId" : "doc004_chunk02",
+      "reviewQuote" : "迟到30分钟以内，每次扣款50元。",
+      "rationale" : "100元与50元矛盾。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    } ]
+  }, {
+    "caseId" : "R06",
+    "question" : "员工福利有哪些规定？",
+    "answer" : "正式员工餐费补贴标准为每月300元，按实际出勤折算。正式员工餐费补贴标准为每月500元。员工每月另有2000元交通补贴。",
+    "evidenceIds" : [ "doc005_chunk01" ],
+    "claims" : [ {
+      "id" : "R16",
+      "claim" : "正式员工餐费补贴标准为每月300元，按实际出勤折算。",
+      "originalText" : "正式员工餐费补贴标准为每月300元，按实际出勤折算。",
+      "proposedStatus" : "SUPPORTED",
+      "referenceEvidenceId" : "doc005_chunk01",
+      "referenceQuote" : "标准为每月300元，随工资发放。餐费补贴按实际出勤折算",
+      "reviewEvidenceId" : "doc005_chunk01",
+      "reviewQuote" : "标准为每月300元，随工资发放。餐费补贴按实际出勤折算",
+      "rationale" : "金额与折算条件一致；正式员工范围见该文总则。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R17",
+      "claim" : "正式员工餐费补贴标准为每月500元。",
+      "originalText" : "正式员工餐费补贴标准为每月500元。",
+      "proposedStatus" : "INSUFFICIENT",
+      "referenceEvidenceId" : null,
+      "referenceQuote" : null,
+      "reviewEvidenceId" : "doc005_chunk01",
+      "reviewQuote" : "标准为每月300元",
+      "rationale" : "500元与300元矛盾。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R18",
+      "claim" : "员工每月另有2000元交通补贴。",
+      "originalText" : "员工每月另有2000元交通补贴。",
+      "proposedStatus" : "INSUFFICIENT",
+      "referenceEvidenceId" : null,
+      "referenceQuote" : null,
+      "reviewEvidenceId" : "doc005_chunk01",
+      "reviewQuote" : "公司为员工提供餐费补贴，标准为每月300元",
+      "rationale" : "福利文档未规定交通补贴；全8份文档复查亦无该规定，证据不足不等于现实中必然没有。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    } ]
+  }, {
+    "caseId" : "R07",
+    "question" : "产品零售指导价有哪些规定？",
+    "answer" : "智能门锁A1的含税零售指导价为1299元。智能摄像头C3的含税零售指导价为399元。智能门铃D1的含税零售指导价为399元。",
+    "evidenceIds" : [ "doc006_chunk01", "doc006_chunk02" ],
+    "claims" : [ {
+      "id" : "R19",
+      "claim" : "智能门锁A1的含税零售指导价为1299元。",
+      "originalText" : "智能门锁A1的含税零售指导价为1299元。",
+      "proposedStatus" : "SUPPORTED",
+      "referenceEvidenceId" : "doc006_chunk01",
+      "referenceQuote" : "智能门锁 A1 售价1299元",
+      "reviewEvidenceId" : "doc006_chunk01",
+      "reviewQuote" : "智能门锁 A1 售价1299元",
+      "rationale" : "总则限定为含税零售指导价，不承诺实际成交价。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R20",
+      "claim" : "智能摄像头C3的含税零售指导价为399元。",
+      "originalText" : "智能摄像头C3的含税零售指导价为399元。",
+      "proposedStatus" : "SUPPORTED",
+      "referenceEvidenceId" : "doc006_chunk02",
+      "referenceQuote" : "智能摄像头 C3 售价399元",
+      "reviewEvidenceId" : "doc006_chunk02",
+      "reviewQuote" : "智能摄像头 C3 售价399元",
+      "rationale" : "指导价与型号对应正确。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R21",
+      "claim" : "智能门铃D1的含税零售指导价为399元。",
+      "originalText" : "智能门铃D1的含税零售指导价为399元。",
+      "proposedStatus" : "INSUFFICIENT",
+      "referenceEvidenceId" : null,
+      "referenceQuote" : null,
+      "reviewEvidenceId" : "doc006_chunk02",
+      "reviewQuote" : "智能门铃 D1 售价259元",
+      "rationale" : "混淆门铃D1与摄像头C3的价格。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    } ]
+  }, {
+    "caseId" : "R08",
+    "question" : "采购折扣与安装有哪些规定？",
+    "answer" : "企业客户单次采购满50台可享9折优惠，具体折扣以合同约定为准。所有客户采购一台也可享9折优惠。产品指导价已经包含安装服务费。",
+    "evidenceIds" : [ "doc006_chunk03" ],
+    "claims" : [ {
+      "id" : "R22",
+      "claim" : "企业客户单次采购满50台可享9折优惠，具体折扣以合同约定为准。",
+      "originalText" : "企业客户单次采购满50台可享9折优惠，具体折扣以合同约定为准。",
+      "proposedStatus" : "SUPPORTED",
+      "referenceEvidenceId" : "doc006_chunk03",
+      "referenceQuote" : "企业客户单次采购满50台，可享受9折优惠。批量采购的具体折扣以销售合同约定为准",
+      "reviewEvidenceId" : "doc006_chunk03",
+      "reviewQuote" : "企业客户单次采购满50台，可享受9折优惠。批量采购的具体折扣以销售合同约定为准",
+      "rationale" : "保留客户类型、采购门槛和合同限定。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R23",
+      "claim" : "所有客户采购一台也可享9折优惠。",
+      "originalText" : "所有客户采购一台也可享9折优惠。",
+      "proposedStatus" : "INSUFFICIENT",
+      "referenceEvidenceId" : null,
+      "referenceQuote" : null,
+      "reviewEvidenceId" : "doc006_chunk03",
+      "reviewQuote" : "企业客户单次采购满50台，可享受9折优惠",
+      "rationale" : "扩大客户范围并删除满50台门槛。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R24",
+      "claim" : "产品指导价已经包含安装服务费。",
+      "originalText" : "产品指导价已经包含安装服务费。",
+      "proposedStatus" : "INSUFFICIENT",
+      "referenceEvidenceId" : null,
+      "referenceQuote" : null,
+      "reviewEvidenceId" : "doc006_chunk03",
+      "reviewQuote" : "以上价格不含安装服务费。",
+      "rationale" : "与明确排除安装费用的原文相反。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    } ]
+  }, {
+    "caseId" : "R09",
+    "question" : "售后保修有哪些规定？",
+    "answer" : "产品自签收之日起享受2年免费保修。人为损坏不在保修范围内。产品自签收之日起享受5年免费保修。",
+    "evidenceIds" : [ "doc007_chunk01", "doc007_chunk02" ],
+    "claims" : [ {
+      "id" : "R25",
+      "claim" : "产品自签收之日起享受2年免费保修。",
+      "originalText" : "产品自签收之日起享受2年免费保修。",
+      "proposedStatus" : "SUPPORTED",
+      "referenceEvidenceId" : "doc007_chunk01",
+      "referenceQuote" : "产品自签收之日起享受2年免费保修。",
+      "reviewEvidenceId" : "doc007_chunk01",
+      "reviewQuote" : "产品自签收之日起享受2年免费保修。",
+      "rationale" : "期限与起算点均与原文相同，非保修情形另见对应章节。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R26",
+      "claim" : "人为损坏不在保修范围内。",
+      "originalText" : "人为损坏不在保修范围内。",
+      "proposedStatus" : "SUPPORTED",
+      "referenceEvidenceId" : "doc007_chunk02",
+      "referenceQuote" : "人为损坏不在保修范围内，包括跌落、进水、私自拆机、非授权维修等情形。",
+      "reviewEvidenceId" : "doc007_chunk02",
+      "reviewQuote" : "人为损坏不在保修范围内，包括跌落、进水、私自拆机、非授权维修等情形。",
+      "rationale" : "原文明确排除人为损坏。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R27",
+      "claim" : "产品自签收之日起享受5年免费保修。",
+      "originalText" : "产品自签收之日起享受5年免费保修。",
+      "proposedStatus" : "INSUFFICIENT",
+      "referenceEvidenceId" : null,
+      "referenceQuote" : null,
+      "reviewEvidenceId" : "doc007_chunk01",
+      "reviewQuote" : "产品自签收之日起享受2年免费保修。",
+      "rationale" : "5年与2年矛盾。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    } ]
+  }, {
+    "caseId" : "R10",
+    "question" : "内部业务记录操作有哪些规定？",
+    "answer" : "删除业务记录需部门经理审批，审批后由系统管理员执行。员工可不经审批自行删除业务记录。系统账号允许多人共用。",
+    "evidenceIds" : [ "doc008_chunk02" ],
+    "claims" : [ {
+      "id" : "R28",
+      "claim" : "删除业务记录需部门经理审批，审批后由系统管理员执行。",
+      "originalText" : "删除业务记录需部门经理审批，审批后由系统管理员执行。",
+      "proposedStatus" : "SUPPORTED",
+      "referenceEvidenceId" : "doc008_chunk02",
+      "referenceQuote" : "删除业务记录需部门经理审批，审批通过后由系统管理员执行。",
+      "reviewEvidenceId" : "doc008_chunk02",
+      "reviewQuote" : "删除业务记录需部门经理审批，审批通过后由系统管理员执行。",
+      "rationale" : "保留审批人与执行人的职责区别。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R29",
+      "claim" : "员工可不经审批自行删除业务记录。",
+      "originalText" : "员工可不经审批自行删除业务记录。",
+      "proposedStatus" : "INSUFFICIENT",
+      "referenceEvidenceId" : null,
+      "referenceQuote" : null,
+      "reviewEvidenceId" : "doc008_chunk02",
+      "reviewQuote" : "员工不得自行删除记录，也不得通过技术手段规避审批流程。",
+      "rationale" : "否定审批和管理员执行要求。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    }, {
+      "id" : "R30",
+      "claim" : "系统账号允许多人共用。",
+      "originalText" : "系统账号允许多人共用。",
+      "proposedStatus" : "INSUFFICIENT",
+      "referenceEvidenceId" : null,
+      "referenceQuote" : null,
+      "reviewEvidenceId" : "doc008_chunk02",
+      "reviewQuote" : "系统账号禁止多人共用",
+      "rationale" : "允许共用与禁止共用矛盾。",
+      "reviewStatus" : "REVIEWED",
+      "annotator" : "Codex (AI)",
+      "aiReviewer" : "Codex (AI document review; not independent human review)",
+      "reviewer" : "成员2、成员3（据成员3在本对话确认）",
+      "humanReviewed" : true,
+      "aiReviewDate" : "2026-11-16", "reviewDate" : "2026-11-19"
+    } ]
+  } ],
+  "sourceIntegrationStatus" : "正式知识库及正式切分器已对齐；AI标签复核，不冒充人工标注"
+}

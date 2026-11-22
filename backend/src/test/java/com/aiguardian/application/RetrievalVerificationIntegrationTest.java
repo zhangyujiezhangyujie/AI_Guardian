@@ -1,5 +1,6 @@
 package com.aiguardian.application;
 
+import com.aiguardian.audit.AuditQueryService;
 import com.aiguardian.audit.AuditService;
 import com.aiguardian.demo.ScenarioRepository;
 import com.aiguardian.domain.model.ClaimStatus;
@@ -8,6 +9,7 @@ import com.aiguardian.domain.model.GuardAction;
 import com.aiguardian.domain.model.InsufficientReason;
 import com.aiguardian.domain.model.RunMode;
 import com.aiguardian.domain.model.VerificationState;
+import com.aiguardian.infrastructure.persistence.JdbcAuditPersistenceRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -22,7 +24,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class RetrievalVerificationIntegrationTest {
     @Autowired ChatOrchestrator orchestrator;
     @Autowired ScenarioRepository scenarios;
+    // This test covers retrieval and verification; the member 4 MySQL integration test covers audit persistence.
     @MockBean AuditService audit;
+    @MockBean AuditQueryService auditQueryService;
+    @MockBean JdbcAuditPersistenceRepository auditPersistenceRepository;
 
     @Test
     void verifiesTheAnnualLeaveCitationAgainstTheLuceneResult() {

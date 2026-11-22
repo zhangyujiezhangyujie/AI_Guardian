@@ -108,7 +108,16 @@ class AnnotationCandidatesTest {
 
     @Test void reviewedEvidenceMatchesKnowledgeFilesAndEveryCitationIsVerbatim() throws Exception {
         var data = dataset("annotations-reviewed.json");
-        assertFalse(data.get("humanReviewed").asBoolean());
+        assertTrue(data.get("humanReviewed").asBoolean());
+        assertEquals("REVIEWED", data.get("status").asText());
+        assertEquals("成员3（用户）", data.path("humanReviewConfirmation").path("reportedBy").asText());
+        assertEquals(2, data.path("humanReviewConfirmation").path("reviewers").size());
+        for (var item : data.get("cases")) for (var claim : item.get("claims")) {
+            assertTrue(claim.path("humanReviewed").asBoolean());
+            assertEquals("REVIEWED", claim.path("reviewStatus").asText());
+            assertEquals("Codex (AI)", claim.path("annotator").asText());
+            assertFalse(claim.path("aiReviewer").asText().isBlank());
+        }
         assertEquals("OFFICIAL_CHUNKER_IDS", data.get("evidenceIdStatus").asText());
         var byId = new HashMap<String, JsonNode>();
         for (var s : data.get("sources")) byId.put(s.get("evidenceId").asText(), s);

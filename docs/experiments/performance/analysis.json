@@ -1,0 +1,218 @@
+{
+  "formalRun": "formal-1795158337163",
+  "startedAt": "2026-11-20T15:05:37.165982+08:00",
+  "finishedAt": "2026-11-20T15:19:33.077009300+08:00",
+  "sourceHashesUnchanged": true,
+  "arms": {
+    "none": {
+      "attempts": 20,
+      "meanMs": 2495.4249701,
+      "p50Ms": 2366.560801,
+      "p95Ms": 4642.3358,
+      "totalCalls": 20.0,
+      "generationCalls": 20,
+      "verificationCalls": 0,
+      "retryCalls": 0,
+      "states": [
+        "NO_CLAIMS:20"
+      ],
+      "averageAnswerChars": 119.8,
+      "byQuestion": [
+        {
+          "question": "公司员工有哪些福利？",
+          "n": 10,
+          "meanMs": 3408.6806300999997
+        },
+        {
+          "question": "公司正式员工一年有多少天年假？",
+          "n": 10,
+          "meanMs": 1582.1693101
+        }
+      ]
+    },
+    "per-claim": {
+      "attempts": 20,
+      "meanMs": 22107.176525099996,
+      "p50Ms": 24009.1591,
+      "p95Ms": 50551.0906,
+      "totalCalls": 142.0,
+      "generationCalls": 20,
+      "verificationCalls": 122,
+      "retryCalls": 1,
+      "states": [
+        "COMPLETED:12",
+        "PARTIAL:8"
+      ],
+      "averageAnswerChars": 113.85,
+      "byQuestion": [
+        {
+          "question": "公司员工有哪些福利？",
+          "n": 10,
+          "meanMs": 31160.045640099997
+        },
+        {
+          "question": "公司正式员工一年有多少天年假？",
+          "n": 10,
+          "meanMs": 13054.307410099998
+        }
+      ]
+    },
+    "batch": {
+      "attempts": 20,
+      "meanMs": 16299.162790000002,
+      "p50Ms": 8340.4907,
+      "p95Ms": 38847.6204,
+      "totalCalls": 40.0,
+      "generationCalls": 20,
+      "verificationCalls": 20,
+      "retryCalls": 0,
+      "states": [
+        "COMPLETED:14",
+        "PARTIAL:6"
+      ],
+      "averageAnswerChars": 124.55,
+      "byQuestion": [
+        {
+          "question": "公司员工有哪些福利？",
+          "n": 10,
+          "meanMs": 27202.629090000002
+        },
+        {
+          "question": "公司正式员工一年有多少天年假？",
+          "n": 10,
+          "meanMs": 5395.69649
+        }
+      ]
+    }
+  },
+  "failedRecords": [
+    {
+      "arm": "batch",
+      "round": 4,
+      "requestId": "req_c897904a0e0d",
+      "state": "PARTIAL",
+      "failureReason": null,
+      "auditReadbackPresent": true
+    },
+    {
+      "arm": "per-claim",
+      "round": 6,
+      "requestId": "req_e55b12e7c90c",
+      "state": "PARTIAL",
+      "failureReason": null,
+      "auditReadbackPresent": true
+    },
+    {
+      "arm": "per-claim",
+      "round": 8,
+      "requestId": "req_51f783f94e34",
+      "state": "PARTIAL",
+      "failureReason": null,
+      "auditReadbackPresent": true
+    },
+    {
+      "arm": "per-claim",
+      "round": 10,
+      "requestId": "req_230954503e09",
+      "state": "PARTIAL",
+      "failureReason": null,
+      "auditReadbackPresent": true
+    },
+    {
+      "arm": "batch",
+      "round": 10,
+      "requestId": "req_ebaaf9b067f8",
+      "state": "PARTIAL",
+      "failureReason": null,
+      "auditReadbackPresent": true
+    },
+    {
+      "arm": "batch",
+      "round": 12,
+      "requestId": "req_e98195c791f3",
+      "state": "PARTIAL",
+      "failureReason": null,
+      "auditReadbackPresent": true
+    },
+    {
+      "arm": "per-claim",
+      "round": 12,
+      "requestId": "req_22407dd44a49",
+      "state": "PARTIAL",
+      "failureReason": null,
+      "auditReadbackPresent": true
+    },
+    {
+      "arm": "per-claim",
+      "round": 14,
+      "requestId": "req_69f9b6236411",
+      "state": "PARTIAL",
+      "failureReason": null,
+      "auditReadbackPresent": true
+    },
+    {
+      "arm": "batch",
+      "round": 14,
+      "requestId": "req_5806fd269e66",
+      "state": "PARTIAL",
+      "failureReason": null,
+      "auditReadbackPresent": true
+    },
+    {
+      "arm": "per-claim",
+      "round": 16,
+      "requestId": "req_5a8c19db36fb",
+      "state": "PARTIAL",
+      "failureReason": null,
+      "auditReadbackPresent": true
+    },
+    {
+      "arm": "batch",
+      "round": 18,
+      "requestId": "req_82a5b2c27733",
+      "state": "PARTIAL",
+      "failureReason": null,
+      "auditReadbackPresent": true
+    },
+    {
+      "arm": "per-claim",
+      "round": 18,
+      "requestId": "req_282a47c15848",
+      "state": "PARTIAL",
+      "failureReason": null,
+      "auditReadbackPresent": true
+    },
+    {
+      "arm": "per-claim",
+      "round": 20,
+      "requestId": "req_3c62da8773fe",
+      "state": "PARTIAL",
+      "failureReason": null,
+      "auditReadbackPresent": true
+    },
+    {
+      "arm": "batch",
+      "round": 20,
+      "requestId": "req_006676286fc8",
+      "state": "PARTIAL",
+      "failureReason": null,
+      "auditReadbackPresent": true
+    }
+  ],
+  "smokeRuns": [
+    {
+      "run": "smoke-1795158229536",
+      "n": 1,
+      "passed": null,
+      "calls": 1.0,
+      "finished": null
+    },
+    {
+      "run": "smoke-1795158294907",
+      "n": 3,
+      "passed": true,
+      "calls": 8.0,
+      "finished": "2026-11-20T15:05:07.153449100+08:00"
+    }
+  ]
+}

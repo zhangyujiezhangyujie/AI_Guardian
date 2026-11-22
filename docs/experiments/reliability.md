@@ -1,8 +1,8 @@
 # 可靠性与异常处理回归（成员 4）
 
-执行日期：2026-11-19
+执行日期：2026-11-21
 
-代码基线：本地 `backend` 已合入 `origin/dev` 的 `408627f`（SC02 集成）。
+代码基线：`origin/dev` 最新提交 `2b158cb`（阶段四报告已纳入成员二检索统计）。
 
 ## 验证范围
 
@@ -21,13 +21,14 @@
 ## 执行结果
 
 - 成员 4 的回归、期望比对、仓库读取和审计单元测试：12 项通过。
-- 成员 4 的 MySQL 审计集成测试：2 项通过，覆盖正常记录和核验失败记录；测试后清理记录并删除临时低权限数据库账号。
-- 排除下述集成测试配置问题后，其余后端测试：105 项执行，0 失败、0 错误、3 项按默认规则跳过（真实 API 与默认关闭的 MySQL 测试）。显式启用 MySQL 后，上述 2 项均通过。
+- `RetrievalVerificationIntegrationTest`：5 项通过。测试关闭数据源自动配置，并 mock `AuditQueryService` 与 `JdbcAuditPersistenceRepository`，保留真实 Lucene 检索和核验链路，将数据库审计隔离给成员 4 的独立测试。
+- 最新基线完整 `mvn test`：149 项，0 失败、0 错误、5 项按默认规则跳过（真实 API 与默认关闭的实验测试）。
+- 最新基线成员 4 的 MySQL 审计集成测试：2 项通过、0 失败、0 跳过，覆盖正常记录和核验失败记录；使用临时低权限数据库账号，测试结束后删除该账号。
 - `JdbcAuditServiceTest` 验证审计 detail 会丢弃 `apiKey`、完整 prompt 等契约外字段；审计写入异常不会向问答调用方抛出。
 
-## 仍需处理的测试阻塞
+## 集成测试配置修正
 
-全量 `mvn test` 中，`RetrievalVerificationIntegrationTest` 的 5 个用例在业务断言前无法启动 Spring 上下文：该测试排除了 `DataSourceAutoConfiguration`，但仍使用非 `stub` profile，因而会创建需要 `JdbcTemplate` 的 `JdbcAuditQueryService`。这是该集成测试的上下文配置问题；处理方式应由该测试负责人选择为启用数据源或 mock 审计查询依赖。成员 4 的测试不改动该成员的测试文件。
+原问题是该测试排除了 `DataSourceAutoConfiguration`，但仍创建依赖 `JdbcTemplate` 的审计查询与持久化组件。修正后在测试中 mock `AuditQueryService` 和 `JdbcAuditPersistenceRepository`，不启动数据库；测试仍运行真实 Lucene 检索与核验。成员 4 的 MySQL 集成测试独立覆盖正式模式下审计读写。
 
 ## P1 工具网关
 
