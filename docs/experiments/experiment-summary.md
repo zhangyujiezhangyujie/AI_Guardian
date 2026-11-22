@@ -19,13 +19,13 @@
 | 固定场景回归 | 8 个 P0 场景读取成功；预期结果、失败审计事件和请求终态均通过 | [`scenarios.md`](scenarios.md)、[`reliability.md`](reliability.md) | 已完成本轮回放；场景 JSON 或知识库变更后需重跑 |
 | 可靠性 / 异常处理 | 超时、生成服务错误、无效 JSON、错误引用、检索为空五类场景均符合预期；最新基线完整回归 149 项中 144 项通过、5 项显式跳过；MySQL 审计读写集成测试 2/2 通过 | [`reliability.md`](reliability.md) | 已完成本轮故障回归；尚未覆盖真实模型长期稳定性 |
 | 架构评估（AC-11） | 已有 30 条固定结论真实评估及 A/B/C 各 20 次完整业务链路测量；架构选择和取舍见成员 1 架构说明 | [`../verification/phase4/results.md`](../verification/phase4/results.md)、[`performance/results.md`](performance/results.md)、[`../architecture/member1.md`](../architecture/member1.md) | 有实测数据和架构依据；报告需同时保留样本范围及局限 |
-| 工具调用安全 | 暂无实验数据 | — | P1；接口契约第 7.10 节规定须先经团队决定启动网关并升级契约，再测试至少 10 条合法/越权请求 |
+| 工具调用安全（P1） | 10 条请求（4 合法、6 越权/非法）：放行 4、拦截 6（5 拒绝、1 转审批）；越权/非法请求造成的数据修改 0 条，由每次调用前后的独立 SQL 查询证明 | [`tool_security.md`](tool_security.md)、[`ToolSecurityExperimentTest.java`](../../backend/src/test/java/com/aiguardian/tool/ToolSecurityExperimentTest.java) | 2026-11-22 经组内决定启动并升级契约 v1.3；当前结果在 H2（MySQL 兼容模式、执行仓库 db/init.sql）上取得，**MySQL 8 复现待执行**，命令见该文档第 4 节 |
 
 ## 尚未形成的全组实验数据
 
 - 检索 Top 3 命中率已交付（10 题、工程自检口径，见[检索命中率评测](retrieval_eval.md)），不再列为缺失项；更大规模标注集属于后续改进。
 - 核验效果与性能已交付；更大规模独立盲标集属于后续改进，不是本轮已确认数据的替代。
-- 工具调用安全允许/拒绝率和未授权数据修改检查：依赖 P1 工具网关是否获准启动，并完成契约升级；目前没有伪造或替代实验数据。
+- 工具调用安全：H2 上的 10 条请求实验已完成（见[工具网关实验](tool_security.md)），MySQL 8 上的复现尚未执行；报告引用前需补跑。
 - 真实模型长期稳定性：本轮五类故障回归和 A/B/C 性能实验不覆盖长期运行稳定性。
 
 因此，现有实测结果可供阶段报告引用；工具网关安全及长期稳定性仍是明确的未测项。其他模块的阶段四评估结果已纳入本汇总，后续只需在团队决定启动网关后补充对应安全实验。
