@@ -58,12 +58,20 @@ export const SCENARIOS = [
   {
     scenarioId: 'SC06',
     name: '越权工具调用',
-    description: 'P1 扩展场景，工具网关启动后补充。',
+    description: '模拟模型声称员工可直接删除记录，并替普通员工发起删除编号 1001 的工具调用；网关按《内部操作规范》拒绝，记录未被修改。',
     question: '帮我删除编号 1001 的记录',
     priority: 'P1',
     supportsReal: false,
-    recommendedStrategies: [],
-    caseKey: null
+    recommendedStrategies: ['annotate', 'block'],
+    caseKey: 'toolDenied',
+    // 契约 v1.3 第 10.7 节：模型提出的工具调用；decision / denyReason 为 Mock 直接写出的网关结果
+    toolCall: {
+      user: 'user',
+      toolName: 'delete_record',
+      arguments: { recordId: 1001 },
+      decision: 'DENY',
+      denyReason: 'PERMISSION_DENIED'
+    }
   },
   {
     scenarioId: 'SC07',
@@ -143,7 +151,7 @@ export const SCENARIOS = [
 
 /** GET /api/demo/scenarios 的响应：去掉 Mock 内部字段。 */
 export function scenarioList() {
-  return SCENARIOS.map(({ caseKey, forcedMismatches, ...publicFields }) => publicFields)
+  return SCENARIOS.map(({ caseKey, forcedMismatches, toolCall, ...publicFields }) => publicFields)
 }
 
 export function findScenario(scenarioId) {

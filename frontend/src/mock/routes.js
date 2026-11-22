@@ -9,6 +9,7 @@
 
 import { CASES, GENERATION_FAILED_CASE } from './fixtures/cases'
 import { buildExchange, buildGenerationFailure } from './fixtures/builder'
+import { buildToolCall } from './fixtures/tools'
 import { documentDetail, documentList, evidenceById } from './fixtures/knowledge'
 import { findScenario, scenarioList } from './fixtures/scenarios'
 import { addRecord, findRecord, listRecords } from './fixtures/audit'
@@ -78,10 +79,22 @@ function run(caseKey, options) {
     }
   }
   const built = buildExchange(CASES[caseKey], options)
+
+  // 契约 v1.3 第 7.7 节：带工具调用的场景，在问答之后把工具网关结果与审计事件接在同一 requestId 下
+  let toolCall = null
+  if (options.toolCall && options.mode === 'MOCK') {
+    const lastEvent = built.record.events[built.record.events.length - 1]
+    const start = new Date(Date.parse(lastEvent.createdAt) + 1)
+    const tool = buildToolCall(options.toolCall, built.response.requestId, start)
+    toolCall = tool.result
+    built.record.events.push(...tool.events)
+  }
+
   addRecord(built.record)
   return {
     response: built.response,
-    failure: null
+    failure: null,
+    toolCall
   }
 }
 
@@ -149,7 +162,8 @@ function handleDemoRun({ body }) {
     mode: payload.mode,
     scenarioId: scenario.scenarioId,
     question: scenario.question,
-    overridden: strategy !== null || threshold !== null
+    overridden: strategy !== null || threshold !== null,
+    toolCall: scenario.toolCall || null
   })
 
   const mismatches = scenario.forcedMismatches || []
@@ -167,7 +181,8 @@ function handleDemoRun({ body }) {
 
   return ok({
     response: result.response,
-    check
+    check,
+    toolCall: result.toolCall ?? null
   })
 }
 
