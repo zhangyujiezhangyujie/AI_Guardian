@@ -1,0 +1,106 @@
+/**
+ * 视觉主题：深色导航 + 浅色主界面 + 蓝色主操作 + 语义化风险色。
+ * 只覆盖 Element Plus 的 CSS 变量与少量通用样式，不引入其他 UI 库（任务卡 6.9）。
+ *
+ * 语义色约定不变：有证据 success（绿）、证据不足 warning（琥珀）、拦截与失败 danger（红）、其他 info（灰）。
+ */
+
+:root {
+  /* 品牌与界面底色 */
+  --ag-sidebar-bg: #111827;
+  --ag-sidebar-hover: #1f2937;
+  --ag-sidebar-active: #374151;
+  --ag-sidebar-text: #cbd5e1;
+  --ag-sidebar-muted: #94a3b8;
+  --ag-page-bg: #f6f7fb;
+  --ag-card-radius: 12px;
+
+  /* Element Plus 语义色及其深浅梯度 */
+  --el-color-primary: #3563e9;
+  --el-color-primary-light-3: #7292f0;
+  --el-color-primary-light-5: #9ab1f4;
+  --el-color-primary-light-7: #c2d0f8;
+  --el-color-primary-light-8: #d7e0fb;
+  --el-color-primary-light-9: #ebeffd;
+  --el-color-primary-dark-2: #2a4fba;
+  --el-color-success: #18a058;
+  --el-color-success-light-3: #5dbc8a;
+  --el-color-success-light-5: #8cd0ac;
+  --el-color-success-light-7: #bae2cd;
+  --el-color-success-light-8: #d1ecde;
+  --el-color-success-light-9: #e8f6ee;
+  --el-color-success-dark-2: #138046;
+  --el-color-warning: #d97706;
+  --el-color-warning-light-3: #e4a051;
+  --el-color-warning-light-5: #ecbb82;
+  --el-color-warning-light-7: #f4d6b4;
+  --el-color-warning-light-8: #f7e4cd;
+  --el-color-warning-light-9: #fbf1e6;
+  --el-color-warning-dark-2: #ae5f05;
+  --el-color-danger: #dc3545;
+  --el-color-danger-light-3: #e6727d;
+  --el-color-danger-light-5: #ee9aa2;
+  --el-color-danger-light-7: #f4c2c7;
+  --el-color-danger-light-8: #f8d7da;
+  --el-color-danger-light-9: #fcebec;
+  --el-color-danger-dark-2: #b02a37;
+  --el-color-error: #dc3545;
+  --el-color-error-light-3: #e6727d;
+  --el-color-error-light-5: #ee9aa2;
+  --el-color-error-light-7: #f4c2c7;
+  --el-color-error-light-8: #f8d7da;
+  --el-color-error-light-9: #fcebec;
+  --el-color-error-dark-2: #b02a37;
+  --el-color-info: #64748b;
+  --el-color-info-light-3: #929eae;
+  --el-color-info-light-5: #b2bac5;
+  --el-color-info-light-7: #d0d5dc;
+  --el-color-info-light-8: #e0e3e8;
+  --el-color-info-light-9: #f0f1f3;
+  --el-color-info-dark-2: #505d6f;
+
+  --el-bg-color-page: var(--ag-page-bg);
+  --el-text-color-primary: #111827;
+  --el-text-color-regular: #374151;
+  --el-text-color-secondary: #6b7280;
+  --el-border-color: #dfe3ea;
+  --el-border-color-light: #e7eaf0;
+  --el-border-color-lighter: #eef0f4;
+  --el-fill-color-light: #f3f5f8;
+  --el-fill-color-lighter: #f8f9fb;
+  --el-border-radius-base: 8px;
+}
+
+/* 卡片：圆角、细边框、无阴影 */
+.el-card {
+  border-radius: var(--ag-card-radius);
+  border-color: var(--el-border-color-light);
+}
+
+.el-card__header {
+  padding: 14px 20px;
+  font-size: 15px;
+}
+
+/* 状态徽章：胶囊形；浅色徽章去掉描边，更接近语义色块 */
+.el-tag {
+  border-radius: 999px;
+}
+
+.el-tag--light {
+  border-color: transparent;
+}
+
+/* 提示条 */
+.el-alert {
+  border-radius: 10px;
+}
+
+/* 表格表头 */
+.el-table th.el-table__cell,
+.el-table th.el-table__cell.el-table-fixed-column--left,
+.el-table th.el-table__cell.el-table-fixed-column--right {
+  background-color: var(--el-fill-color-lighter);
+  color: var(--el-text-color-secondary);
+  font-weight: 500;
+}
