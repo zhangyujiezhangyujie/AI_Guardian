@@ -2,6 +2,7 @@
 
 > 依据：方案 3.8、9.5，任务卡 4 第 6.9 节，接口契约 v1.3 第 3.11、7.10 节。
 > 实现与实验由成员 5 经组内决定代为完成。
+> 成员 4 于 2026-11-23 在 MySQL 8.0.46 上复现了 10 条安全请求；明细见第 4 节和 [MySQL 原始结果](tool_security_mysql_report.json)。
 
 ## 1. 网关做什么
 
@@ -29,7 +30,7 @@
 
 实现：`backend/src/test/java/com/aiguardian/tool/ToolSecurityExperimentTest.java`，结果写入 `backend/target/tool-security-experiment/report.md` 与 `report.json`。
 
-## 3. 结果（2026-11-22，H2 MySQL 兼容模式）
+## 3. H2 基线结果（2026-11-22）
 
 数据库：H2 2.x（MySQL 兼容模式，执行仓库 `db/init.sql` 的 P1 段落）。
 
@@ -50,24 +51,19 @@
 
 有效性检查：临时去掉第 2 步权限检查后，本实验在 T05 失败（DENY 变为 REQUIRE_APPROVAL），网关单元测试与 SC06 演示比对也同时失败，说明实验能发现越权漏洞；检查恢复后全部通过。
 
-## 4. 在 MySQL 上复现（待有 MySQL 环境的成员执行）
+## 4. MySQL 8 复现记录（2026-11-23）
 
-本次实验环境没有 MySQL，结果来自 H2。H2 执行的是仓库里同一份建表与重置脚本，但它不是 MySQL。报告引用前，建议在 MySQL 8 上复现一次：
+在本机 MySQL 8.0.46 的 `ai_guardian` 库运行 `ToolSecurityExperimentTest`，1 项 JUnit 测试执行了上表 10 条请求，0 失败、0 错误、0 跳过。结果与 H2 一致：4 条放行，6 条拒绝或转审批；每次调用前后的独立 SQL 快照显示，只有合法请求 T03、T04 分别修改了记录 1002、1003，6 条越权或非法请求没有修改任何记录。完整原始结果见 [tool_security_mysql_report.json](tool_security_mysql_report.json)。
 
-```powershell
-# 1. 初始化（已初始化过的库重复执行也安全，均为 IF NOT EXISTS / INSERT IGNORE）
-mysql -u root -p < db/init.sql
+原数据库中尚无 `mock_business_record` 表。本次仅执行 `db/init.sql` 的 P1 建表和种子数据段，未改动其他审计表。运行时使用只对该演示表有 SELECT、INSERT、UPDATE、DELETE 权限的临时账号。测试结束后，`db/reset_mock_business_record.sql` 将 1001–1005 恢复为初始状态；随后独立查询确认复位成功，临时账号也已删除。
 
-# 2. 运行实验（会先执行 reset 脚本恢复 1001–1005）
-cd backend
-mvn test -Dtest=ToolSecurityExperimentTest "-DtoolSecurityJdbcUrl=jdbc:mysql://localhost:3306/ai_guardian?serverTimezone=Asia/Shanghai" -DtoolSecurityJdbcUser=root "-DtoolSecurityJdbcPassword=你的密码"
-```
+复跑时先执行 P1 建表段和 `db/reset_mock_business_record.sql`，创建临时低权限账号，再运行：
 
-运行后用 `report.md` 替换第 3 节表格，并把数据库一行改为 MySQL。也可以另外手工查询确认：
-
-```sql
-SELECT id, status, deleted, updated_at FROM mock_business_record ORDER BY id;
--- 预期：1002 为 CLOSED、1003 为 ARCHIVED（T03、T04 合法修改），1001、1004、1005 保持初始状态，全部 deleted=0
+```sh
+mvn -B -Dtest=ToolSecurityExperimentTest \
+  -DtoolSecurityJdbcUrl='jdbc:mysql://127.0.0.1:3306/ai_guardian?serverTimezone=Asia/Shanghai' \
+  -DtoolSecurityJdbcUser="$TOOL_SECURITY_DB_USER" \
+  -DtoolSecurityJdbcPassword="$TOOL_SECURITY_DB_PASSWORD" test
 ```
 
 ## 5. 局限（报告中须如实说明）
