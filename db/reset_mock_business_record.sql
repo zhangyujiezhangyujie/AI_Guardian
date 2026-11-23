@@ -1,6 +1,8 @@
 -- 把模拟业务记录 1001–1005 恢复为初始状态（契约 v1.3 第 9 章），用于重复演示和安全实验。
--- 只影响 mock_business_record，不触碰问答与审计数据。
+-- 同时清空审批单 approval_request（只含演示数据）。不触碰问答与审计数据。
 USE ai_guardian;
+
+DELETE FROM approval_request;
 
 DELETE FROM mock_business_record WHERE id BETWEEN 1001 AND 1005;
 

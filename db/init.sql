@@ -96,3 +96,23 @@ INSERT IGNORE INTO mock_business_record (id, title, owner, status, deleted, upda
     (1003, '供应商资质复核',         'manager', 'OPEN',     0, '2026-11-22 10:00:00.000'),
     (1004, '客户投诉处理记录',       'user',    'CLOSED',   0, '2026-11-22 10:00:00.000'),
     (1005, '年度设备盘点表',         'manager', 'ARCHIVED', 0, '2026-11-22 10:00:00.000');
+
+-- P1 简化审批（契约 v1.4 第 9 章）：删除等需审批的工具调用生成审批单
+CREATE TABLE IF NOT EXISTS approval_request (
+    id                   VARCHAR(20)  NOT NULL PRIMARY KEY,
+    tool_call_id         VARCHAR(20)  NOT NULL,
+    audit_request_id     VARCHAR(20)  NOT NULL,
+    tool_name            VARCHAR(32)  NOT NULL,
+    arguments_json       TEXT         NOT NULL,
+    requester            VARCHAR(20)  NOT NULL,
+    based_on_request_id  VARCHAR(20)  NULL,
+    status               VARCHAR(16)  NOT NULL,
+    approver             VARCHAR(20)  NULL,
+    comment              VARCHAR(200) NULL,
+    failure_reason       VARCHAR(32)  NULL,
+    created_at           DATETIME(3)  NOT NULL,
+    expires_at           DATETIME(3)  NOT NULL,
+    decided_at           DATETIME(3)  NULL,
+    INDEX idx_apr_status (status),
+    INDEX idx_apr_created (created_at)
+);

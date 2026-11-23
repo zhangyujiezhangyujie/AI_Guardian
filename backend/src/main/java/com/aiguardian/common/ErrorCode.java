@@ -14,7 +14,10 @@ public enum ErrorCode {
     AUDIT_NOT_FOUND(HttpStatus.NOT_FOUND, "审计记录不存在。"),
     LLM_GENERATION_FAILED(HttpStatus.BAD_GATEWAY, "大模型生成回答失败，请稍后重试。"),
     RETRIEVAL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "知识库检索失败。"),
-    INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "系统内部错误。");
+    INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "系统内部错误。"),
+    APPROVAL_NOT_FOUND(HttpStatus.NOT_FOUND, "审批单不存在。"),
+    APPROVAL_FORBIDDEN(HttpStatus.FORBIDDEN, "无权处理该审批单：%s"),
+    APPROVAL_NOT_PENDING(HttpStatus.CONFLICT, "审批单不是待审批状态：%s");
 
     private final HttpStatus httpStatus;
     private final String message;

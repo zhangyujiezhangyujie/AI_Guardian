@@ -23,6 +23,11 @@ public class BusinessException extends RuntimeException {
         this.requestId = requestId;
     }
 
+    /** 带原因的错误（message 模板含 %s 的错误码，如 APPROVAL_FORBIDDEN）。 */
+    public static BusinessException withReason(ErrorCode errorCode, String reason) {
+        return new BusinessException(errorCode, null, errorCode.getMessage().formatted(reason));
+    }
+
     public static BusinessException invalidRequest(String reason) {
         return new BusinessException(ErrorCode.INVALID_REQUEST, null,
                 ErrorCode.INVALID_REQUEST.getMessage().formatted(reason));

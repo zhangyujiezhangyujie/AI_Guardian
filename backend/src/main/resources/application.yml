@@ -41,4 +41,7 @@ aiguardian:
     roles:
       user: [search_document]
       manager: [search_document, update_record, delete_record]
+      admin: [search_document, update_record, delete_record]
     approval-required: [delete_record]
+    approvers: [manager]
+    approval-ttl-minutes: 1440

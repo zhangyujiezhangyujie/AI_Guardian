@@ -9,6 +9,7 @@ import com.aiguardian.domain.model.GuardAction;
 import com.aiguardian.domain.model.InsufficientReason;
 import com.aiguardian.domain.model.RunMode;
 import com.aiguardian.domain.model.VerificationState;
+import com.aiguardian.domain.tool.ApprovalRepository;
 import com.aiguardian.domain.tool.BusinessRecordRepository;
 import com.aiguardian.infrastructure.persistence.JdbcAuditPersistenceRepository;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,7 @@ class RetrievalVerificationIntegrationTest {
     @MockBean JdbcAuditPersistenceRepository auditPersistenceRepository;
     // P1 工具网关的模拟业务记录同样依赖数据库，本测试不涉及，按同样方式隔离。
     @MockBean BusinessRecordRepository businessRecordRepository;
+    @MockBean ApprovalRepository approvalRepository;
 
     @Test
     void verifiesTheAnnualLeaveCitationAgainstTheLuceneResult() {

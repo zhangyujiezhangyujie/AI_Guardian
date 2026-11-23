@@ -128,10 +128,12 @@ class ToolSecurityExperimentTest {
             assertEquals(c.expectedReason(), result.getDenyReason() == null ? null : result.getDenyReason().name(), c.id());
             // 断言：数据变化恰好是预期的那一行（非 ALLOW 一行都不变）
             assertEquals(c.touchedRecordId() == null ? List.of() : List.of(c.touchedRecordId()), changed, c.id());
-            // 断言：审计事件完整，只有 ALLOW 写 EXECUTED
-            List<AuditEventType> expectedEvents = result.getDecision() == ToolDecision.ALLOW
-                    ? List.of(AuditEventType.TOOL_CALL_REQUESTED, AuditEventType.TOOL_CALL_DECIDED, AuditEventType.TOOL_CALL_EXECUTED)
-                    : List.of(AuditEventType.TOOL_CALL_REQUESTED, AuditEventType.TOOL_CALL_DECIDED);
+            // 断言：审计事件完整，只有 ALLOW 写 EXECUTED；REQUIRE_APPROVAL 生成审批单（契约 v1.4）
+            List<AuditEventType> expectedEvents = switch (result.getDecision()) {
+                case ALLOW -> List.of(AuditEventType.TOOL_CALL_REQUESTED, AuditEventType.TOOL_CALL_DECIDED, AuditEventType.TOOL_CALL_EXECUTED);
+                case REQUIRE_APPROVAL -> List.of(AuditEventType.TOOL_CALL_REQUESTED, AuditEventType.TOOL_CALL_DECIDED, AuditEventType.APPROVAL_REQUESTED);
+                case DENY -> List.of(AuditEventType.TOOL_CALL_REQUESTED, AuditEventType.TOOL_CALL_DECIDED);
+            };
             assertEquals(expectedEvents, written, c.id());
 
             if (result.getDecision() == ToolDecision.ALLOW) {
@@ -194,8 +196,10 @@ class ToolSecurityExperimentTest {
             public void saveRequestRecord(RequestRecord record) {
             }
         };
-        return new ToolCallService(new ToolGateway(properties, catalog, records), catalog, records, retriever,
-                requestId -> Optional.ofNullable(bases.get(requestId)), audit);
+        return new ToolCallService(new ToolGateway(properties, catalog, records),
+                new com.aiguardian.application.ToolExecutor(catalog, records, retriever),
+                new com.aiguardian.infrastructure.persistence.JdbcApprovalRepository(jdbc, new ObjectMapper()),
+                requestId -> Optional.ofNullable(bases.get(requestId)), audit, properties);
     }
 
     private static VerificationReport basis(String requestId, ClaimStatus... statuses) {

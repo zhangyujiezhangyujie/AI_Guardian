@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.aiguardian.application.ChatOrchestrator;
 import com.aiguardian.application.ChatOrchestratorImpl;
 import com.aiguardian.application.ToolCallService;
+import com.aiguardian.application.ToolExecutor;
 import com.aiguardian.audit.AuditService;
 import com.aiguardian.config.AiGuardianProperties;
 import com.aiguardian.demo.DefaultScenarioExpectationChecker;
@@ -21,6 +22,7 @@ import com.aiguardian.domain.guard.OutputGuardRegistry;
 import com.aiguardian.domain.model.AuditEvent;
 import com.aiguardian.domain.model.ChatResponse;
 import com.aiguardian.domain.model.RequestRecord;
+import com.aiguardian.domain.tool.InMemoryApprovalRepository;
 import com.aiguardian.domain.tool.InMemoryBusinessRecordRepository;
 import com.aiguardian.domain.tool.ToolCatalog;
 import com.aiguardian.domain.tool.ToolGateway;
@@ -74,8 +76,9 @@ class DemoControllerTest {
                 new ExactQuoteCitationValidator(properties), guards, noopAudit(), json);
         records = new InMemoryBusinessRecordRepository();
         ToolCatalog catalog = new ToolCatalog();
-        tools = new ToolCallService(new ToolGateway(properties, catalog, records), catalog, records,
-                new LuceneEvidenceRetriever(index), requestId -> Optional.empty(), noopAudit());
+        tools = new ToolCallService(new ToolGateway(properties, catalog, records),
+                new ToolExecutor(catalog, records, new LuceneEvidenceRetriever(index)),
+                new InMemoryApprovalRepository(), requestId -> Optional.empty(), noopAudit(), properties);
         mockMvc = mockMvcWith(orchestrator);
     }
 
