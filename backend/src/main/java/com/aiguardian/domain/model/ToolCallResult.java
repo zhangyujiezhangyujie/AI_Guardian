@@ -23,5 +23,7 @@ public class ToolCallResult {
     private boolean executed;
     private Map<String, Object> result;
     private BusinessRecord record;
+    /** v1.4：decision=REQUIRE_APPROVAL 时的审批单号。 */
+    private String approvalId;
     private String createdAt;
 }

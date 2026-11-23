@@ -67,9 +67,11 @@ class ToolControllerTest {
             public void saveRequestRecord(RequestRecord record) {
             }
         };
-        ToolCallService service = new ToolCallService(new ToolGateway(properties, catalog, records), catalog, records,
-                retriever, requestId -> Optional.ofNullable(bases.get(requestId)), audit);
-        mockMvc = MockMvcBuilders.standaloneSetup(new ToolController(service, new ObjectMapper()))
+        ToolCallService service = new ToolCallService(new ToolGateway(properties, catalog, records),
+                new com.aiguardian.application.ToolExecutor(catalog, records, retriever),
+                new com.aiguardian.domain.tool.InMemoryApprovalRepository(),
+                requestId -> Optional.ofNullable(bases.get(requestId)), audit, properties);
+        mockMvc = MockMvcBuilders.standaloneSetup(new ToolController(service, new ObjectMapper(), properties))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
     }
@@ -118,7 +120,9 @@ class ToolControllerTest {
     void missingOrUnknownUserHeaderIs400() throws Exception {
         String body = "{\"toolName\":\"search_document\",\"arguments\":{\"keyword\":\"年假\"}}";
         call(null, body).andExpect(status().isBadRequest()).andExpect(jsonPath("$.errorCode").value("INVALID_REQUEST"));
-        call("admin", body).andExpect(status().isBadRequest()).andExpect(jsonPath("$.errorCode").value("INVALID_REQUEST"));
+        call("guest", body).andExpect(status().isBadRequest()).andExpect(jsonPath("$.errorCode").value("INVALID_REQUEST"));
+        // v1.4：admin 是合法的演示用户
+        call("admin", body).andExpect(status().isOk());
     }
 
     @Test

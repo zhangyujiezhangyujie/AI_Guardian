@@ -70,6 +70,7 @@ Mock 模式下另有一个不在导航中的页面 `/dev/cards`，一次列出�
 | `/audit` | 审计日志列表 |
 | `/audit/:requestId` | 审计详情 |
 | `/demo` | 演示场景 |
+| `/approvals` | 审批中心（P1，契约 v1.4；依赖真实后端，Mock 模式下列表为空） |
 
 ## 约定
 

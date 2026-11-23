@@ -109,6 +109,22 @@ class ToolGatewayTest {
     }
 
     @Test
+    void approvalGrantedSkipsOnlyTheApprovalStep() {
+        // 审批已通过：删除放行
+        assertEquals(ToolDecision.ALLOW, gateway.decide(new ToolCallRequest("delete_record", Map.of("recordId", 1001), null),
+                "manager", Optional::empty, true).decision());
+        // 其余检查照常：普通员工仍无权限、记录不存在仍拒绝
+        assertEquals(ToolDenyReason.PERMISSION_DENIED, gateway.decide(new ToolCallRequest("delete_record", Map.of("recordId", 1001), null),
+                "user", Optional::empty, true).denyReason());
+        assertEquals(ToolDenyReason.RECORD_NOT_FOUND, gateway.decide(new ToolCallRequest("delete_record", Map.of("recordId", 9999), null),
+                "manager", Optional::empty, true).denyReason());
+        // 依据核验照常
+        VerificationReport bad = report(VerificationState.COMPLETED, ClaimStatus.INSUFFICIENT);
+        assertEquals(ToolDenyReason.UNVERIFIED_BASIS, gateway.decide(new ToolCallRequest("delete_record", Map.of("recordId", 1001), BASIS),
+                "manager", () -> Optional.of(bad), true).denyReason());
+    }
+
+    @Test
     void managerUpdateWithoutBasisIsAllowedAndBasisIsNotLookedUp() {
         AtomicInteger lookups = new AtomicInteger();
         ToolDecisionOutcome outcome = decide("manager", "update_record", Map.of("recordId", 1002, "status", "CLOSED"), null,

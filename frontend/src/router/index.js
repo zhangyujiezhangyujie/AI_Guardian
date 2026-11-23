@@ -4,6 +4,7 @@ import ChatView from '@/views/ChatView.vue'
 import AuditListView from '@/views/AuditListView.vue'
 import AuditDetailView from '@/views/AuditDetailView.vue'
 import DemoView from '@/views/DemoView.vue'
+import ApprovalCenterView from '@/views/ApprovalCenterView.vue'
 import { USE_MOCK } from '@/mock'
 
 const routes = [
@@ -42,6 +43,14 @@ const routes = [
     component: DemoView,
     meta: {
       title: '演示场景'
+    }
+  },
+  {
+    path: '/approvals',
+    name: 'approvals',
+    component: ApprovalCenterView,
+    meta: {
+      title: '审批中心'
     }
   },
   {

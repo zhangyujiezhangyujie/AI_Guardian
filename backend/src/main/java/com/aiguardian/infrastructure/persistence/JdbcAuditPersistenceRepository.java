@@ -45,7 +45,9 @@ public class JdbcAuditPersistenceRepository {
             Map.entry(AuditEventType.TOOL_CALL_REQUESTED,
                     Set.of("toolCallId", "toolName", "user", "basedOnRequestId")),
             Map.entry(AuditEventType.TOOL_CALL_DECIDED, Set.of("toolCallId", "decision", "denyReason")),
-            Map.entry(AuditEventType.TOOL_CALL_EXECUTED, Set.of("toolCallId", "toolName", "recordId")));
+            Map.entry(AuditEventType.TOOL_CALL_EXECUTED, Set.of("toolCallId", "toolName", "recordId")),
+            Map.entry(AuditEventType.APPROVAL_REQUESTED, Set.of("approvalId", "toolCallId", "requester", "expiresAt")),
+            Map.entry(AuditEventType.APPROVAL_DECIDED, Set.of("approvalId", "status", "approver")));
 
     private final JdbcTemplate jdbc;
     private final ObjectMapper objectMapper;

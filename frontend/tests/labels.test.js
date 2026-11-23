@@ -6,6 +6,7 @@ import {
   GUARD_ACTION,
   INSUFFICIENT_REASON,
   RUN_MODE,
+  APPROVAL_STATUS,
   TOOL_DECISION,
   TOOL_DENY_REASON,
   VERIFICATION_FAILURE_REASON,
@@ -15,7 +16,7 @@ import {
   labelType
 } from '../src/constants/labels'
 
-// 契约 v1.3 第 3.1 节的枚举值，逐字抄录；契约变更时这里同步修改
+// 契约 v1.4 第 3.1 节的枚举值，逐字抄录；契约变更时这里同步修改
 const CONTRACT_ENUMS = {
   RunMode: [RUN_MODE, ['REAL', 'MOCK']],
   ClaimStatus: [CLAIM_STATUS, ['SUPPORTED', 'INSUFFICIENT']],
@@ -41,8 +42,11 @@ const CONTRACT_ENUMS = {
     'REQUEST_FAILED',
     'TOOL_CALL_REQUESTED',
     'TOOL_CALL_DECIDED',
-    'TOOL_CALL_EXECUTED'
+    'TOOL_CALL_EXECUTED',
+    'APPROVAL_REQUESTED',
+    'APPROVAL_DECIDED'
   ]],
+  ApprovalStatus: [APPROVAL_STATUS, ['PENDING', 'APPROVED', 'EXECUTED', 'FAILED', 'REJECTED', 'EXPIRED']],
   ToolDecision: [TOOL_DECISION, ['ALLOW', 'DENY', 'REQUIRE_APPROVAL']],
   ToolDenyReason: [TOOL_DENY_REASON, [
     'TOOL_NOT_ALLOWED',

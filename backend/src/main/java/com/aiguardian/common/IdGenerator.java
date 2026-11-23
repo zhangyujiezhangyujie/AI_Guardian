@@ -21,6 +21,11 @@ public final class IdGenerator {
         return "tool_" + randomHex();
     }
 
+    /** P1 审批单编号（契约 3.12）。 */
+    public static String approvalId() {
+        return "apr_" + randomHex();
+    }
+
     private static String randomHex() {
         byte[] bytes = new byte[6];
         RANDOM.nextBytes(bytes);

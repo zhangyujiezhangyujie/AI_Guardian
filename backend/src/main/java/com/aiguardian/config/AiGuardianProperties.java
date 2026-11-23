@@ -68,7 +68,12 @@ public class AiGuardianProperties {
         private List<String> allowedTools = List.of("search_document", "update_record", "delete_record");
         private Map<String, List<String>> roles = Map.of(
                 "user", List.of("search_document"),
-                "manager", List.of("search_document", "update_record", "delete_record"));
+                "manager", List.of("search_document", "update_record", "delete_record"),
+                "admin", List.of("search_document", "update_record", "delete_record"));
         private List<String> approvalRequired = List.of("delete_record");
+        /** v1.4：可审批的演示用户（契约 7.11）。 */
+        private List<String> approvers = List.of("manager");
+        /** v1.4：审批单有效期（分钟）。 */
+        private long approvalTtlMinutes = 1440;
     }
 }

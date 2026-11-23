@@ -55,6 +55,15 @@ public class ToolGateway {
      */
     public ToolDecisionOutcome decide(ToolCallRequest request, String user,
                                       Supplier<Optional<VerificationReport>> basis) {
+        return decide(request, user, basis, false);
+    }
+
+    /**
+     * @param approvalGranted true 表示审批已通过（契约 7.11）：跳过第 4 步，其余检查全部重新执行，
+     *                        防止“批准时成立、执行时已不成立”
+     */
+    public ToolDecisionOutcome decide(ToolCallRequest request, String user,
+                                      Supplier<Optional<VerificationReport>> basis, boolean approvalGranted) {
         String toolName = request.getToolName();
         AiGuardianProperties.ToolGateway config = properties.getToolGateway();
 
@@ -86,8 +95,8 @@ public class ToolGateway {
             }
         }
 
-        // 4. 审批
-        if (config.getApprovalRequired().contains(toolName)) {
+        // 4. 审批（审批通过后的重新检查跳过这一步）
+        if (!approvalGranted && config.getApprovalRequired().contains(toolName)) {
             return new ToolDecisionOutcome(ToolDecision.REQUIRE_APPROVAL, null, MSG_APPROVAL, arguments);
         }
 

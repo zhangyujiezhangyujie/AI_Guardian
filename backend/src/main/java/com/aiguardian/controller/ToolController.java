@@ -4,6 +4,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.aiguardian.application.ToolCallService;
 import com.aiguardian.common.BusinessException;
+import com.aiguardian.config.AiGuardianProperties;
 import com.aiguardian.domain.model.ToolCallRequest;
 import com.aiguardian.domain.model.ToolCallResult;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -27,8 +28,6 @@ public class ToolController {
 
     static final String USER_HEADER = "X-Demo-User";
 
-    private static final Set<String> DEMO_USERS = Set.of("user", "manager");
-
     private static final Set<String> FIELDS = Set.of("toolName", "arguments", "basedOnRequestId");
 
     private static final Pattern REQUEST_ID = Pattern.compile("^req_[0-9a-f]{12}$");
@@ -37,16 +36,21 @@ public class ToolController {
 
     private final ObjectMapper json;
 
-    public ToolController(ToolCallService tools, ObjectMapper json) {
+    private final AiGuardianProperties properties;
+
+    public ToolController(ToolCallService tools, ObjectMapper json, AiGuardianProperties properties) {
         this.tools = tools;
         this.json = json;
+        this.properties = properties;
     }
 
     @PostMapping(path = "/api/tools/execute", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ToolCallResult execute(@RequestHeader(value = USER_HEADER, required = false) String user,
                                   @RequestBody JsonNode body) {
-        if (user == null || !DEMO_USERS.contains(user)) {
-            throw BusinessException.invalidRequest("请求头 X-Demo-User 必须为 user 或 manager。");
+        // 演示用户即 tool-gateway.roles 的键（默认 user、manager、admin），仅用于演示，不是真实身份认证
+        if (user == null || !properties.getToolGateway().getRoles().containsKey(user)) {
+            throw BusinessException.invalidRequest("请求头 X-Demo-User 必须为 " + String.join("、",
+                    properties.getToolGateway().getRoles().keySet().stream().sorted().toList()) + " 之一。");
         }
         return tools.execute(parse(body), user);
     }

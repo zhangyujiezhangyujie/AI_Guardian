@@ -66,10 +66,12 @@ class ToolCallServiceTest {
         return service(records);
     }
 
+    private final com.aiguardian.domain.tool.InMemoryApprovalRepository approvals = new com.aiguardian.domain.tool.InMemoryApprovalRepository();
+
     private ToolCallService service(com.aiguardian.domain.tool.BusinessRecordRepository repository) {
         ToolCatalog catalog = new ToolCatalog();
-        return new ToolCallService(new ToolGateway(properties, catalog, repository), catalog, repository,
-                retriever, requestId -> Optional.empty(), audit);
+        return new ToolCallService(new ToolGateway(properties, catalog, repository),
+                new ToolExecutor(catalog, repository, retriever), approvals, requestId -> Optional.empty(), audit, properties);
     }
 
     private List<AuditEventType> eventTypes() {
@@ -133,13 +135,31 @@ class ToolCallServiceTest {
     }
 
     @Test
-    void approvalRequiredIsNotExecuted() {
+    void approvalRequiredIsNotExecutedAndCreatesAPendingApproval() {
         ToolCallResult result = service().execute(new ToolCallRequest("delete_record", Map.of("recordId", 1001), null), "manager");
         assertEquals(ToolDecision.REQUIRE_APPROVAL, result.getDecision());
         assertFalse(result.isExecuted());
         assertFalse(result.getRecord().isDeleted());
         assertEquals(0, records.writes());
-        assertEquals(2, events.size());
+
+        assertTrue(result.getApprovalId().matches("^apr_[0-9a-f]{12}$"));
+        var approval = approvals.findById(result.getApprovalId()).orElseThrow();
+        assertEquals(com.aiguardian.domain.model.ApprovalStatus.PENDING, approval.getStatus());
+        assertEquals("manager", approval.getRequester());
+        assertEquals(result.getToolCallId(), approval.getToolCallId());
+        assertEquals(java.time.Duration.ofMinutes(1440), java.time.Duration.between(
+                java.time.OffsetDateTime.parse(approval.getCreatedAt()), java.time.OffsetDateTime.parse(approval.getExpiresAt())));
+        assertEquals(result.getToolCallId(), approvals.auditIdOf(result.getApprovalId()));
+
+        assertEquals(List.of(AuditEventType.TOOL_CALL_REQUESTED, AuditEventType.TOOL_CALL_DECIDED,
+                AuditEventType.APPROVAL_REQUESTED), eventTypes());
+        assertEquals(result.getApprovalId(), events.get(2).getDetail().get("approvalId"));
+    }
+
+    @Test
+    void otherDecisionsHaveNoApprovalId() {
+        assertNull(service().execute(new ToolCallRequest("delete_record", Map.of("recordId", 1001), null), "user").getApprovalId());
+        assertNull(service().execute(new ToolCallRequest("search_document", Map.of("keyword", "年假"), null), "user").getApprovalId());
     }
 
     @Test
