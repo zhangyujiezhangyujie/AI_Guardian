@@ -237,6 +237,16 @@ export const mockRoutes = [
   },
   {
     method: 'get',
+    pattern: /^\/approvals$/,
+    handler: () => ok([])
+  },
+  {
+    method: 'post',
+    pattern: /^\/(tools\/execute|approvals\/[^/]+\/(approve|reject))$/,
+    handler: () => fail(404, 'MOCK_NOT_CONFIGURED', '审批中心依赖真实后端的工具网关，前端 Mock 未模拟，请使用 npm run dev 联调。')
+  },
+  {
+    method: 'get',
     pattern: /^\/audit$/,
     handler: ({ params }) => ok(listRecords(params))
   },

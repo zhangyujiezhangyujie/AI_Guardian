@@ -106,6 +106,20 @@ const record = computed(() => props.toolCall.record)
     </el-alert>
 
     <div
+      v-if="toolCall.approvalId"
+      class="tool-call-card__approval"
+    >
+      已生成审批单
+      <router-link
+        class="mono"
+        :to="{ path: '/approvals', query: { focus: toolCall.approvalId } }"
+      >
+        {{ toolCall.approvalId }}
+      </router-link>
+      ，待部门经理在审批中心处理
+    </div>
+
+    <div
       v-if="record"
       class="tool-call-card__record"
     >
@@ -198,6 +212,11 @@ const record = computed(() => props.toolCall.record)
   font-size: 12px;
   background-color: var(--el-fill-color-lighter);
   border-radius: 8px;
+}
+
+.tool-call-card__approval {
+  font-size: 14px;
+  color: var(--el-color-warning-dark-2);
 }
 
 .tool-call-card__note {

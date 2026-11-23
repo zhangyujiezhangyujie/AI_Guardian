@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { ChatDotRound, Tickets, Monitor } from '@element-plus/icons-vue'
+import { ChatDotRound, Tickets, Monitor, Stamp } from '@element-plus/icons-vue'
 
 import { USE_MOCK } from '@/mock'
 
@@ -27,6 +27,11 @@ const navItems = [
     path: '/demo',
     label: '演示场景',
     icon: Monitor
+  },
+  {
+    path: '/approvals',
+    label: '审批中心',
+    icon: Stamp
   }
 ]
 

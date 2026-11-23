@@ -176,6 +176,42 @@ export const AUDIT_EVENT_TYPE = {
   TOOL_CALL_EXECUTED: {
     text: '工具已执行',
     type: 'warning'
+  },
+  APPROVAL_REQUESTED: {
+    text: '生成审批单',
+    type: 'warning'
+  },
+  APPROVAL_DECIDED: {
+    text: '审批处理',
+    type: 'info'
+  }
+}
+
+/** ApprovalStatus（契约 v1.4 第 3.1 节，P1 简化审批）。 */
+export const APPROVAL_STATUS = {
+  PENDING: {
+    text: '待审批',
+    type: 'warning'
+  },
+  APPROVED: {
+    text: '已批准（执行中）',
+    type: 'primary'
+  },
+  EXECUTED: {
+    text: '已批准并执行',
+    type: 'success'
+  },
+  FAILED: {
+    text: '批准后未执行',
+    type: 'danger'
+  },
+  REJECTED: {
+    text: '已驳回',
+    type: 'info'
+  },
+  EXPIRED: {
+    text: '已过期',
+    type: 'info'
   }
 }
 
@@ -223,6 +259,15 @@ export const TOOL_DENY_REASON = {
   }
 }
 
+/** 审批单 failureReason（契约 v1.4 第 3.12 节）：ToolDenyReason 名称或 EXECUTION_FAILED。 */
+export const APPROVAL_FAILURE_REASON = {
+  ...TOOL_DENY_REASON,
+  EXECUTION_FAILED: {
+    text: '执行时发生异常',
+    type: 'danger'
+  }
+}
+
 /** 工具名（契约 v1.3 第 7.10 节工具清单）；未知工具原样显示。 */
 export const TOOL_NAME = {
   search_document: {
@@ -248,6 +293,10 @@ export const DEMO_USER = {
   manager: {
     text: '部门经理',
     type: 'primary'
+  },
+  admin: {
+    text: '系统管理员',
+    type: 'warning'
   }
 }
 
