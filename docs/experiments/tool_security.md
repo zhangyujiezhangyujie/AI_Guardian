@@ -66,10 +66,33 @@ mvn -B -Dtest=ToolSecurityExperimentTest \
   -DtoolSecurityJdbcPassword="$TOOL_SECURITY_DB_PASSWORD" test
 ```
 
-## 5. 局限（报告中须如实说明）
+## 5. 简化审批（契约 v1.4，2026-11-23）
+
+v1.4 起，第 4 步得到 REQUIRE_APPROVAL 时会生成一张待审批的审批单（`approval_request`），由部门经理在“审批中心”批准或驳回。规则依据《内部操作规范》：删除需部门经理审批，审批通过后由系统管理员执行。
+
+| 规则 | 实现 | 验证 |
+| --- | --- | --- |
+| 只有 `approvers`（默认 manager）可以审批 | 403 APPROVAL_FORBIDDEN | `ApprovalServiceTest.onlyConfiguredApproversCanDecide` |
+| 申请人不能审批自己的申请 | 403 APPROVAL_FORBIDDEN | `requesterCannotApproveOwnRequest`；去掉此检查后 2 项测试失败 |
+| 批准后以申请人身份重走决策链（跳过审批步骤），通过才执行 | 不通过则 FAILED，记录原因，不执行 | 记录已被删除、申请人失去权限、依据含证据不足结论三种情况；跳过重新检查后 3 项测试失败 |
+| 并发时只处理一次 | 条件更新 `WHERE status='PENDING'` | `concurrentClaimOnlyOneWins`、仓库 SQL 测试 |
+| 过期作废（默认 24 小时） | 读取或处理时判断，不设定时任务 | `expiredApprovalCannotBeApprovedAndIsListedAsExpired`、仓库 SQL 测试 |
+
+端到端（真实 Spring 应用 + H2 执行仓库 `db/init.sql` + 浏览器）：
+
+1. 系统管理员依据 SC01 的回答（全部有证据）申请删除 1001，网关判定“需人工审批”，生成审批单。
+2. 系统管理员试图批准：“演示用户 admin 没有审批权限”。
+3. 部门经理申请删除 1002 后试图自己批准：“申请人不能审批自己的申请”。
+4. 部门经理批准系统管理员的申请：重新检查通过，执行，记录 1001 已删除。
+5. 系统管理员对 1003 申请两次，部门经理先后批准：第一张执行；第二张在重新检查时发现记录已删除，状态“批准后未执行”，原因“目标业务记录不存在”。
+6. SC01 的审计时间线依次出现：工具调用请求 → 工具网关判定 → 生成审批单 → 审批处理 → 工具网关判定（重新检查）→ 工具已执行。
+
+对第 3、4 节安全实验的影响：T10（经理删除）现在会额外生成一张审批单，审计事件多一条 APPROVAL_REQUESTED，`mock_business_record` 仍然没有任何变化；实验断言已相应更新，H2 上 10 条请求结果不变。第 4 节的 MySQL 复现是在 v1.3 上完成的；在 v1.4 上复跑前，需要先执行 `db/init.sql` 的 P1 段落创建 `approval_request` 表（reset 脚本会清空这张表）。
+
+## 6. 局限（报告中须如实说明）
 
 - 工具和数据都是模拟的，不连接任何真实业务系统。
 - 演示用户通过请求头 `X-Demo-User: user | manager` 区分，**不是真实的身份认证**。
-- REQUIRE_APPROVAL 只表示“网关不执行”，审批流程本身不在项目范围内（P2）。
+- 审批为简化版：没有审批中心以外的通知、多级审批、审批人指派和撤回申请；过期只在读取或处理时判断，没有后台定时任务。
 - 真实模式下不让模型提出工具调用；SC06 的工具调用由场景文件固定给出，属于模拟的模型输出。
 - 10 条请求只覆盖决策链各分支，不代表对抗性攻击下的安全性；提示词注入检测（方案 3.9）未实现。
