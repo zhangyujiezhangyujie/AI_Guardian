@@ -1,4 +1,4 @@
-# AI Guardian 接口契约附录 v1.3
+# AI Guardian 接口契约附录 v1.4
 
 > 适用项目：AI Guardian（AI 幻觉防火墙）V1.2
 > 契约负责人：成员 1
@@ -43,6 +43,7 @@
 | `test/` 下场景回归测试、期望比对器 | 成员 4 | 各模块单元测试由各自负责人编写 |
 | `frontend/` 全部 | 成员 5 | |
 | P1 工具网关：`domain/tool/`、`application/ToolCallService`、`controller/ToolController`、`infrastructure/persistence/JdbcBusinessRecordRepository`、`test-cases/SC06.json` | 成员 4（经组内决定由成员 5 代为实现） | 见 3.11、7.10、10.7 |
+| P1 简化审批：`application/ApprovalService`、`application/ToolExecutor`、`controller/ApprovalController`、`infrastructure/persistence/JdbcApprovalRepository`、前端“审批中心” | 成员 5（经组内决定） | 见 3.12、7.11 |
 | `docs/` | 各自写自己的部分，成员 1 统稿 | |
 
 ---
@@ -118,8 +119,11 @@ backend/src/main/java/com/aiguardian/
 │   ├── ToolGateway.java               # 决策链：白名单 → 权限 → 参数 → 审批 → 依据核验
 │   ├── ToolCatalog.java               # 三个工具的参数约束
 │   └── BusinessRecordRepository.java  # 接口，模拟业务记录
-├── application/ToolCallService.java   # 审计、依据查询、执行
+├── application/ToolCallService.java   # 审计、依据查询、决策；REQUIRE_APPROVAL 时生成审批单
+├── application/ToolExecutor.java      # 工具执行与记录快照（网关放行或审批通过后调用）
+├── application/ApprovalService.java   # 审批：批准后重新检查再执行、禁止自批、过期
 ├── controller/ToolController.java     # POST /api/tools/execute
+├── controller/ApprovalController.java # /api/approvals
 ├── common/
 │   ├── ErrorCode.java                 # 成员 1
 │   ├── BusinessException.java         # 成员 1
@@ -193,7 +197,18 @@ public enum AuditEventType {
     REQUEST_FAILED,
     TOOL_CALL_REQUESTED,   // P1：收到工具调用请求
     TOOL_CALL_DECIDED,     // P1：网关给出决策
-    TOOL_CALL_EXECUTED     // P1：工具实际执行（仅 decision=ALLOW 时出现）
+    TOOL_CALL_EXECUTED,    // P1：工具实际执行（网关放行，或审批通过且重新检查通过）
+    APPROVAL_REQUESTED,    // P1 v1.4：生成审批单
+    APPROVAL_DECIDED       // P1 v1.4：审批人批准或驳回
+}
+
+public enum ApprovalStatus {   // P1 v1.4
+    PENDING,   // 待审批
+    APPROVED,  // 已批准，正在重新检查与执行（瞬时状态）
+    EXECUTED,  // 已批准，重新检查通过并已执行
+    FAILED,    // 已批准，但重新检查不通过或执行异常，未执行（原因见 failureReason）
+    REJECTED,  // 已驳回，不执行
+    EXPIRED    // 超过有效期未处理，作废
 }
 
 public enum ToolDecision {     // P1
@@ -521,6 +536,7 @@ ToolCallResult（网关决策结果）：
 | executed | boolean | 否 | 是否实际执行（仅 ALLOW 时可能为 true） |
 | result | Map&lt;String, Object&gt; | 是 | 执行结果，未执行时为 null；键见 7.10 |
 | record | BusinessRecord | 是 | 记录类工具在**决策之后**读取的目标记录当前状态，用于展示“数据是否被修改”；搜索类工具或记录不存在时为 null |
+| approvalId | String | 是 | v1.4：decision=REQUIRE_APPROVAL 时为新生成的审批单号，其他决策为 null |
 | createdAt | String | 否 | ISO-8601 |
 
 BusinessRecord（模拟业务记录，表 `mock_business_record`）：
@@ -533,6 +549,26 @@ BusinessRecord（模拟业务记录，表 `mock_business_record`）：
 | status | String | `OPEN` / `CLOSED` / `ARCHIVED` |
 | deleted | boolean | 是否已删除（软删除） |
 | updatedAt | String | ISO-8601 |
+
+### 3.12 ApprovalRequest（审批单，P1 v1.4）
+
+| 字段 | 类型 | 可空 | 说明 |
+| --- | --- | --- | --- |
+| approvalId | String | 否 | `apr_` + 12 位小写十六进制 |
+| toolCallId | String | 否 | 生成审批单的那次工具调用 |
+| toolName | String | 否 | |
+| arguments | Map&lt;String, Object&gt; | 否 | |
+| requester | String | 否 | 申请人（演示用户） |
+| basedOnRequestId | String | 是 | |
+| status | ApprovalStatus | 否 | |
+| approver | String | 是 | 批准或驳回的人 |
+| comment | String | 是 | 审批意见，最多 200 字 |
+| failureReason | String | 是 | status=FAILED 时为 ToolDenyReason 名称或 `EXECUTION_FAILED` |
+| result | Map&lt;String, Object&gt; | 是 | 仅批准接口的响应中、且已执行时非空（键同 7.10）；列表与查询中为 null |
+| record | BusinessRecord | 是 | 仅批准、驳回接口的响应中非空：处理后目标记录的当前状态 |
+| createdAt | String | 否 | ISO-8601 |
+| expiresAt | String | 否 | createdAt + `tool-gateway.approval-ttl-minutes` |
+| decidedAt | String | 是 | 批准、驳回或过期的时间 |
 
 ---
 
@@ -1050,7 +1086,7 @@ events 按 createdAt 升序。不存在返回 404 AUDIT_NOT_FOUND。
 
 用途：防止不可靠的模型输出触发危险操作。所有工具都只操作模拟数据，不连接任何真实业务系统。
 
-请求头 `X-Demo-User`：必填，`user` 或 `manager`。**仅用于演示区分角色，不是真实的身份认证**，报告中须如实说明。缺失或取值无效返回 400 INVALID_REQUEST。
+请求头 `X-Demo-User`：必填，取值为 `tool-gateway.roles` 中的演示用户（默认 `user` 普通员工、`manager` 部门经理、`admin` 系统管理员，v1.4 新增 `admin`）。**仅用于演示区分角色，不是真实的身份认证**，报告中须如实说明。缺失或取值无效返回 400 INVALID_REQUEST。
 
 请求体：ToolCallRequest（3.11）。
 
@@ -1080,7 +1116,7 @@ events 按 createdAt 升序。不存在返回 404 AUDIT_NOT_FOUND。
 | 2 | 用户角色在 `tool-gateway.roles` 中允许使用该工具 | DENY / PERMISSION_DENIED |
 | 3 | 参数符合工具清单约束 | DENY / INVALID_ARGUMENTS |
 | 3' | 记录类工具：recordId 对应记录存在且未删除 | DENY / RECORD_NOT_FOUND |
-| 4 | 工具在 `tool-gateway.approval-required` 中 | REQUIRE_APPROVAL（不执行） |
+| 4 | 工具在 `tool-gateway.approval-required` 中 | REQUIRE_APPROVAL（不执行；v1.4 起同时生成审批单，见 7.11） |
 | 5 | `output-guard.strict-for-tool-call=true`、工具为写操作且 basedOnRequestId 非空时：依据的问答记录必须存在，且 verificationState=COMPLETED、totalClaims≥1、insufficientClaims=0 | 记录不存在：DENY / BASIS_NOT_FOUND；否则 DENY / UNVERIFIED_BASIS |
 | — | 全部通过 | ALLOW，执行工具 |
 
@@ -1131,6 +1167,36 @@ events 按 createdAt 升序。不存在返回 404 AUDIT_NOT_FOUND。
 
 ---
 
+### 7.11 审批接口（P1 简化审批，v1.4 新增）
+
+依据知识库《内部操作规范》：“删除业务记录需部门经理审批，审批通过后由系统管理员执行”。工具调用得到 REQUIRE_APPROVAL 时自动生成一张 PENDING 审批单；审批通过后由系统代为执行（模拟“系统管理员执行”）。
+
+| 接口 | 请求头 | 说明 |
+| --- | --- | --- |
+| `GET /api/approvals?status=` | — | 审批单列表，按 createdAt 降序，最多 100 条；status 可空，非空时为 ApprovalStatus 名称 |
+| `GET /api/approvals/{approvalId}` | — | 单个审批单；不存在返回 404 APPROVAL_NOT_FOUND |
+| `POST /api/approvals/{approvalId}/approve` | `X-Demo-User` 必填 | 请求体 `{"comment": "可空，最多 200 字"}`；响应 ApprovalRequest |
+| `POST /api/approvals/{approvalId}/reject` | `X-Demo-User` 必填 | 同上 |
+
+批准与驳回的规则（ApprovalService，按顺序）：
+
+| 顺序 | 检查 | 不通过 |
+| --- | --- | --- |
+| 1 | 审批单存在 | 404 APPROVAL_NOT_FOUND |
+| 2 | 未过期：PENDING 且已超过 expiresAt 的审批单先置为 EXPIRED | 409 APPROVAL_NOT_PENDING（“审批单已过期”） |
+| 3 | 状态为 PENDING | 409 APPROVAL_NOT_PENDING |
+| 4 | 操作人角色在 `tool-gateway.approvers` 中（默认只有 manager） | 403 APPROVAL_FORBIDDEN |
+| 5 | 操作人不是申请人（禁止自批） | 403 APPROVAL_FORBIDDEN（“申请人不能审批自己的申请”） |
+| 6 | 用条件更新抢占（`WHERE status='PENDING'`），保证并发时只处理一次 | 409 APPROVAL_NOT_PENDING |
+
+批准后：**重新执行 7.10 的决策链（跳过第 4 步审批）**，以申请人身份检查白名单、权限、参数、记录存在与依据核验。全部通过则执行，状态 EXECUTED；不通过则状态 FAILED、failureReason 为拒绝原因，不执行；执行异常则 FAILED、`EXECUTION_FAILED`。这一步防止“批准时成立、执行时已不成立”（例如记录已被删除、依据已失效）。驳回后状态 REJECTED，不执行。
+
+过期：不设后台定时任务；列表、查询、批准、驳回时把已超过 expiresAt 的 PENDING 审批单置为 EXPIRED。
+
+审计：审批单的事件写在原工具调用的审计 requestId 下（basedOnRequestId，为空时为 toolCallId）：生成时 APPROVAL_REQUESTED；批准或驳回时 APPROVAL_DECIDED；批准后的重新检查写 TOOL_CALL_DECIDED，执行时写 TOOL_CALL_EXECUTED。
+
+---
+
 ## 8. 审计规范
 
 ### 8.1 写入原则
@@ -1155,6 +1221,8 @@ events 按 createdAt 升序。不存在返回 404 AUDIT_NOT_FOUND。
 | TOOL_CALL_REQUESTED（P1） | `toolCallId`, `toolName`, `user`, `basedOnRequestId` |
 | TOOL_CALL_DECIDED（P1） | `toolCallId`, `decision`, `denyReason` |
 | TOOL_CALL_EXECUTED（P1） | `toolCallId`, `toolName`, `recordId`（搜索类为 null） |
+| APPROVAL_REQUESTED（P1 v1.4） | `approvalId`, `toolCallId`, `requester`, `expiresAt` |
+| APPROVAL_DECIDED（P1 v1.4） | `approvalId`, `status`（APPROVED / REJECTED）, `approver` |
 
 工具调用事件的 `success`：REQUESTED、DECIDED 恒为 true（拒绝是正常的防护结果，不是失败）；EXECUTED 执行成功为 true，执行异常为 false 且 errorCode 为 `INTERNAL_ERROR`。
 
@@ -1262,6 +1330,31 @@ CREATE TABLE IF NOT EXISTS mock_business_record (
 ```
 
 `db/init.sql` 用 `INSERT IGNORE` 写入编号 1001–1005 的初始记录；`db/reset_mock_business_record.sql` 把这 5 条记录恢复为初始状态，供重复演示和安全实验使用。
+
+P1 简化审批新增（v1.4）：
+
+```sql
+CREATE TABLE IF NOT EXISTS approval_request (
+    id                   VARCHAR(20)  NOT NULL PRIMARY KEY,   -- apr_...
+    tool_call_id         VARCHAR(20)  NOT NULL,
+    audit_request_id     VARCHAR(20)  NOT NULL,               -- 审批事件写入的审计 requestId
+    tool_name            VARCHAR(32)  NOT NULL,
+    arguments_json       TEXT         NOT NULL,
+    requester            VARCHAR(20)  NOT NULL,
+    based_on_request_id  VARCHAR(20)  NULL,
+    status               VARCHAR(16)  NOT NULL,
+    approver             VARCHAR(20)  NULL,
+    comment              VARCHAR(200) NULL,
+    failure_reason       VARCHAR(32)  NULL,
+    created_at           DATETIME(3)  NOT NULL,
+    expires_at           DATETIME(3)  NOT NULL,
+    decided_at           DATETIME(3)  NULL,
+    INDEX idx_apr_status (status),
+    INDEX idx_apr_created (created_at)
+);
+```
+
+reset 脚本同时清空 `approval_request`（只含演示数据）。
 
 ---
 
@@ -1513,7 +1606,10 @@ aiguardian:
     roles:
       user: [search_document]
       manager: [search_document, update_record, delete_record]
+      admin: [search_document, update_record, delete_record]   # v1.4
     approval-required: [delete_record]
+    approvers: [manager]          # v1.4：可审批的演示用户
+    approval-ttl-minutes: 1440    # v1.4：审批单有效期
 ```
 
 - 所有配置通过 `AiGuardianProperties`（成员 1）以 `@ConfigurationProperties(prefix = "aiguardian")` 注入，其他模块不得用 `@Value` 直接读取。
@@ -1535,6 +1631,9 @@ aiguardian:
 | LLM_GENERATION_FAILED | 502 | 生成回答的模型调用失败 | 大模型生成回答失败，请稍后重试。 |
 | RETRIEVAL_FAILED | 500 | 索引不可用 | 知识库检索失败。 |
 | INTERNAL_ERROR | 500 | 其他未捕获异常 | 系统内部错误。 |
+| APPROVAL_NOT_FOUND | 404 | 审批单不存在（P1 v1.4） | 审批单不存在。 |
+| APPROVAL_FORBIDDEN | 403 | 无审批权限或申请人自批（P1 v1.4） | 无权处理该审批单：{具体原因} |
+| APPROVAL_NOT_PENDING | 409 | 审批单已处理或已过期（P1 v1.4） | 审批单不是待审批状态：{具体原因} |
 
 GlobalExceptionHandler（成员 1）把 BusinessException 和未捕获异常统一转为 3.8 的错误响应。**核验失败不是错误码**，它是 200 响应中的 state=FAILED。
 
@@ -1582,3 +1681,4 @@ section 为 null 时省略 `· 章节` 部分。片段之间空一行。
 | v1.1 | 2026-11-16 | 成员 1 | 配置检索停用词，明确证据片段保留正文原有换行和空行，规定在 dev 上运行集成回归 |
 | v1.2 | 2026-11-17 | 成员 1 | 保留 SC02 原问题，将模拟回答中的年假改为本次检索可支持的餐费补贴，更新相关示例 |
 | v1.3 | 2026-11-22 | 成员 5（经组内决定代为实现 P1） | 新增 P1 工具调用安全网关：ToolDecision、ToolDenyReason、三个审计事件、3.11 数据结构、7.10 `POST /api/tools/execute`、7.7 `toolCall` 字段、`mock_business_record` 表、10.7 场景扩展与 SC06、`tool-gateway` 配置。P0 主链路（ChatOrchestrator、ChatResponse、ChatCommand）不变 |
+| v1.4 | 2026-11-23 | 成员 5（经组内决定） | 新增 P1 简化审批：ApprovalStatus、3.12 ApprovalRequest、ToolCallResult.approvalId、7.11 审批接口（批准后重新检查再执行、禁止自批、过期）、审计事件 APPROVAL_REQUESTED / APPROVAL_DECIDED、`approval_request` 表、演示用户 `admin`、`approvers` 与 `approval-ttl-minutes` 配置、三个错误码。P0 主链路不变 |
