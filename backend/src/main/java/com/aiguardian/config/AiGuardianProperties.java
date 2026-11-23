@@ -1,6 +1,7 @@
 package com.aiguardian.config;
 
 import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,6 +14,7 @@ public class AiGuardianProperties {
     private final Verification verification = new Verification();
     private final OutputGuard outputGuard = new OutputGuard();
     private final Demo demo = new Demo();
+    private final ToolGateway toolGateway = new ToolGateway();
 
     @Getter
     @Setter
@@ -57,5 +59,16 @@ public class AiGuardianProperties {
     @Setter
     public static class Demo {
         private String testCasesDir = "../test-cases";
+    }
+
+    /** P1 工具调用安全网关（契约 7.10、11）。默认值与 application.yml 一致。 */
+    @Getter
+    @Setter
+    public static class ToolGateway {
+        private List<String> allowedTools = List.of("search_document", "update_record", "delete_record");
+        private Map<String, List<String>> roles = Map.of(
+                "user", List.of("search_document"),
+                "manager", List.of("search_document", "update_record", "delete_record"));
+        private List<String> approvalRequired = List.of("delete_record");
     }
 }

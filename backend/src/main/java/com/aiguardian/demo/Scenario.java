@@ -23,4 +23,6 @@ public class Scenario {
     private List<String> recommendedStrategies;
     private Map<LLMPurpose, List<MockResponse>> mock;
     private ScenarioExpected expected;
+    /** v1.3，可空：模型提出的工具调用（契约 10.7）。 */
+    private ScenarioToolCall toolCall;
 }

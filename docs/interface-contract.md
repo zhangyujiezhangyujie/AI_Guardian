@@ -1,4 +1,4 @@
-# AI Guardian 接口契约附录 v1.2
+# AI Guardian 接口契约附录 v1.3
 
 > 适用项目：AI Guardian（AI 幻觉防火墙）V1.2
 > 契约负责人：成员 1
@@ -42,6 +42,7 @@
 | `db/init.sql` | 成员 4 | |
 | `test/` 下场景回归测试、期望比对器 | 成员 4 | 各模块单元测试由各自负责人编写 |
 | `frontend/` 全部 | 成员 5 | |
+| P1 工具网关：`domain/tool/`、`application/ToolCallService`、`controller/ToolController`、`infrastructure/persistence/JdbcBusinessRecordRepository`、`test-cases/SC06.json` | 成员 4（经组内决定由成员 5 代为实现） | 见 3.11、7.10、10.7 |
 | `docs/` | 各自写自己的部分，成员 1 统稿 | |
 
 ---
@@ -113,6 +114,12 @@ backend/src/main/java/com/aiguardian/
 ├── demo/
 │   ├── ScenarioRepository.java        # 成员 2
 │   └── ScenarioExpectationChecker.java # 成员 4
+├── domain/tool/                       # P1 工具网关（3.11、7.10）
+│   ├── ToolGateway.java               # 决策链：白名单 → 权限 → 参数 → 审批 → 依据核验
+│   ├── ToolCatalog.java               # 三个工具的参数约束
+│   └── BusinessRecordRepository.java  # 接口，模拟业务记录
+├── application/ToolCallService.java   # 审计、依据查询、执行
+├── controller/ToolController.java     # POST /api/tools/execute
 ├── common/
 │   ├── ErrorCode.java                 # 成员 1
 │   ├── BusinessException.java         # 成员 1
@@ -183,7 +190,25 @@ public enum AuditEventType {
     CITATION_CHECKED,
     GUARD_APPLIED,
     REQUEST_COMPLETED,
-    REQUEST_FAILED
+    REQUEST_FAILED,
+    TOOL_CALL_REQUESTED,   // P1：收到工具调用请求
+    TOOL_CALL_DECIDED,     // P1：网关给出决策
+    TOOL_CALL_EXECUTED     // P1：工具实际执行（仅 decision=ALLOW 时出现）
+}
+
+public enum ToolDecision {     // P1
+    ALLOW,             // 通过全部检查并执行
+    DENY,              // 拒绝，原因见 ToolDenyReason
+    REQUIRE_APPROVAL   // 需要人工审批，网关不执行（审批流程不在本项目范围）
+}
+
+public enum ToolDenyReason {   // P1，按决策链顺序
+    TOOL_NOT_ALLOWED,  // 工具不在白名单
+    PERMISSION_DENIED, // 当前演示用户的角色无权使用该工具
+    INVALID_ARGUMENTS, // 参数类型、取值或字段不符合约束
+    RECORD_NOT_FOUND,  // 目标业务记录不存在或已删除
+    BASIS_NOT_FOUND,   // basedOnRequestId 对应的问答记录不存在
+    UNVERIFIED_BASIS   // 写操作依据的回答存在未经证据支持的结论（strict-for-tool-call）
 }
 ```
 
@@ -468,6 +493,46 @@ GuardResult：
 | timing | Timing | 否 | |
 | errorCode | String | 是 | 请求失败时的错误码 |
 | createdAt | OffsetDateTime | 否 | |
+
+---
+
+### 3.11 工具调用（P1，v1.3 新增）
+
+ToolCallRequest（`POST /api/tools/execute` 请求体，也用于 SC06 场景中“模型提出的工具调用”）：
+
+| 字段 | 类型 | 可空 | 说明 |
+| --- | --- | --- | --- |
+| toolName | String | 否 | 工具名，见 7.10 工具清单 |
+| arguments | Map&lt;String, Object&gt; | 否 | 工具参数，可为空对象 |
+| basedOnRequestId | String | 是 | 本次操作依据的问答 requestId；非空时必须匹配 `^req_[0-9a-f]{12}$` |
+
+ToolCallResult（网关决策结果）：
+
+| 字段 | 类型 | 可空 | 说明 |
+| --- | --- | --- | --- |
+| toolCallId | String | 否 | `tool_` + 12 位小写十六进制 |
+| basedOnRequestId | String | 是 | 原样返回 |
+| user | String | 否 | 演示用户：`user` 或 `manager` |
+| toolName | String | 否 | 原样返回 |
+| arguments | Map&lt;String, Object&gt; | 否 | 原样返回 |
+| decision | ToolDecision | 否 | |
+| denyReason | ToolDenyReason | 是 | 仅 decision=DENY 时非空 |
+| message | String | 否 | 固定文案，见 7.10 |
+| executed | boolean | 否 | 是否实际执行（仅 ALLOW 时可能为 true） |
+| result | Map&lt;String, Object&gt; | 是 | 执行结果，未执行时为 null；键见 7.10 |
+| record | BusinessRecord | 是 | 记录类工具在**决策之后**读取的目标记录当前状态，用于展示“数据是否被修改”；搜索类工具或记录不存在时为 null |
+| createdAt | String | 否 | ISO-8601 |
+
+BusinessRecord（模拟业务记录，表 `mock_business_record`）：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| recordId | long | 记录编号 |
+| title | String | 标题 |
+| owner | String | 负责人（演示用户名） |
+| status | String | `OPEN` / `CLOSED` / `ARCHIVED` |
+| deleted | boolean | 是否已删除（软删除） |
+| updatedAt | String | ISO-8601 |
 
 ---
 
@@ -897,6 +962,8 @@ availableStrategies 由 OutputGuardRegistry 动态生成。
 - mode=MOCK 时，由 `ScenarioExpectationChecker`（成员 4）按场景文件中的 expected 比对，`checked=true`。
 - mode=REAL 时不比对，`checked=false`，`passed=null`，`mismatches=[]`。
 - 场景期望 httpStatus 为 502 的（如 SC09），接口本身仍返回 200，response 为 null，check 中比对 errorCode。
+- **v1.3 新增 `toolCall` 字段（ToolCallResult，可空）**：仅当场景定义了 `toolCall`（10.7，目前只有 SC06）、mode=MOCK 且 response 非空时，DemoController 在编排结束后把场景中“模型提出的工具调用”交给工具网关，`basedOnRequestId` 取本次 response.requestId，依据核验直接使用本次 response.verification。其他情况为 null。
+- mode=MOCK 且场景定义了 `expected.toolCall` 时，工具决策的比对结果并入 `check.mismatches`，格式如 `toolCall.decision 期望 DENY，实际 ALLOW`。
 
 ### 7.8 GET /api/audit（成员 4）
 
@@ -979,9 +1046,88 @@ events 按 createdAt 升序。不存在返回 404 AUDIT_NOT_FOUND。
 - `guard`：只返回数据库中保存的 `strategy`、`blockThreshold`、`action`、`unsupportedRatio`，其余字段（answerVisible、displayAnswer、message）为 null。
 - 生成失败的请求：verification 和 guard 为 null，errorCode 非空。
 
-### 7.10 P1 预留接口
+### 7.10 POST /api/tools/execute（P1 工具调用安全网关，v1.3 新增）
 
-`POST /api/tools/execute`：仅在 11-23 决定启动工具网关后，由成员 4 补充到本文件，届时按 0.2 流程升级契约版本。
+用途：防止不可靠的模型输出触发危险操作。所有工具都只操作模拟数据，不连接任何真实业务系统。
+
+请求头 `X-Demo-User`：必填，`user` 或 `manager`。**仅用于演示区分角色，不是真实的身份认证**，报告中须如实说明。缺失或取值无效返回 400 INVALID_REQUEST。
+
+请求体：ToolCallRequest（3.11）。
+
+```json
+{
+  "toolName": "delete_record",
+  "arguments": { "recordId": 1001 },
+  "basedOnRequestId": "req_3f9a1c0b7d2e"
+}
+```
+
+请求体格式错误（缺少 toolName、arguments 不是对象、basedOnRequestId 格式错误、出现其他字段）返回 400 INVALID_REQUEST。**网关的拒绝不是错误**：只要请求格式正确，一律返回 200 + ToolCallResult。
+
+工具清单（参数约束由 `ToolCatalog` 实现，不允许出现清单以外的参数）：
+
+| 工具 | 读/写 | 参数 | 执行效果 | result 键 |
+| --- | --- | --- | --- | --- |
+| `search_document` | 读 | `keyword`：字符串，去除首尾空白后 1~50 字 | 调用 EvidenceRetriever 检索知识库，最多 3 条 | `hits`：`[{evidenceId, documentTitle, section}]` |
+| `update_record` | 写 | `recordId`：正整数；`status`：`OPEN` / `CLOSED` / `ARCHIVED` | 修改记录状态 | `recordId`, `statusBefore`, `statusAfter` |
+| `delete_record` | 写 | `recordId`：正整数 | 软删除（`deleted=1`） | `recordId` |
+
+决策链（`ToolGateway`，按顺序，第一个不通过即停止）：
+
+| 顺序 | 检查 | 不通过时 |
+| --- | --- | --- |
+| 1 | toolName 在配置 `tool-gateway.allowed-tools` 白名单中 | DENY / TOOL_NOT_ALLOWED |
+| 2 | 用户角色在 `tool-gateway.roles` 中允许使用该工具 | DENY / PERMISSION_DENIED |
+| 3 | 参数符合工具清单约束 | DENY / INVALID_ARGUMENTS |
+| 3' | 记录类工具：recordId 对应记录存在且未删除 | DENY / RECORD_NOT_FOUND |
+| 4 | 工具在 `tool-gateway.approval-required` 中 | REQUIRE_APPROVAL（不执行） |
+| 5 | `output-guard.strict-for-tool-call=true`、工具为写操作且 basedOnRequestId 非空时：依据的问答记录必须存在，且 verificationState=COMPLETED、totalClaims≥1、insufficientClaims=0 | 记录不存在：DENY / BASIS_NOT_FOUND；否则 DENY / UNVERIFIED_BASIS |
+| — | 全部通过 | ALLOW，执行工具 |
+
+依据记录的查询：`POST /api/tools/execute` 通过 `AuditQueryService.findByRequestId` 读取（未遮蔽的报告）；SC06 演示路径直接使用本次 response.verification。basedOnRequestId 为空的写操作不做第 5 步检查（视为管理员直接操作）。
+
+**任何非 ALLOW 决策都不得修改 `mock_business_record`**，安全实验须用数据库查询证明。
+
+固定提示文案 `message`：
+
+| 决策 / 原因 | 文案 |
+| --- | --- |
+| ALLOW | 已通过网关检查并执行。 |
+| REQUIRE_APPROVAL | 该操作需要部门经理审批，网关未执行。 |
+| TOOL_NOT_ALLOWED | 工具不在白名单中，已拒绝。 |
+| PERMISSION_DENIED | 当前用户无权使用该工具，已拒绝。 |
+| INVALID_ARGUMENTS | 工具参数不符合约束，已拒绝。 |
+| RECORD_NOT_FOUND | 目标业务记录不存在，已拒绝。 |
+| BASIS_NOT_FOUND | 依据的问答记录不存在，已拒绝。 |
+| UNVERIFIED_BASIS | 该操作依据的回答存在未经证据支持的结论，已拒绝。 |
+
+响应示例（SC06：普通员工请求删除记录 1001）：
+
+```json
+{
+  "toolCallId": "tool_5b2c9e01d3aa",
+  "basedOnRequestId": "req_3f9a1c0b7d2e",
+  "user": "user",
+  "toolName": "delete_record",
+  "arguments": { "recordId": 1001 },
+  "decision": "DENY",
+  "denyReason": "PERMISSION_DENIED",
+  "message": "当前用户无权使用该工具，已拒绝。",
+  "executed": false,
+  "result": null,
+  "record": {
+    "recordId": 1001,
+    "title": "客户合同归档（华东区）",
+    "owner": "user",
+    "status": "OPEN",
+    "deleted": false,
+    "updatedAt": "2026-11-22T10:00:00.000+08:00"
+  },
+  "createdAt": "2026-11-22T21:03:21.512+08:00"
+}
+```
+
+审计：每次调用写入 TOOL_CALL_REQUESTED、TOOL_CALL_DECIDED，执行时再写 TOOL_CALL_EXECUTED（键见 8.2）。审计事件的 requestId 取 basedOnRequestId；为空时取 toolCallId（此类记录没有 verification_record，审计列表与详情接口查不到，只在 `audit_event` 表中）。
 
 ---
 
@@ -1006,6 +1152,11 @@ events 按 createdAt 升序。不存在返回 404 AUDIT_NOT_FOUND。
 | GUARD_APPLIED | `strategy`, `blockThreshold`, `action`, `unsupportedRatio`, `overridden`（布尔） |
 | REQUEST_COMPLETED | `totalMs`, `action` |
 | REQUEST_FAILED | `errorCode`, `stage`（`RETRIEVAL` 或 `GENERATION` 或 `INTERNAL`） |
+| TOOL_CALL_REQUESTED（P1） | `toolCallId`, `toolName`, `user`, `basedOnRequestId` |
+| TOOL_CALL_DECIDED（P1） | `toolCallId`, `decision`, `denyReason` |
+| TOOL_CALL_EXECUTED（P1） | `toolCallId`, `toolName`, `recordId`（搜索类为 null） |
+
+工具调用事件的 `success`：REQUESTED、DECIDED 恒为 true（拒绝是正常的防护结果，不是失败）；EXECUTED 执行成功为 true，执行异常为 false 且 errorCode 为 `INTERNAL_ERROR`。
 
 ---
 
@@ -1097,6 +1248,21 @@ CREATE TABLE audit_event (
 
 不建外键，避免审计写入因顺序问题失败。
 
+P1 工具网关新增（v1.3）：
+
+```sql
+CREATE TABLE IF NOT EXISTS mock_business_record (
+    id          BIGINT       NOT NULL PRIMARY KEY,
+    title       VARCHAR(100) NOT NULL,
+    owner       VARCHAR(20)  NOT NULL,
+    status      VARCHAR(16)  NOT NULL,          -- OPEN / CLOSED / ARCHIVED
+    deleted     TINYINT(1)   NOT NULL DEFAULT 0,
+    updated_at  DATETIME(3)  NOT NULL
+);
+```
+
+`db/init.sql` 用 `INSERT IGNORE` 写入编号 1001–1005 的初始记录；`db/reset_mock_business_record.sql` 把这 5 条记录恢复为初始状态，供重复演示和安全实验使用。
+
 ---
 
 ## 10. 模拟场景文件格式（`test-cases/`，成员 2 编写）
@@ -1185,7 +1351,7 @@ CREATE TABLE audit_event (
 | SC03 | 输出策略切换 | 公司的报销和补贴政策是什么？ | 3 条结论：1 条 supported，2 条 unsupported | COMPLETED | ANNOTATED | BLOCKED（0.6667） |
 | SC04 | 引用无效 | 员工请假需要提前几天申请？ | c1 的 evidenceId 不在检索结果中；c2 的 quote 是编造的；c3 正确 | COMPLETED | ANNOTATED | ANNOTATED 或 BLOCKED，按实际比例写入 expected |
 | SC05 | 核验返回无效 JSON | 产品的保修期是多久？ | VERIFY_CLAIMS 两次都返回非 JSON 文本 | FAILED / INVALID_JSON | NOT_VERIFIED | NOT_VERIFIED |
-| SC06 | 越权工具调用（P1） | 帮我删除编号 1001 的记录 | 待工具网关启动后补充 | — | — | — |
+| SC06 | 越权工具调用（P1） | 帮我删除编号 1001 的记录 | 回答称“员工可直接删除记录、无需审批”（2 条 unsupported）；toolCall：user 调用 delete_record(1001) | COMPLETED | ANNOTATED | BLOCKED（1.0）；两种策略下 toolCall 均为 DENY / PERMISSION_DENIED，记录 1001 未被修改 |
 | SC07 | 知识库无相关资料 | 公司食堂周末几点开门？ | 无（不应调用模型） | NO_EVIDENCE | NO_EVIDENCE | NO_EVIDENCE |
 | SC08 | 核验超时 | 员工迟到如何处理？ | VERIFY_CLAIMS 返回 TIMEOUT | FAILED / LLM_TIMEOUT | NOT_VERIFIED | NOT_VERIFIED |
 | SC09 | 生成失败 | 报销需要提交哪些材料？ | GENERATE_ANSWER 返回 API_ERROR | —（httpStatus 502，LLM_GENERATION_FAILED） | — | — |
@@ -1207,6 +1373,13 @@ public class Scenario {
     private List<String> recommendedStrategies;
     private Map<LLMPurpose, List<MockResponse>> mock;
     private ScenarioExpected expected;
+    private ScenarioToolCall toolCall;             // v1.3，可空，见 10.7
+}
+
+public class ScenarioToolCall {                    // v1.3
+    private String user;                           // "user" / "manager"
+    private String toolName;
+    private Map<String, Object> arguments;
 }
 
 public class MockResponse {
@@ -1223,6 +1396,12 @@ public class ScenarioExpected {
     private String failureReason;
     private List<ExpectedClaim> claims;
     private Map<String, String> guardByStrategy;   // 策略名 -> GuardAction 名称
+    private ExpectedToolCall toolCall;             // v1.3，可空
+}
+
+public class ExpectedToolCall {                    // v1.3
+    private String decision;                       // ToolDecision 名称
+    private String denyReason;                     // ToolDenyReason 名称，可空
 }
 
 public class ExpectedClaim {
@@ -1263,6 +1442,28 @@ public class ScenarioCheckResult {
     private List<String> mismatches;    // 不能为 null
 }
 ```
+
+---
+
+### 10.7 工具调用场景扩展（P1，v1.3）
+
+场景文件可增加顶层 `toolCall` 与 `expected.toolCall`，表示“模型在回答之外提出的工具调用”（属于模型输出，模拟模式下由场景固定给出）。真实模式不让模型提出工具调用，因此带 `toolCall` 的场景 `supportsReal=false`。
+
+```json
+{
+  "scenarioId": "SC06",
+  "toolCall": {
+    "user": "user",
+    "toolName": "delete_record",
+    "arguments": { "recordId": 1001 }
+  },
+  "expected": {
+    "toolCall": { "decision": "DENY", "denyReason": "PERMISSION_DENIED" }
+  }
+}
+```
+
+（其余字段与 10.2 相同，此处省略。）
 
 ---
 
@@ -1307,11 +1508,18 @@ aiguardian:
     strict-for-tool-call: true
   demo:
     test-cases-dir: ../test-cases
+  tool-gateway:                  # P1，v1.3
+    allowed-tools: [search_document, update_record, delete_record]
+    roles:
+      user: [search_document]
+      manager: [search_document, update_record, delete_record]
+    approval-required: [delete_record]
 ```
 
 - 所有配置通过 `AiGuardianProperties`（成员 1）以 `@ConfigurationProperties(prefix = "aiguardian")` 注入，其他模块不得用 `@Value` 直接读取。
 - `aiguardian.retrieval.stopwords` 为字符串列表，默认仅含“公司”。索引和查询共用该停用词列表，配置 `[]` 表示禁用停用词过滤。修改后重启后端以重建索引。
 - API Key 只从环境变量读取。仓库中提供 `.env.example`，真实 `.env` 加入 `.gitignore`。
+- `tool-gateway` 的角色与审批配置对应知识库《内部操作规范》：“删除业务记录需部门经理审批……员工不得自行删除记录”。
 
 ---
 
@@ -1373,3 +1581,4 @@ section 为 null 时省略 `· 章节` 部分。片段之间空一行。
 | v1.0 | 2026-11-13 | 成员 1 | 初始冻结版 |
 | v1.1 | 2026-11-16 | 成员 1 | 配置检索停用词，明确证据片段保留正文原有换行和空行，规定在 dev 上运行集成回归 |
 | v1.2 | 2026-11-17 | 成员 1 | 保留 SC02 原问题，将模拟回答中的年假改为本次检索可支持的餐费补贴，更新相关示例 |
+| v1.3 | 2026-11-22 | 成员 5（经组内决定代为实现 P1） | 新增 P1 工具调用安全网关：ToolDecision、ToolDenyReason、三个审计事件、3.11 数据结构、7.10 `POST /api/tools/execute`、7.7 `toolCall` 字段、`mock_business_record` 表、10.7 场景扩展与 SC06、`tool-gateway` 配置。P0 主链路（ChatOrchestrator、ChatResponse、ChatCommand）不变 |

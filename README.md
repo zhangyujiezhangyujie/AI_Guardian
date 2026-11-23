@@ -66,6 +66,22 @@ Invoke-RestMethod 'http://localhost:8080/api/guard/config'
 
 示例模型配置使用 DeepSeek 的 OpenAI 兼容 Chat Completions，Base URL 为 `https://api.deepseek.com`，模型为 `deepseek-flash`。核验使用 JSON 模式时，核验 Prompt 应明确要求输出 JSON 并提供结构示例。API Key 由部署环境提供。[DeepSeek JSON 模式](https://api-docs.deepseek.com/guides/json_mode/)
 
+## P1 工具调用安全网关
+
+模型除了回答问题，还可能提出“删除记录”等工具调用。网关在执行前用 Java 代码依次检查：白名单 → 角色权限 → 参数 → 是否需审批 → 所依据的回答是否全部有证据。工具只操作模拟表 `mock_business_record`，不连接真实系统。规格见[接口契约 v1.3](docs/interface-contract.md) 第 3.11、7.10 节，实验见[工具网关实验](docs/experiments/tool_security.md)。
+
+1. **建表**：已经执行过 `db/init.sql` 的数据库，重新执行一次即可补上新表和 1001–1005 五条记录（脚本均为 `IF NOT EXISTS` / `INSERT IGNORE`，不影响已有数据）。
+2. **演示**：演示页运行 SC06。模拟模型替普通员工发起删除编号 1001 的请求，网关以“当前用户无权使用该工具”拒绝，卡片中可见记录未被删除；点击“依据的问答”进入审计详情，时间线末尾是工具调用事件。
+3. **直接调用接口**（请求头 `X-Demo-User` 为 `user` 或 `manager`，仅用于演示，不是真实身份认证）：
+
+   ```powershell
+   $body = '{"toolName":"delete_record","arguments":{"recordId":1001}}'
+   Invoke-RestMethod -Method Post -Uri 'http://localhost:8080/api/tools/execute' -Headers @{ 'X-Demo-User' = 'user' } -ContentType 'application/json; charset=UTF-8' -Body ([Text.Encoding]::UTF8.GetBytes($body))
+   ```
+
+4. **恢复演示数据**：执行 `mysql -u root -p < db/reset_mock_business_record.sql`，把 1001–1005 恢复为初始状态。
+5. **安全实验**：`cd backend` 后运行 `mvn test -Dtest=ToolSecurityExperimentTest`（默认用 H2）；在 MySQL 上复现的命令见实验文档第 4 节。
+
 ## 测试与联调材料
 
 ```powershell

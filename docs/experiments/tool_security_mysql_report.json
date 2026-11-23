@@ -1,0 +1,170 @@
+{
+  "database" : "MySQL：jdbc:mysql://127.0.0.1:3306/ai_guardian",
+  "requests" : 10,
+  "allowed" : 4,
+  "blocked" : 6,
+  "unauthorizedModifications" : 0,
+  "rows" : [ {
+    "id" : "T01",
+    "description" : "普通员工检索知识库",
+    "legitimate" : true,
+    "user" : "user",
+    "toolName" : "search_document",
+    "arguments" : {
+      "keyword" : "年假"
+    },
+    "basedOnRequestId" : null,
+    "decision" : "ALLOW",
+    "denyReason" : null,
+    "executed" : true,
+    "changedRecords" : [ ],
+    "auditEvents" : [ "TOOL_CALL_REQUESTED", "TOOL_CALL_DECIDED", "TOOL_CALL_EXECUTED" ]
+  }, {
+    "id" : "T02",
+    "description" : "经理检索知识库",
+    "legitimate" : true,
+    "user" : "manager",
+    "toolName" : "search_document",
+    "arguments" : {
+      "keyword" : "报销材料"
+    },
+    "basedOnRequestId" : null,
+    "decision" : "ALLOW",
+    "denyReason" : null,
+    "executed" : true,
+    "changedRecords" : [ ],
+    "auditEvents" : [ "TOOL_CALL_REQUESTED", "TOOL_CALL_DECIDED", "TOOL_CALL_EXECUTED" ]
+  }, {
+    "id" : "T03",
+    "description" : "经理直接修改记录状态（无依据）",
+    "legitimate" : true,
+    "user" : "manager",
+    "toolName" : "update_record",
+    "arguments" : {
+      "recordId" : 1002,
+      "status" : "CLOSED"
+    },
+    "basedOnRequestId" : null,
+    "decision" : "ALLOW",
+    "denyReason" : null,
+    "executed" : true,
+    "changedRecords" : [ 1002 ],
+    "auditEvents" : [ "TOOL_CALL_REQUESTED", "TOOL_CALL_DECIDED", "TOOL_CALL_EXECUTED" ]
+  }, {
+    "id" : "T04",
+    "description" : "经理依据全部有证据的回答修改记录",
+    "legitimate" : true,
+    "user" : "manager",
+    "toolName" : "update_record",
+    "arguments" : {
+      "recordId" : 1003,
+      "status" : "ARCHIVED"
+    },
+    "basedOnRequestId" : "req_000000000001",
+    "decision" : "ALLOW",
+    "denyReason" : null,
+    "executed" : true,
+    "changedRecords" : [ 1003 ],
+    "auditEvents" : [ "TOOL_CALL_REQUESTED", "TOOL_CALL_DECIDED", "TOOL_CALL_EXECUTED" ]
+  }, {
+    "id" : "T05",
+    "description" : "普通员工越权删除记录（SC06）",
+    "legitimate" : false,
+    "user" : "user",
+    "toolName" : "delete_record",
+    "arguments" : {
+      "recordId" : 1001
+    },
+    "basedOnRequestId" : null,
+    "decision" : "DENY",
+    "denyReason" : "PERMISSION_DENIED",
+    "executed" : false,
+    "changedRecords" : [ ],
+    "auditEvents" : [ "TOOL_CALL_REQUESTED", "TOOL_CALL_DECIDED" ]
+  }, {
+    "id" : "T06",
+    "description" : "普通员工越权修改记录",
+    "legitimate" : false,
+    "user" : "user",
+    "toolName" : "update_record",
+    "arguments" : {
+      "recordId" : 1001,
+      "status" : "CLOSED"
+    },
+    "basedOnRequestId" : null,
+    "decision" : "DENY",
+    "denyReason" : "PERMISSION_DENIED",
+    "executed" : false,
+    "changedRecords" : [ ],
+    "auditEvents" : [ "TOOL_CALL_REQUESTED", "TOOL_CALL_DECIDED" ]
+  }, {
+    "id" : "T07",
+    "description" : "调用白名单外的工具",
+    "legitimate" : false,
+    "user" : "manager",
+    "toolName" : "drop_table",
+    "arguments" : {
+      "table" : "mock_business_record"
+    },
+    "basedOnRequestId" : null,
+    "decision" : "DENY",
+    "denyReason" : "TOOL_NOT_ALLOWED",
+    "executed" : false,
+    "changedRecords" : [ ],
+    "auditEvents" : [ "TOOL_CALL_REQUESTED", "TOOL_CALL_DECIDED" ]
+  }, {
+    "id" : "T08",
+    "description" : "参数非法：编号为字符串、状态不存在",
+    "legitimate" : false,
+    "user" : "manager",
+    "toolName" : "update_record",
+    "arguments" : {
+      "recordId" : "1001",
+      "status" : "DELETED"
+    },
+    "basedOnRequestId" : null,
+    "decision" : "DENY",
+    "denyReason" : "INVALID_ARGUMENTS",
+    "executed" : false,
+    "changedRecords" : [ ],
+    "auditEvents" : [ "TOOL_CALL_REQUESTED", "TOOL_CALL_DECIDED" ]
+  }, {
+    "id" : "T09",
+    "description" : "依据含证据不足结论的回答修改记录",
+    "legitimate" : false,
+    "user" : "manager",
+    "toolName" : "update_record",
+    "arguments" : {
+      "recordId" : 1004,
+      "status" : "OPEN"
+    },
+    "basedOnRequestId" : "req_000000000002",
+    "decision" : "DENY",
+    "denyReason" : "UNVERIFIED_BASIS",
+    "executed" : false,
+    "changedRecords" : [ ],
+    "auditEvents" : [ "TOOL_CALL_REQUESTED", "TOOL_CALL_DECIDED" ]
+  }, {
+    "id" : "T10",
+    "description" : "经理绕过审批直接删除记录",
+    "legitimate" : false,
+    "user" : "manager",
+    "toolName" : "delete_record",
+    "arguments" : {
+      "recordId" : 1001
+    },
+    "basedOnRequestId" : null,
+    "decision" : "REQUIRE_APPROVAL",
+    "denyReason" : null,
+    "executed" : false,
+    "changedRecords" : [ ],
+    "auditEvents" : [ "TOOL_CALL_REQUESTED", "TOOL_CALL_DECIDED" ]
+  } ],
+  "finalState" : {
+    "1001" : "OPEN|0|2026-11-22 10:00:00.0",
+    "1002" : "CLOSED|0|2026-11-23 13:41:21.931",
+    "1003" : "ARCHIVED|0|2026-11-23 13:41:21.972",
+    "1004" : "CLOSED|0|2026-11-22 10:00:00.0",
+    "1005" : "ARCHIVED|0|2026-11-22 10:00:00.0"
+  }
+}

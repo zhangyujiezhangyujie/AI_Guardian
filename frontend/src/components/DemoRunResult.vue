@@ -3,6 +3,7 @@ import { computed } from 'vue'
 
 import AnswerCard from './AnswerCard.vue'
 import ErrorCard from './ErrorCard.vue'
+import ToolCallCard from './ToolCallCard.vue'
 import { GUARD_STRATEGY, RUN_MODE, labelText } from '@/constants/labels'
 
 /**
@@ -23,6 +24,9 @@ const props = defineProps({
 const check = computed(() => props.run.data?.check ?? null)
 
 const response = computed(() => props.run.data?.response ?? null)
+
+// 契约 v1.3 第 7.7 节：仅 SC06 等带工具调用的场景非空
+const toolCall = computed(() => props.run.data?.toolCall ?? null)
 
 const strategyText = computed(() => {
   return props.run.strategy ? labelText(GUARD_STRATEGY, props.run.strategy) : '默认策略'
@@ -94,6 +98,12 @@ const auditLink = computed(() => `/audit?mode=${props.run.mode}`)
       <AnswerCard
         v-if="response"
         :response="response"
+      />
+
+      <ToolCallCard
+        v-if="toolCall"
+        :tool-call="toolCall"
+        :compact="showStrategy"
       />
 
       <el-card

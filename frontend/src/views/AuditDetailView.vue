@@ -12,6 +12,8 @@ import {
   GUARD_ACTION,
   GUARD_STRATEGY,
   RUN_MODE,
+  TOOL_DECISION,
+  TOOL_DENY_REASON,
   VERIFICATION_FAILURE_REASON,
   VERIFICATION_STATE,
   labelText,
@@ -405,6 +407,19 @@ function detailJson(value) {
                 v-if="event.errorCode"
                 class="error-code mono"
               >{{ event.errorCode }}</span>
+              <template v-if="event.eventType === 'TOOL_CALL_DECIDED' && event.detail">
+                <el-tag
+                  :type="labelType(TOOL_DECISION, event.detail.decision)"
+                  size="small"
+                  disable-transitions
+                >
+                  {{ labelText(TOOL_DECISION, event.detail.decision) }}
+                </el-tag>
+                <span
+                  v-if="event.detail.denyReason"
+                  class="event-reason"
+                >{{ labelText(TOOL_DENY_REASON, event.detail.denyReason) }}</span>
+              </template>
             </div>
             <details
               v-if="event.detail"
@@ -541,6 +556,11 @@ function detailJson(value) {
 .event-duration {
   font-size: 12px;
   color: var(--el-text-color-secondary);
+}
+
+.event-reason {
+  font-size: 12px;
+  color: var(--el-color-danger);
 }
 
 .event-detail {

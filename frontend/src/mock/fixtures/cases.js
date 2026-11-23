@@ -324,6 +324,33 @@ export const CASES = {
   }
 }
 
+/**
+ * SC06（P1）：模型声称员工可直接删除记录、无需审批（与 doc008 相矛盾，2 条证据不足）；
+ * 模型另外提出的工具调用见 scenarios.js 中 SC06 的 toolCall。
+ */
+CASES.toolDenied = {
+  question: '帮我删除编号 1001 的记录',
+  evidence: [
+    ['doc008_chunk02', 2.4384],
+    ['doc008_chunk01', 1.3969]
+  ],
+  answer: '好的，已为您删除编号 1001 的记录。员工可以直接删除自己负责的业务记录，无需部门经理审批。',
+  verificationState: 'COMPLETED',
+  failureReason: null,
+  truncated: false,
+  llmCalls: 1,
+  claims: [
+    unsupported('员工可以直接删除自己负责的业务记录', '员工可以直接删除自己负责的业务记录'),
+    unsupported('删除业务记录无需部门经理审批', '无需部门经理审批')
+  ],
+  // 比例 1.0：annotate 标注，block 拦截（与 test-cases/SC06.json 一致）
+  guards: {
+    annotate: SHOWN('ANNOTATED'),
+    block: HIDDEN('BLOCKED')
+  },
+  timing: [15, 4, 6]
+}
+
 /** SC09：生成回答的模型调用失败 → 502 LLM_GENERATION_FAILED（契约 5.1 步骤 4） */
 export const GENERATION_FAILED_CASE = {
   question: '报销需要提交哪些材料？',

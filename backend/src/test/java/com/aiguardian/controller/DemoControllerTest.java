@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.aiguardian.application.ChatOrchestrator;
 import com.aiguardian.application.ChatOrchestratorImpl;
+import com.aiguardian.application.ToolCallService;
 import com.aiguardian.audit.AuditService;
 import com.aiguardian.config.AiGuardianProperties;
 import com.aiguardian.demo.DefaultScenarioExpectationChecker;
@@ -20,6 +21,9 @@ import com.aiguardian.domain.guard.OutputGuardRegistry;
 import com.aiguardian.domain.model.AuditEvent;
 import com.aiguardian.domain.model.ChatResponse;
 import com.aiguardian.domain.model.RequestRecord;
+import com.aiguardian.domain.tool.InMemoryBusinessRecordRepository;
+import com.aiguardian.domain.tool.ToolCatalog;
+import com.aiguardian.domain.tool.ToolGateway;
 import com.aiguardian.domain.verification.ExactQuoteCitationValidator;
 import com.aiguardian.domain.verification.LLMBatchClaimVerifier;
 import com.aiguardian.infrastructure.llm.MockLLMClient;
@@ -29,6 +33,8 @@ import com.aiguardian.infrastructure.lucene.KnowledgeBaseLoader;
 import com.aiguardian.infrastructure.lucene.LuceneEvidenceRetriever;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,10 +48,13 @@ class DemoControllerTest {
     private ScenarioExpectationChecker checker;
     private OutputGuardRegistry guards;
     private MockMvc mockMvc;
+    private AiGuardianProperties properties;
+    private InMemoryBusinessRecordRepository records;
+    private ToolCallService tools;
 
     @BeforeEach
     void setUp() {
-        AiGuardianProperties properties = new AiGuardianProperties();
+        properties = new AiGuardianProperties();
         properties.getRetrieval().setKnowledgeBaseDir("../knowledge-base");
         properties.getRetrieval().setMinScore(1.0);
         properties.getDemo().setTestCasesDir("../test-cases");
@@ -63,6 +72,10 @@ class DemoControllerTest {
         ChatOrchestrator orchestrator = new ChatOrchestratorImpl(properties, new LuceneEvidenceRetriever(index), mock,
                 List.of(new LLMBatchClaimVerifier(mock, json, properties)),
                 new ExactQuoteCitationValidator(properties), guards, noopAudit(), json);
+        records = new InMemoryBusinessRecordRepository();
+        ToolCatalog catalog = new ToolCatalog();
+        tools = new ToolCallService(new ToolGateway(properties, catalog, records), catalog, records,
+                new LuceneEvidenceRetriever(index), requestId -> Optional.empty(), noopAudit());
         mockMvc = mockMvcWith(orchestrator);
     }
 
@@ -75,7 +88,7 @@ class DemoControllerTest {
     void listsScenariosWithoutMockOrExpected() throws Exception {
         mockMvc.perform(get("/api/demo/scenarios"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(8))
+                .andExpect(jsonPath("$.length()").value(9))
                 .andExpect(jsonPath("$[0].scenarioId").value("SC01"))
                 .andExpect(jsonPath("$[0].name").value("完整证据支持"))
                 .andExpect(jsonPath("$[0].question").value("公司正式员工一年有多少天年假？"))
@@ -116,6 +129,73 @@ class DemoControllerTest {
                 .andExpect(jsonPath("$.response").value(nullValue()))
                 .andExpect(jsonPath("$.check.checked").value(true))
                 .andExpect(jsonPath("$.check.passed").value(true));
+    }
+
+    @Test
+    void sc06PassesProposedToolCallToGatewayWhichDeniesIt() throws Exception {
+        for (String strategy : List.of("annotate", "block")) {
+            mockMvc.perform(post("/api/demo/run").contentType(APPLICATION_JSON).content(
+                            "{\"scenarioId\":\"SC06\",\"mode\":\"MOCK\",\"guardStrategy\":\"" + strategy + "\"}"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.check.passed").value(true))
+                    .andExpect(jsonPath("$.check.mismatches").isEmpty())
+                    .andExpect(jsonPath("$.response.guard.action").value("block".equals(strategy) ? "BLOCKED" : "ANNOTATED"))
+                    .andExpect(jsonPath("$.toolCall.user").value("user"))
+                    .andExpect(jsonPath("$.toolCall.toolName").value("delete_record"))
+                    .andExpect(jsonPath("$.toolCall.decision").value("DENY"))
+                    .andExpect(jsonPath("$.toolCall.denyReason").value("PERMISSION_DENIED"))
+                    .andExpect(jsonPath("$.toolCall.executed").value(false))
+                    .andExpect(jsonPath("$.toolCall.record.recordId").value(1001))
+                    .andExpect(jsonPath("$.toolCall.record.deleted").value(false));
+        }
+        org.junit.jupiter.api.Assertions.assertEquals(0, records.writes());
+    }
+
+    @Test
+    void sc06ToolCallIsBoundToTheRunRequestId() throws Exception {
+        String body = mockMvc.perform(post("/api/demo/run").contentType(APPLICATION_JSON)
+                        .content("{\"scenarioId\":\"SC06\",\"mode\":\"MOCK\"}"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        var tree = new ObjectMapper().readTree(body);
+        org.junit.jupiter.api.Assertions.assertEquals(
+                tree.at("/response/requestId").asText(), tree.at("/toolCall/basedOnRequestId").asText());
+    }
+
+    @Test
+    void misconfiguredPermissionIsStillCaughtByUnverifiedBasisCheck() throws Exception {
+        // 纵深防御：即使误把删除权限给了普通员工、去掉审批，回答中的结论缺乏证据，第 5 步仍会拒绝
+        properties.getToolGateway().setRoles(Map.of("user", List.of("delete_record")));
+        properties.getToolGateway().setApprovalRequired(List.of());
+        mockMvc.perform(post("/api/demo/run").contentType(APPLICATION_JSON)
+                        .content("{\"scenarioId\":\"SC06\",\"mode\":\"MOCK\",\"guardStrategy\":\"annotate\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.toolCall.decision").value("DENY"))
+                .andExpect(jsonPath("$.toolCall.denyReason").value("UNVERIFIED_BASIS"))
+                .andExpect(jsonPath("$.toolCall.record.deleted").value(false));
+        org.junit.jupiter.api.Assertions.assertEquals(0, records.writes());
+    }
+
+    @Test
+    void wrongToolDecisionFailsTheExpectationCheck() throws Exception {
+        // 人为关闭全部防护：普通员工可直接删除、无需审批、不检查依据，决策变为 ALLOW，与 SC06 期望不符
+        properties.getToolGateway().setRoles(Map.of("user", List.of("delete_record")));
+        properties.getToolGateway().setApprovalRequired(List.of());
+        properties.getOutputGuard().setStrictForToolCall(false);
+        mockMvc.perform(post("/api/demo/run").contentType(APPLICATION_JSON)
+                        .content("{\"scenarioId\":\"SC06\",\"mode\":\"MOCK\",\"guardStrategy\":\"annotate\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.toolCall.decision").value("ALLOW"))
+                .andExpect(jsonPath("$.check.passed").value(false))
+                .andExpect(jsonPath("$.check.mismatches[0]").value("toolCall.decision 期望 DENY，实际 ALLOW"));
+    }
+
+    @Test
+    void scenariosWithoutToolCallReturnNullToolCall() throws Exception {
+        mockMvc.perform(post("/api/demo/run").contentType(APPLICATION_JSON)
+                        .content("{\"scenarioId\":\"SC01\",\"mode\":\"MOCK\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.toolCall").value(nullValue()));
     }
 
     @Test
@@ -189,7 +269,7 @@ class DemoControllerTest {
     }
 
     private MockMvc mockMvcWith(ChatOrchestrator orchestrator) {
-        return MockMvcBuilders.standaloneSetup(new DemoController(scenarios, orchestrator, checker, guards))
+        return MockMvcBuilders.standaloneSetup(new DemoController(scenarios, orchestrator, checker, guards, tools))
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
     }

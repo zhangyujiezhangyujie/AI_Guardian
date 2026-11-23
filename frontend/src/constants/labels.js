@@ -164,6 +164,106 @@ export const AUDIT_EVENT_TYPE = {
   REQUEST_FAILED: {
     text: '请求失败',
     type: 'danger'
+  },
+  TOOL_CALL_REQUESTED: {
+    text: '工具调用请求',
+    type: 'info'
+  },
+  TOOL_CALL_DECIDED: {
+    text: '工具网关判定',
+    type: 'info'
+  },
+  TOOL_CALL_EXECUTED: {
+    text: '工具已执行',
+    type: 'warning'
+  }
+}
+
+/** ToolDecision（契约 v1.3 第 3.1 节，P1 工具网关）。 */
+export const TOOL_DECISION = {
+  ALLOW: {
+    text: '放行',
+    type: 'success'
+  },
+  DENY: {
+    text: '拒绝',
+    type: 'danger'
+  },
+  REQUIRE_APPROVAL: {
+    text: '需人工审批',
+    type: 'warning'
+  }
+}
+
+/** ToolDenyReason（契约 v1.3 第 3.1 节），按决策链顺序。 */
+export const TOOL_DENY_REASON = {
+  TOOL_NOT_ALLOWED: {
+    text: '工具不在白名单中',
+    type: 'danger'
+  },
+  PERMISSION_DENIED: {
+    text: '当前用户无权使用该工具',
+    type: 'danger'
+  },
+  INVALID_ARGUMENTS: {
+    text: '工具参数不符合约束',
+    type: 'danger'
+  },
+  RECORD_NOT_FOUND: {
+    text: '目标业务记录不存在',
+    type: 'danger'
+  },
+  BASIS_NOT_FOUND: {
+    text: '依据的问答记录不存在',
+    type: 'danger'
+  },
+  UNVERIFIED_BASIS: {
+    text: '依据的回答存在证据不足的结论',
+    type: 'danger'
+  }
+}
+
+/** 工具名（契约 v1.3 第 7.10 节工具清单）；未知工具原样显示。 */
+export const TOOL_NAME = {
+  search_document: {
+    text: '检索知识库',
+    type: 'info'
+  },
+  update_record: {
+    text: '修改业务记录',
+    type: 'warning'
+  },
+  delete_record: {
+    text: '删除业务记录',
+    type: 'danger'
+  }
+}
+
+/** 演示用户（请求头 X-Demo-User，仅用于演示，不是真实身份认证）。 */
+export const DEMO_USER = {
+  user: {
+    text: '普通员工',
+    type: 'info'
+  },
+  manager: {
+    text: '部门经理',
+    type: 'primary'
+  }
+}
+
+/** 模拟业务记录状态（契约 v1.3 第 3.11 节 BusinessRecord.status）。 */
+export const RECORD_STATUS = {
+  OPEN: {
+    text: '处理中',
+    type: 'primary'
+  },
+  CLOSED: {
+    text: '已关闭',
+    type: 'info'
+  },
+  ARCHIVED: {
+    text: '已归档',
+    type: 'info'
   }
 }
 

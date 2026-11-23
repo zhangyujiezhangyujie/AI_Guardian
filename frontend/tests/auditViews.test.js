@@ -168,6 +168,22 @@ describe('AuditDetailView', () => {
     expect(mounted.el.textContent).toContain('核验结果无法解析为 JSON')
   })
 
+  it('工具调用事件：时间线显示中文名、决策标签与原因', async () => {
+    const { record } = buildExchange(CASES.toolDenied, { strategy: 'annotate', mode: 'MOCK', scenarioId: 'SC06' })
+    record.events.push(
+      { eventType: 'TOOL_CALL_REQUESTED', success: true, durationMs: null, errorCode: null, detail: { toolCallId: 'tool_aaaaaaaaaaaa', toolName: 'delete_record', user: 'user', basedOnRequestId: record.requestId }, createdAt: '2026-11-22T21:00:00.000+08:00' },
+      { eventType: 'TOOL_CALL_DECIDED', success: true, durationMs: 1, errorCode: null, detail: { toolCallId: 'tool_aaaaaaaaaaaa', decision: 'DENY', denyReason: 'PERMISSION_DENIED' }, createdAt: '2026-11-22T21:00:00.001+08:00' }
+    )
+    getAuditDetail.mockResolvedValue(record)
+    mounted = await mount(AuditDetailView, { requestId: record.requestId }, { path: `/audit/${record.requestId}` })
+    await flush()
+    const names = [...mounted.el.querySelectorAll('.event-name')].map((e) => e.textContent)
+    expect(names.slice(-2)).toEqual(['工具调用请求', '工具网关判定'])
+    const lastRow = [...mounted.el.querySelectorAll('.event-row')].at(-1)
+    expect(lastRow.textContent).toContain('拒绝')
+    expect(lastRow.querySelector('.event-reason').textContent).toBe('当前用户无权使用该工具')
+  })
+
   it('审计记录不存在：显示提示和返回按钮', async () => {
     getAuditDetail.mockRejectedValue({ errorCode: 'AUDIT_NOT_FOUND', message: '审计记录不存在。', requestId: null, httpStatus: 404 })
     mounted = await mount(AuditDetailView, { requestId: 'req_000000000000' }, { path: '/audit/req_000000000000' })
