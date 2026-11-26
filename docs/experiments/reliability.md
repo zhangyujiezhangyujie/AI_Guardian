@@ -2,7 +2,7 @@
 
 执行日期：2026-11-23
 
-代码基线：`origin/dev` `e998d71`；成员 4 网关验证使用 `origin/feature/tool-gateway` `3106bc2`。
+代码基线：验证时使用 `feature/tool-gateway` `3106bc2`；该代码树随合并提交 `dbd12b8` 纳入 `dev`，MySQL 实验原始记录随成员 4 文档提交 `2788b61` 纳入。
 
 ## 验证范围
 
@@ -24,7 +24,7 @@
 - `RetrievalVerificationIntegrationTest`：5 项通过。测试关闭数据源自动配置，并 mock `AuditQueryService` 与 `JdbcAuditPersistenceRepository`，保留真实 Lucene 检索和核验链路，将数据库审计隔离给成员 4 的独立测试。
 - `origin/dev` 基线 `2b158cb` 的完整 `mvn test`（2026-11-21）：149 项，0 失败、0 错误、5 项按默认规则跳过。
 - `origin/dev` 基线 `2b158cb` 的成员 4 MySQL 审计集成测试：2 项通过、0 失败、0 跳过，覆盖正常记录和核验失败记录；使用临时低权限数据库账号，测试结束后删除该账号。
-- `feature/tool-gateway` 后端完整 `mvn test`：194 项，0 失败、0 错误、5 项显式跳过；本轮变更未修改前端。
+- 与 `dev` 合并提交 `dbd12b8` 同代码树的后端完整 `mvn test`：194 项，0 失败、0 错误、5 项显式跳过。
 - 网关分支 MySQL 审计集成测试：2 项通过、0 失败、0 跳过；测试前后以 SQL 核对临时请求记录均已清理。
 - 网关 MySQL 安全实验：MySQL 8.0.46 上 10 条请求通过；4 条放行、6 条拒绝或转审批，越权/非法请求造成的数据修改为 0。只改动 `mock_business_record` 演示表，测试后复位种子记录并删除临时低权限账号；详情见 [`tool_security.md`](tool_security.md)。
 - `JdbcAuditServiceTest` 验证审计 detail 会丢弃 `apiKey`、完整 prompt 等契约外字段；审计写入异常不会向问答调用方抛出。
